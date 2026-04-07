@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1B4FBE;
+  --color-primary-dark: #0D3080;
+  --color-bg-page: #EEF3FB;
+  --color-bg-card: #FFFFFF;
+  --color-border: #C8D8F0;
+  --color-yellow: #F5C518;
+  --color-orange: #E8601C;
+  --color-success: #2ECC71;
+  --color-danger: #E74C3C;
+  --color-text-main: #1A1A2E;
+  --color-text-muted: #6B7BA8;
+
+  --font-display: "Nunito", sans-serif;
+  --font-body: "Nunito Sans", sans-serif;
+}
