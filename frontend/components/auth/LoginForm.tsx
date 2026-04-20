@@ -1,0 +1,194 @@
+'use client'
+
+import { useState } from 'react'
+import { DoodleIcon } from '@/components/ui/DoodleIcon'
+
+interface LoginFormProps {
+  onLogin: (email: string, senha: string) => void
+  onSignup: (apelido: string, email: string, senha: string) => void
+  carregando?: boolean
+  erro?: string
+}
+
+export function LoginForm({ onLogin, onSignup, carregando = false, erro = '' }: LoginFormProps) {
+  const [mode, setMode] = useState<'login' | 'signup' | 'recover'>('login')
+  const [apelido, setApelido] = useState('')
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (mode === 'login') {
+      onLogin(email, senha)
+    } else if (mode === 'signup') {
+      onSignup(apelido, email, senha)
+    }
+  }
+
+  if (mode === 'recover') {
+    return <RecoverForm onBack={() => setMode('login')} />
+  }
+
+  return (
+    <>
+      <div style={{ marginBottom: 28 }}>
+        <h1
+          style={{
+            fontFamily: 'var(--font-ui)',
+            fontWeight: 900,
+            fontSize: 44,
+            margin: '0 0 4px',
+            color: 'var(--ink)',
+            letterSpacing: '-0.03em',
+            lineHeight: 1.05,
+          }}
+        >
+          {mode === 'login' ? (
+            <>
+              Bora duelar,<br />
+              <span className="scribble">
+                gênio?
+                <svg viewBox="0 0 140 14" preserveAspectRatio="none">
+                  <path d="M 2 10 q 30 -8 70 -4 t 66 2" stroke="#F5C518" strokeWidth="6" fill="none" strokeLinecap="round" />
+                </svg>
+              </span>
+            </>
+          ) : (
+            <>Cria tua<br />conta.</>
+          )}
+        </h1>
+        <p style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 16, margin: '14px 0 0' }}>
+          {mode === 'login'
+            ? 'Entra, escolhe um tema e mostra quem manda.'
+            : 'Escolhe teu apelido — é assim que os outros te chamam na sala.'}
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        {/* Google */}
+        <button type="button" className="btn" style={{ width: '100%', background: '#fff', marginBottom: 14 }}>
+          <DoodleIcon name="google" size={22} />
+          Entrar com Google
+        </button>
+
+        <div className="hand-divider">ou com email</div>
+
+        {mode === 'signup' && (
+          <div className="input-wrap">
+            <label>Apelido</label>
+            <span className="input-icon"><DoodleIcon name="user" size={20} /></span>
+            <input
+              className="input"
+              placeholder="derek_o_insuperável"
+              value={apelido}
+              onChange={(e) => setApelido(e.target.value)}
+              required
+            />
+          </div>
+        )}
+
+        <div className="input-wrap">
+          <label>Email</label>
+          <span className="input-icon"><DoodleIcon name="mail" size={20} /></span>
+          <input
+            className="input"
+            type="email"
+            placeholder="voce@faesa.br"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="input-wrap">
+          <label>Senha</label>
+          <span className="input-icon"><DoodleIcon name="lock" size={20} /></span>
+          <input
+            className="input"
+            type="password"
+            placeholder="••••••••"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            required
+          />
+          {mode === 'login' && (
+            <div style={{ textAlign: 'right', marginTop: 6 }}>
+              <a
+                className="link-hand"
+                href="#"
+                onClick={(e) => { e.preventDefault(); setMode('recover') }}
+              >
+                esqueci minha senha
+              </a>
+            </div>
+          )}
+        </div>
+
+        {erro && (
+          <p style={{ color: 'var(--red)', fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 12 }}>
+            {erro}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          className="btn btn-accent"
+          style={{ width: '100%', marginTop: 8, fontSize: 18, padding: '16px 22px' }}
+          disabled={carregando}
+        >
+          {carregando
+            ? 'Entrando...'
+            : mode === 'login' ? 'Entrar no Valendo' : 'Criar conta'}
+          <DoodleIcon name="play" size={18} strokeColor="var(--accent-ink)" color="var(--accent-ink)" />
+        </button>
+      </form>
+
+      <p style={{ textAlign: 'center', marginTop: 22, color: 'var(--muted)', fontWeight: 600 }}>
+        {mode === 'login' ? 'Primeira vez por aqui?' : 'Já tens conta?'}{' '}
+        <a
+          className="link-hand"
+          href="#"
+          onClick={(e) => { e.preventDefault(); setMode(mode === 'login' ? 'signup' : 'login') }}
+        >
+          {mode === 'login' ? 'cria tua conta' : 'fazer login'}
+        </a>
+      </p>
+    </>
+  )
+}
+
+function RecoverForm({ onBack }: { onBack: () => void }) {
+  return (
+    <div>
+      <h1
+        style={{
+          fontFamily: 'var(--font-ui)',
+          fontWeight: 900,
+          fontSize: 40,
+          margin: '0 0 8px',
+          color: 'var(--ink)',
+          letterSpacing: '-0.03em',
+          lineHeight: 1.05,
+        }}
+      >
+        Esqueceu<br />a senha?
+      </h1>
+      <p style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 16, margin: '10px 0 28px' }}>
+        Acontece. Coloca teu email que a gente manda um link de recuperação.
+      </p>
+      <div className="input-wrap">
+        <label>Email</label>
+        <span className="input-icon"><DoodleIcon name="mail" size={20} /></span>
+        <input className="input" type="email" placeholder="voce@faesa.br" />
+      </div>
+      <button className="btn btn-primary" style={{ width: '100%', marginTop: 8 }}>
+        Enviar link mágico
+      </button>
+      <p style={{ textAlign: 'center', marginTop: 22 }}>
+        <a className="link-hand" href="#" onClick={(e) => { e.preventDefault(); onBack() }}>
+          ← voltar ao login
+        </a>
+      </p>
+    </div>
+  )
+}

@@ -1,110 +1,140 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { LogoMark } from '@/components/ui/LogoMark'
+import { LoginForm } from '@/components/auth/LoginForm'
+import { LoginScene } from '@/components/auth/LoginScene'
 
 export default function LoginPage() {
+  const [erro, setErro] = useState('')
+  const [carregando, setCarregando] = useState(false)
+  const router = useRouter()
 
-    const [apelido, setApelido] = useState("")
-    const [senha, setSenha] = useState("")
-    const [erro, setErro] = useState("")
-    const [carregando, setCarregando] = useState(false)
-
-    const router = useRouter()
-
-    async function handleLogin() {
-
-        async function handleLogin(e: React.FormEvent) {
-            e.preventDefault()
-
-            if (!apelido.trim() || !senha.trim()) {
-                setErro("Preencha todos os campos!")
-                return
-            }
-
-
-            setCarregando(true)
-            setErro("")
-
-            try {
-                const resposta = await fetch("http://localhost:3001/auth/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ tag: apelido, senha }),
-                })
-
-                if (!resposta.ok) {
-                    setErro("Usuário ou Senha inválidos ! ")
-                    return
-                }
-
-                const dados = await resposta.json()
-                localStorage.setItem("token", dados.acess_token)
-                router.push("/dashboard")
-
-            } catch {
-                setErro("Erro de conexão, Verifique se o servidor está rodando !")
-            } finally {
-                setCarregando(false)
-            }
-        }
-
-        return (
-            <div className="min-h-screen bg-bg-page flex items-center justify-center">
-                <div className="bg-bg-card border border-border rounded-xl p-8 w-full max-w-sm shadow-md">
-                    <h1 className="font-display font-black text-4xl text-primary text-center mb-2">
-                        Valen<span className="text-yellow">do!</span>
-                    </h1>
-                    <p className="text-text-muted text-center text-sm mb-8">
-                        Entre na disputa
-                    </p>
-                    <div className="mb-4">
-                        <label className="text-text-muted text-xs font-semibold uppercase mb-1 block">
-                            Apelido
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Ex: derek#1234"
-                            value={apelido}
-                            onChange={(e) => setApelido(e.target.value)}
-                            className="w-full border border-border rounded-lg px-4 py-3 text-text-main focus:outline-none focus:border-primary"
-                        />
-                    </div>
-
-                    <div className="mb-6">
-                        <label className="text-text-muted text-xs font-semibold uppercase mb-1 block">
-                            Senha
-                        </label>
-                        <input
-                            type="password"
-                            placeholder="Sua senha"
-                            value={senha}
-                            onChange={(e) => setSenha(e.target.value)}
-                            className="w-full border border-border rounded-lg px-4 py-3 text-text-main focus:outline-none focus:border-primary"
-                        />
-                    </div>
-                    {erro && (
-                        <p className="text-danger text-sm mb-4 text-center">{erro}</p>
-                    )}
-
-                    <button
-                        onClick={handleLogin}
-                        disabled={carregando}
-                        className="w-full bg-yellow text-primary-dark font-extrabold py-3 rounded-lg hover:bg-yellow/90 transition disabled:opacity-50"
-                    >
-                        {carregando ? "Entrando..." : "⚡ ENTRAR NA DISPUTA"}
-                    </button>
-
-                    <p className="text-center text-text-muted text-sm mt-4">
-                        Novo por aqui?{" "}
-                        <a href="/register" className="text-primary font-semibold hover:underline">
-                            Criar conta
-                        </a>
-                    </p>
-
-                </div>
-            </div>
-        )
+  async function handleLogin(email: string, senha: string) {
+    if (!email.trim() || !senha.trim()) {
+      setErro('Preencha todos os campos!')
+      return
     }
+
+    setCarregando(true)
+    setErro('')
+
+    try {
+      const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      })
+
+      if (!resposta.ok) {
+        setErro('Email ou senha inválidos!')
+        return
+      }
+
+      const dados = await resposta.json()
+      localStorage.setItem('token', dados.access_token)
+      router.push('/lobby')
+    } catch {
+      setErro('Erro de conexão. Verifique se o servidor está rodando!')
+    } finally {
+      setCarregando(false)
+    }
+  }
+
+  async function handleSignup(apelido: string, email: string, senha: string) {
+    if (!apelido.trim() || !email.trim() || !senha.trim()) {
+      setErro('Preencha todos os campos!')
+      return
+    }
+
+    setCarregando(true)
+    setErro('')
+
+    try {
+      const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tag: apelido, email, senha }),
+      })
+
+      if (!resposta.ok) {
+        const data = await resposta.json().catch(() => ({}))
+        setErro(data.message || 'Erro ao criar conta.')
+        return
+      }
+
+      // Auto-login after registration
+      await handleLogin(email, senha)
+    } catch {
+      setErro('Erro de conexão. Verifique se o servidor está rodando!')
+    } finally {
+      setCarregando(false)
+    }
+  }
+
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1.05fr',
+        background: 'var(--bg-page)',
+      }}
+    >
+      {/* LEFT — form */}
+      <div
+        style={{
+          padding: '48px 64px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <LogoMark />
+          <span
+            style={{
+              fontFamily: 'var(--font-ui)',
+              fontWeight: 900,
+              fontSize: 28,
+              color: 'var(--primary-dark)',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Valendo
+          </span>
+          <span
+            className="chip"
+            style={{
+              marginLeft: 8,
+              borderColor: 'var(--primary)',
+              color: 'var(--primary)',
+              transform: 'rotate(-3deg)',
+            }}
+          >
+            beta
+          </span>
+        </div>
+
+        {/* Form */}
+        <div style={{ maxWidth: 420, width: '100%', margin: '0 auto' }}>
+          <LoginForm
+            onLogin={handleLogin}
+            onSignup={handleSignup}
+            carregando={carregando}
+            erro={erro}
+          />
+        </div>
+
+        <p style={{ color: 'var(--muted)', fontSize: 13, fontWeight: 600, textAlign: 'center' }}>
+          FAESA · Desenvolvimento Web 2 · 2025
+        </p>
+      </div>
+
+      {/* RIGHT — scene */}
+      <LoginScene />
+    </div>
+  )
 }

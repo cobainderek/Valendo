@@ -1,47 +1,33 @@
-@import "tailwindcss";
-
-@source "../app/**/*.{ts,tsx}";
-@source "../components/**/*.{ts,tsx}";
-
-@theme {
-  --color-primary: #1B4FBE;
-  --color-primary-dark: #0D3080;
-  --color-bg-page: #EEF3FB;
-  --color-bg-card: #FFFFFF;
-  --color-border: #C8D8F0;
-  --color-yellow: #F5C518;
-  --color-orange: #E8601C;
-  --color-success: #2ECC71;
-  --color-danger: #E74C3C;
-  --color-text-main: #1A1A2E;
-  --color-text-muted: #6B7BA8;
-
-  --font-display: var(--font-nunito), "Nunito", sans-serif;
-  --font-body: var(--font-nunito), "Nunito Sans", sans-serif;
-  --font-hand: var(--font-caveat), "Caveat", cursive;
-}
-
 /* ============================================
    VALENDO — Doodle Design System
-   Inlined here to guarantee it wins over
-   Tailwind's preflight/reset in CSS 4.
+   Visual identity: Flat 2D, contornos pretos,
+   sombras sólidas 3D, hand-drawn feel.
    ============================================ */
 
 /* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
+  /* Cores principais */
   --primary: #1B4FBE;
   --primary-dark: #0D3080;
   --primary-soft: #D9E6FF;
+
+  /* Fundos */
   --bg-page: #EEF3FB;
   --bg-card: #FFFFFF;
   --bg-cream: #FFF8E7;
+
+  /* Bordas e textos */
   --border: #C8D8F0;
   --ink: #1A1A2E;
   --ink-soft: #3B4264;
   --muted: #6B7BA8;
+
+  /* Destaque (accent) — padrão amarelo */
   --accent: #F5C518;
   --accent-deep: #E0B000;
   --accent-ink: #0D3080;
+
+  /* Cores auxiliares */
   --yellow: #F5C518;
   --yellow-deep: #E0B000;
   --orange: #E8601C;
@@ -50,48 +36,50 @@
   --red: #E74C3C;
   --purple: #7C3AED;
   --pink: #DB2777;
+
+  /* Fontes */
   --font-ui: var(--font-nunito), 'Nunito', system-ui, sans-serif;
   --font-hand: var(--font-caveat), 'Caveat', cursive;
+
+  /* Sombras */
   --shadow-doodle: 4px 4px 0 var(--ink);
   --shadow-doodle-sm: 3px 3px 0 var(--ink);
   --shadow-soft: 0 8px 24px rgba(13, 48, 128, 0.08);
 }
 
+/* Tema accent laranja */
 [data-accent="orange"] {
   --accent: var(--orange);
   --accent-deep: var(--orange-deep);
   --accent-ink: #FFFFFF;
 }
 
+
 /* ===== DOODLE CARD ===== */
 .doodle-card {
-  background: var(--bg-card) !important;
-  border: 2.5px solid var(--ink) !important;
-  border-radius: 18px !important;
-  box-shadow: var(--shadow-doodle) !important;
+  background: var(--bg-card);
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: var(--shadow-doodle);
   position: relative;
 }
 
-.doodle-card.tilt-l {
-  transform: rotate(-1.2deg);
-}
+.doodle-card.tilt-l { transform: rotate(-1.2deg); }
+.doodle-card.tilt-r { transform: rotate(1.2deg); }
 
-.doodle-card.tilt-r {
-  transform: rotate(1.2deg);
-}
 
 /* ===== BOTÕES ===== */
 .btn {
-  font-family: var(--font-ui) !important;
-  font-weight: 800 !important;
+  font-family: var(--font-ui);
+  font-weight: 800;
   font-size: 16px;
   padding: 14px 22px;
-  border: 2.5px solid var(--ink) !important;
-  border-radius: 12px !important;
-  box-shadow: var(--shadow-doodle-sm) !important;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: var(--shadow-doodle-sm);
   cursor: pointer;
-  background: var(--bg-card) !important;
-  color: var(--ink) !important;
+  background: var(--bg-card);
+  color: var(--ink);
   transition: transform 0.08s ease, box-shadow 0.08s ease;
   letter-spacing: -0.01em;
   display: inline-flex;
@@ -103,33 +91,19 @@
 
 .btn:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--ink) !important;
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
 .btn:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink) !important;
+  box-shadow: 1px 1px 0 var(--ink);
 }
 
-.btn-primary {
-  background: var(--primary) !important;
-  color: #fff !important;
-}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-accent  { background: var(--accent); color: var(--accent-ink); }
+.btn-ghost   { background: transparent; box-shadow: none; border-color: transparent; }
+.btn-ghost:hover { background: var(--primary-soft); }
 
-.btn-accent {
-  background: var(--accent) !important;
-  color: var(--accent-ink) !important;
-}
-
-.btn-ghost {
-  background: transparent !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-}
-
-.btn-ghost:hover {
-  background: var(--primary-soft) !important;
-}
 
 /* ===== INPUTS ===== */
 .input-wrap {
@@ -149,16 +123,16 @@
 
 .input {
   width: 100%;
-  font-family: var(--font-ui) !important;
+  font-family: var(--font-ui);
   font-weight: 600;
   font-size: 15px;
-  padding: 13px 16px 13px 44px !important;
-  border: 2.5px solid var(--ink) !important;
-  border-radius: 12px !important;
-  background: var(--bg-card) !important;
-  color: var(--ink) !important;
+  padding: 13px 16px 13px 44px;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--bg-card);
+  color: var(--ink);
   outline: none;
-  box-shadow: var(--shadow-doodle-sm) !important;
+  box-shadow: var(--shadow-doodle-sm);
   transition: box-shadow 0.1s ease, transform 0.1s ease;
 }
 
@@ -168,8 +142,8 @@
 }
 
 .input:focus {
-  box-shadow: 4px 4px 0 var(--primary) !important;
-  border-color: var(--primary) !important;
+  box-shadow: 4px 4px 0 var(--primary);
+  border-color: var(--primary);
 }
 
 .input-icon {
@@ -183,12 +157,13 @@
   height: 20px;
 }
 
+
 /* ===== LINK HAND-WRITTEN ===== */
 .link-hand {
-  font-family: var(--font-hand) !important;
-  font-size: 22px !important;
-  color: var(--primary) !important;
-  text-decoration: none !important;
+  font-family: var(--font-hand);
+  font-size: 22px;
+  color: var(--primary);
+  text-decoration: none;
   font-weight: 700;
   position: relative;
   cursor: pointer;
@@ -213,20 +188,22 @@
   opacity: 1;
 }
 
+
 /* ===== CHIPS / TAGS ===== */
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  border: 2px solid var(--ink) !important;
-  border-radius: 999px !important;
-  background: var(--bg-card) !important;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--bg-card);
   font-weight: 800;
   font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
 
 /* ===== SCRIBBLE UNDERLINE ===== */
 .scribble {
@@ -243,6 +220,7 @@
   height: 14px;
   pointer-events: none;
 }
+
 
 /* ===== DIVIDER HAND-DRAWN ===== */
 .hand-divider {
@@ -266,54 +244,35 @@
   border-radius: 2px;
 }
 
+
 /* ===== STICKER / BADGE ===== */
 .sticker {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border: 2.5px solid var(--ink) !important;
-  border-radius: 10px !important;
-  background: var(--yellow) !important;
-  color: var(--primary-dark) !important;
+  border: 2.5px solid var(--ink);
+  border-radius: 10px;
+  background: var(--yellow);
+  color: var(--primary-dark);
   font-weight: 900;
   font-size: 13px;
-  box-shadow: 2px 2px 0 var(--ink) !important;
+  box-shadow: 2px 2px 0 var(--ink);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
+
 /* ===== ANIMATIONS ===== */
 @keyframes pulse-dot {
-
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.4;
-    transform: scale(1.4);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.4); }
 }
 
 @keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
-.animate-pulse-dot {
-  animation: pulse-dot 1.2s infinite;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
+.animate-pulse-dot { animation: pulse-dot 1.2s infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
