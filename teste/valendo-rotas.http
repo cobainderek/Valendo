@@ -1,0 +1,150 @@
+### VALENDO API - Ambientes de Testes Integrado (REST Client)
+### Siga cada bloco sequencialmente para testar a cadeia inteira da API
+### Instale a extensão "REST Client" no VS Code se os botões "Send Request" não aparecerem
+
+@api_host = http://localhost:3000
+# Variavel global alocada dinamicamente pelo teste de login para ser usada nas rotas privadas protegidas:
+@auth_token = SEU_TOKEN_DE_TESTE_AQUI
+
+---
+
+### ===============================
+### 1. HEALTH CHECK & INFRA
+### ===============================
+
+###
+# @name LigarMotor
+GET {{api_host}}/
+
+---
+
+### ===============================
+### 2. USUÁRIOS (CADASTROS)
+### ===============================
+
+###
+# @name CriarUsuarioPadrao
+POST {{api_host}}/users
+Content-Type: application/json
+
+{
+  "name": "Valendo Tester",
+  "tag": "alpha_tester",
+  "email": "testador@valendo.com",
+  "password": "senha456"
+}
+
+###
+# @name FalhaValidacaoUsuario
+POST {{api_host}}/users
+Content-Type: application/json
+
+{
+  "name": "",
+  "tag": "t",
+  "email": "email-sem-arroba",
+  "password": "12"
+}
+
+---
+
+### ===============================
+### 3. AUTENTICAÇÃO (LOGIN)
+### ===============================
+
+###
+# @name FazerLoginCorreto
+POST {{api_host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "testador@valendo.com",
+  "password": "senha456"
+}
+
+# -> Após logar, COPIE A STRING inteira do access_token gerada para a variável @auth_token lá no topo do arquivo!
+
+###
+# @name ErroSenhaIncorreta
+POST {{api_host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "testador@valendo.com",
+  "password": "senhaincorreta777"
+}
+
+---
+
+### ===============================
+### 4. MULTIPLAYER E SALAS
+### ===============================
+
+###
+# @name ListarSalasEspera
+GET {{api_host}}/rooms
+Authorization: Bearer {{auth_token}}
+
+###
+# @name CriarMinhaSalaPrivada
+POST {{api_host}}/rooms
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "theme": "Geografia Mundial",
+  "isPrivate": true
+}
+
+###
+# @name CriarSalaEsperaPublica
+POST {{api_host}}/rooms
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "theme": "Programação Typescript",
+  "isPrivate": false
+}
+
+# -> COPIE o "code" gerado aqui e passe na rota da Inteligência Artificial em ROOMCODE
+
+---
+
+### ===============================
+### 5. GERAÇÃO (IA E CACHE REDIS)
+### ===============================
+
+###
+# @name GerarDezQuestoesTema
+POST {{api_host}}/questions/generate
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="roomCode"
+
+S6OO1A
+--boundary123
+Content-Disposition: form-data; name="theme"
+
+História de Portugal Séc XV
+--boundary123--
+
+
+###
+# @name BurlarProtecaoQuarto (Sem Autorizacao - Teste)
+# Simulando caso você tente injetar questoes numa sala de outra pessoa
+POST {{api_host}}/questions/generate
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=boundary444
+
+--boundary444
+Content-Disposition: form-data; name="roomCode"
+
+ZZZZZZ
+--boundary444
+Content-Disposition: form-data; name="theme"
+
+Conhecimentos Básicos
+--boundary444--

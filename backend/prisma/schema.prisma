@@ -4,10 +4,69 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id           BigInt   @id @default(autoincrement())
+  name         String   @db.VarChar(255)
+  tag          String   @unique @db.VarChar(50)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  globalXp     Int      @default(0) @map("global_xp")
+
+  // For future relationships:
+  HostedRooms     Room[]          @relation("rooms_host")
+  // Answers         Answer[]
+  // WeeklyScores    WeeklyScore[]
+  // Friendships1    Friendship[]    @relation("friendships_user1")
+  // Friendships2    Friendship[]    @relation("friendships_user2")
+
+  @@map("users")
+}
+
+model Room {
+  id        BigInt   @id @default(autoincrement())
+  code      String   @unique @db.Char(6)
+  hostId    BigInt   @map("host_id")
+  theme     String?  @db.VarChar(255)
+  status    String   @default("waiting") @db.VarChar(20)
+  isPrivate Boolean  @default(false) @map("is_private")
+
+  host      User     @relation("rooms_host", fields: [hostId], references: [id])
+  duel      Duel?
+
+  @@map("rooms")
+}
+
+model Duel {
+  id          BigInt   @id @default(autoincrement())
+  roomId      BigInt   @map("room_id") @unique
+  createdAt   DateTime @default(now()) @map("created_at")
+  totalRounds Int      @map("total_rounds")
+
+  room        Room     @relation(fields: [roomId], references: [id])
+  questions   Question[]
+
+  @@map("duels")
+}
+
+model Question {
+  id            BigInt   @id @default(autoincrement())
+  duelId        BigInt   @map("duel_id")
+  text          String
+  options       Json
+  correctAnswer String   @map("correct_answer") @db.VarChar(255)
+  explanationAi String?  @map("explanation_ai")
+
+  duel          Duel     @relation(fields: [duelId], references: [id])
+  // answers    Answer[]
+
+  @@map("questions")
 }

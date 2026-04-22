@@ -1,0 +1,346 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-04-21T17:20:00.000Z",
+  "__export_source": "insomnia.desktop.app:v10.0.0",
+  "resources": [
+    {
+      "_id": "wrk_valendo_api",
+      "parentId": null,
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "name": "Valendo API",
+      "description": "Coleção de testes para a API do Valendo",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base_valendo",
+      "parentId": "wrk_valendo_api",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000"
+      },
+      "color": null,
+      "isPrivate": false,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_health_01",
+      "parentId": "wrk_valendo_api",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "name": "Health Check",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_users_01",
+      "parentId": "wrk_valendo_api",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "name": "Users",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -900,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_auth_01",
+      "parentId": "wrk_valendo_api",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "name": "Auth",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -800,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_health_01",
+      "parentId": "fld_health_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/",
+      "name": "GET Health Check",
+      "description": "Verifica se a API esta rodando",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -1000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_user_01",
+      "parentId": "fld_users_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/users",
+      "name": "POST Criar Usuario",
+      "description": "Cria um novo usuario no sistema",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Joao Silva\",\n  \"tag\": \"joao_silva\",\n  \"email\": \"joao@email.com\",\n  \"password\": \"senha123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct01"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -1000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_user_val_01",
+      "parentId": "fld_users_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/users",
+      "name": "POST Criar Usuario (Validacao - campos vazios)",
+      "description": "Testa a validacao enviando campos vazios. Espera-se erro 400.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"\",\n  \"tag\": \"\",\n  \"email\": \"email-invalido\",\n  \"password\": \"123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct02"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -900,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_user_dup_email_01",
+      "parentId": "fld_users_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/users",
+      "name": "POST Criar Usuario (Email duplicado)",
+      "description": "Testa a criacao com email ja existente. Execute apos criar o Joao Silva.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Outro Nome\",\n  \"tag\": \"outro_tag\",\n  \"email\": \"joao@email.com\",\n  \"password\": \"senha123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct03"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -800,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_user_dup_tag_01",
+      "parentId": "fld_users_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/users",
+      "name": "POST Criar Usuario (Tag duplicada)",
+      "description": "Testa a criacao com tag ja existente. Execute apos criar o Joao Silva.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Maria Souza\",\n  \"tag\": \"joao_silva\",\n  \"email\": \"maria@email.com\",\n  \"password\": \"senha456\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct04"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -700,
+      "_type": "request"
+    },
+    {
+      "_id": "req_login_01",
+      "parentId": "fld_auth_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/auth/login",
+      "name": "POST Login",
+      "description": "Autentica um usuario e retorna o JWT.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"joao@email.com\",\n  \"password\": \"senha123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct05"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -1000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_login_wrong_01",
+      "parentId": "fld_auth_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/auth/login",
+      "name": "POST Login (Senha errada)",
+      "description": "Testa login com senha incorreta. Espera-se erro 401.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"joao@email.com\",\n  \"password\": \"senhaerrada\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct06"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -900,
+      "_type": "request"
+    },
+    {
+      "_id": "req_login_nouser_01",
+      "parentId": "fld_auth_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/auth/login",
+      "name": "POST Login (Usuario inexistente)",
+      "description": "Testa login com email que nao existe no banco. Espera-se erro 401.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"naoexiste@email.com\",\n  \"password\": \"senha123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct07"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -800,
+      "_type": "request"
+    },
+    {
+      "_id": "req_login_val_01",
+      "parentId": "fld_auth_01",
+      "modified": 1745259600000,
+      "created": 1745259600000,
+      "url": "http://localhost:3000/auth/login",
+      "name": "POST Login (Validacao - campos invalidos)",
+      "description": "Testa a validacao do DTO de login com email invalido e senha curta. Espera-se erro 400.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"nao-e-email\",\n  \"password\": \"123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_ct08"
+        }
+      ],
+      "authentication": {},
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "metaSortKey": -700,
+      "_type": "request"
+    }
+  ]
+}

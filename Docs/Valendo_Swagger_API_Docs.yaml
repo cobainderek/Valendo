@@ -1,0 +1,294 @@
+openapi: 3.0.3
+info:
+  title: Valendo API
+  version: 1.0.0
+  description: Coleção de testes para a API do Valendo
+servers:
+  - url: http://localhost:3000
+    description: Servidor Local
+paths:
+  /:
+    get:
+      tags:
+        - Health Check
+      summary: Health Check da API
+      description: Verifica se a API está rodando
+      responses:
+        "200":
+          description: OK
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Criar Usuario
+      description: Cria um novo usuario no sistema
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Joao Silva
+                tag:
+                  type: string
+                  example: joao_silva
+                email:
+                  type: string
+                  example: joao@email.com
+                password:
+                  type: string
+                  example: senha123
+      responses:
+        "201":
+          description: Criado com sucesso
+        "400":
+          description: Erro de validacao
+        "409":
+          description: Email ou tag ja existentes
+  /users_validation:
+    post:
+      tags:
+        - Users
+      summary: Criar Usuario (Validacao - campos vazios)
+      description: Testa a validacao enviando campos vazios. Espera-se erro 400.
+      responses:
+        "400":
+          description: Bad Request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: ""
+                tag:
+                  type: string
+                  example: ""
+                email:
+                  type: string
+                  example: email-invalido
+                password:
+                  type: string
+                  example: "123"
+  /users_dup_email:
+    post:
+      tags:
+        - Users
+      summary: Criar Usuario (Email duplicado)
+      description: Testa a criacao com email ja existente. Execute apos criar o Joao Silva.
+      responses:
+        "409":
+          description: Conflict
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Outro Nome
+                tag:
+                  type: string
+                  example: outro_tag
+                email:
+                  type: string
+                  example: joao@email.com
+                password:
+                  type: string
+                  example: senha123
+  /users_dup_tag:
+    post:
+      tags:
+        - Users
+      summary: Criar Usuario (Tag duplicada)
+      description: Testa a criacao com tag ja existente. Execute apos criar o Joao Silva.
+      responses:
+        "409":
+          description: Conflict
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Maria Souza
+                tag:
+                  type: string
+                  example: joao_silva
+                email:
+                  type: string
+                  example: maria@email.com
+                password:
+                  type: string
+                  example: senha456
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      description: Autentica um usuario e retorna o JWT.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: joao@email.com
+                password:
+                  type: string
+                  example: senha123
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+  /auth/login_wrong_pwd:
+    post:
+      tags:
+        - Auth
+      summary: Login (Senha errada)
+      description: Testa login com senha incorreta. Espera-se erro 401.
+      responses:
+        "401":
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: joao@email.com
+                password:
+                  type: string
+                  example: senhaerrada
+  /auth/login_nouser:
+    post:
+      tags:
+        - Auth
+      summary: Login (Usuario inexistente)
+      description: Testa login com email que nao existe no banco. Espera-se erro 401.
+      responses:
+        "401":
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: naoexiste@email.com
+                password:
+                  type: string
+                  example: senha123
+  /auth/login_val:
+    post:
+      tags:
+        - Auth
+      summary: Login (Validacao - campos invalidos)
+      description: Testa a validacao do DTO de login com email invalido e senha curta. Espera-se erro 400.
+      responses:
+        "400":
+          description: Bad Request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: nao-e-email
+                password:
+                  type: string
+                  example: "123"
+  /rooms:
+    get:
+      tags:
+        - Rooms
+      summary: Listar Lobby
+      description: Retorna todas as salas aguardando iniciacao publicamente.
+      responses:
+        "200":
+          description: OK
+    post:
+      tags:
+        - Rooms
+      summary: Criar Sala
+      description: Instancia uma nova sala baseada no usuario dono do JWT.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                  example: "Conhecimentos Gerais"
+                isPrivate:
+                  type: boolean
+                  example: false
+      responses:
+        "201":
+          description: OK
+        "401":
+          description: Unauthorized
+  /questions/generate:
+    post:
+      tags:
+        - Questions
+      summary: Gerar Bateria de Questoes (IA)
+      description: Dispara o algoritmo Gemini e Redis para criar 10 questoes no DB.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                roomCode:
+                  type: string
+                  example: "S6OO1A"
+                theme:
+                  type: string
+                  example: "História de Portugal"
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: OK
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
