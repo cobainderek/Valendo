@@ -3,8 +3,9 @@
 interface ValdoProps {
   size?: number
   expression?: 'idle' | 'cheer' | 'think' | 'confused' | 'sleep'
-  accessory?: 'book' | 'trophy' | 'pencil' | null
+  accessory?: 'book' | 'trophy' | 'pencil' | 'whistle' | null
   tilt?: number
+  whistling?: boolean
 }
 
 export function Valdo({
@@ -12,6 +13,7 @@ export function Valdo({
   expression = 'idle',
   accessory = 'book',
   tilt = -4,
+  whistling = false,
 }: ValdoProps) {
   const w = size
   const h = size * 1.15
@@ -79,6 +81,60 @@ export function Valdo({
           <rect x="36" y="50" width="28" height="10" fill="#E8601C" stroke="#1A1A2E" strokeWidth="3" />
           <rect x="28" y="58" width="44" height="10" rx="2" fill="#E8601C" stroke="#1A1A2E" strokeWidth="3" />
           <text x="50" y="26" textAnchor="middle" fontFamily="Nunito" fontWeight="900" fontSize="18" fill="#0D3080">1</text>
+        </g>
+      )
+    }
+    if (accessory === 'whistle') {
+      // Apito pendurado por cordão no pescoço + "TUIT" animado quando whistling
+      return (
+        <g>
+          {/* Cordão */}
+          <path
+            d="M 95 175 q 25 -8 50 0"
+            stroke="#1A1A2E"
+            strokeWidth="2.5"
+            fill="none"
+            strokeLinecap="round"
+          />
+          {/* Apito */}
+          <g transform="translate(110, 170)">
+            <rect
+              x="0"
+              y="0"
+              width="28"
+              height="14"
+              rx="4"
+              fill="#F5C518"
+              stroke="#1A1A2E"
+              strokeWidth="2.5"
+            />
+            <circle cx="22" cy="7" r="3" fill="#1A1A2E" />
+            <path d="M 28 4 l 6 -2 l 0 10 l -6 -2 z" fill="#F5C518" stroke="#1A1A2E" strokeWidth="2.5" strokeLinejoin="round" />
+          </g>
+          {/* TUIT — som do apito */}
+          {whistling && (
+            <g className="valdo-whistle-puff">
+              <path
+                d="M 150 168 q 14 -6 26 4 q 10 10 4 22"
+                fill="none"
+                stroke="#1A1A2E"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray="3 5"
+              />
+              <text
+                x="178"
+                y="176"
+                fontFamily="Caveat, cursive"
+                fontWeight="700"
+                fontSize="22"
+                fill="#E74C3C"
+                transform="rotate(-8 178 176)"
+              >
+                tuit!
+              </text>
+            </g>
+          )}
         </g>
       )
     }

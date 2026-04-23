@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Nunito, Caveat } from "next/font/google"
 import "./globals.css"
+import { GlobalFloatingUI } from "@/components/social/GlobalFloatingUI"
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-[var(--bg-page)]" style={{ fontFamily: 'var(--font-ui)' }}>
         {children}
+        <GlobalFloatingUI />
       </body>
     </html>
   )
