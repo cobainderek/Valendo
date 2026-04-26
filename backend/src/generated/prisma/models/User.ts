@@ -229,6 +229,10 @@ export type UserWhereInput = {
   passwordHash?: Prisma.StringFilter<"User"> | string
   globalXp?: Prisma.IntFilter<"User"> | number
   HostedRooms?: Prisma.RoomListRelationFilter
+  wonRooms?: Prisma.RoomListRelationFilter
+  roomPlayers?: Prisma.RoomPlayerListRelationFilter
+  answers?: Prisma.AnswerListRelationFilter
+  weeklyScores?: Prisma.WeeklyScoreListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -239,6 +243,10 @@ export type UserOrderByWithRelationInput = {
   passwordHash?: Prisma.SortOrder
   globalXp?: Prisma.SortOrder
   HostedRooms?: Prisma.RoomOrderByRelationAggregateInput
+  wonRooms?: Prisma.RoomOrderByRelationAggregateInput
+  roomPlayers?: Prisma.RoomPlayerOrderByRelationAggregateInput
+  answers?: Prisma.AnswerOrderByRelationAggregateInput
+  weeklyScores?: Prisma.WeeklyScoreOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -252,6 +260,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordHash?: Prisma.StringFilter<"User"> | string
   globalXp?: Prisma.IntFilter<"User"> | number
   HostedRooms?: Prisma.RoomListRelationFilter
+  wonRooms?: Prisma.RoomListRelationFilter
+  roomPlayers?: Prisma.RoomPlayerListRelationFilter
+  answers?: Prisma.AnswerListRelationFilter
+  weeklyScores?: Prisma.WeeklyScoreListRelationFilter
 }, "id" | "tag" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -288,6 +300,10 @@ export type UserCreateInput = {
   passwordHash: string
   globalXp?: number
   HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -298,6 +314,10 @@ export type UserUncheckedCreateInput = {
   passwordHash: string
   globalXp?: number
   HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -308,6 +328,10 @@ export type UserUpdateInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
   HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -318,6 +342,10 @@ export type UserUncheckedUpdateInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
   HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -389,6 +417,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type BigIntFieldUpdateOperationsInput = {
   set?: bigint | number
   increment?: bigint | number
@@ -415,12 +448,70 @@ export type UserCreateNestedOneWithoutHostedRoomsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutWonRoomsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWonRoomsInput, Prisma.UserUncheckedCreateWithoutWonRoomsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWonRoomsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutHostedRoomsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutHostedRoomsInput, Prisma.UserUncheckedCreateWithoutHostedRoomsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutHostedRoomsInput
   upsert?: Prisma.UserUpsertWithoutHostedRoomsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutHostedRoomsInput, Prisma.UserUpdateWithoutHostedRoomsInput>, Prisma.UserUncheckedUpdateWithoutHostedRoomsInput>
+}
+
+export type UserUpdateOneWithoutWonRoomsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWonRoomsInput, Prisma.UserUncheckedCreateWithoutWonRoomsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWonRoomsInput
+  upsert?: Prisma.UserUpsertWithoutWonRoomsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWonRoomsInput, Prisma.UserUpdateWithoutWonRoomsInput>, Prisma.UserUncheckedUpdateWithoutWonRoomsInput>
+}
+
+export type UserCreateNestedOneWithoutRoomPlayersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoomPlayersInput, Prisma.UserUncheckedCreateWithoutRoomPlayersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoomPlayersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRoomPlayersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoomPlayersInput, Prisma.UserUncheckedCreateWithoutRoomPlayersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoomPlayersInput
+  upsert?: Prisma.UserUpsertWithoutRoomPlayersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRoomPlayersInput, Prisma.UserUpdateWithoutRoomPlayersInput>, Prisma.UserUncheckedUpdateWithoutRoomPlayersInput>
+}
+
+export type UserCreateNestedOneWithoutAnswersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAnswersInput, Prisma.UserUncheckedCreateWithoutAnswersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAnswersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAnswersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAnswersInput, Prisma.UserUncheckedCreateWithoutAnswersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAnswersInput
+  upsert?: Prisma.UserUpsertWithoutAnswersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAnswersInput, Prisma.UserUpdateWithoutAnswersInput>, Prisma.UserUncheckedUpdateWithoutAnswersInput>
+}
+
+export type UserCreateNestedOneWithoutWeeklyScoresInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWeeklyScoresInput, Prisma.UserUncheckedCreateWithoutWeeklyScoresInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWeeklyScoresInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWeeklyScoresNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWeeklyScoresInput, Prisma.UserUncheckedCreateWithoutWeeklyScoresInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWeeklyScoresInput
+  upsert?: Prisma.UserUpsertWithoutWeeklyScoresInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWeeklyScoresInput, Prisma.UserUpdateWithoutWeeklyScoresInput>, Prisma.UserUncheckedUpdateWithoutWeeklyScoresInput>
 }
 
 export type UserCreateWithoutHostedRoomsInput = {
@@ -430,6 +521,10 @@ export type UserCreateWithoutHostedRoomsInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutHostedRoomsInput = {
@@ -439,11 +534,46 @@ export type UserUncheckedCreateWithoutHostedRoomsInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutHostedRoomsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutHostedRoomsInput, Prisma.UserUncheckedCreateWithoutHostedRoomsInput>
+}
+
+export type UserCreateWithoutWonRoomsInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutWonRoomsInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutWonRoomsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWonRoomsInput, Prisma.UserUncheckedCreateWithoutWonRoomsInput>
 }
 
 export type UserUpsertWithoutHostedRoomsInput = {
@@ -464,6 +594,10 @@ export type UserUpdateWithoutHostedRoomsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutHostedRoomsInput = {
@@ -473,6 +607,251 @@ export type UserUncheckedUpdateWithoutHostedRoomsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutWonRoomsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWonRoomsInput, Prisma.UserUncheckedUpdateWithoutWonRoomsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWonRoomsInput, Prisma.UserUncheckedCreateWithoutWonRoomsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWonRoomsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWonRoomsInput, Prisma.UserUncheckedUpdateWithoutWonRoomsInput>
+}
+
+export type UserUpdateWithoutWonRoomsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWonRoomsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutRoomPlayersInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRoomPlayersInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRoomPlayersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoomPlayersInput, Prisma.UserUncheckedCreateWithoutRoomPlayersInput>
+}
+
+export type UserUpsertWithoutRoomPlayersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRoomPlayersInput, Prisma.UserUncheckedUpdateWithoutRoomPlayersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoomPlayersInput, Prisma.UserUncheckedCreateWithoutRoomPlayersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRoomPlayersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRoomPlayersInput, Prisma.UserUncheckedUpdateWithoutRoomPlayersInput>
+}
+
+export type UserUpdateWithoutRoomPlayersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRoomPlayersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAnswersInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAnswersInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAnswersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAnswersInput, Prisma.UserUncheckedCreateWithoutAnswersInput>
+}
+
+export type UserUpsertWithoutAnswersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAnswersInput, Prisma.UserUncheckedUpdateWithoutAnswersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAnswersInput, Prisma.UserUncheckedCreateWithoutAnswersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAnswersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAnswersInput, Prisma.UserUncheckedUpdateWithoutAnswersInput>
+}
+
+export type UserUpdateWithoutAnswersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAnswersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutWeeklyScoresInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutWeeklyScoresInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutWeeklyScoresInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWeeklyScoresInput, Prisma.UserUncheckedCreateWithoutWeeklyScoresInput>
+}
+
+export type UserUpsertWithoutWeeklyScoresInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWeeklyScoresInput, Prisma.UserUncheckedUpdateWithoutWeeklyScoresInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWeeklyScoresInput, Prisma.UserUncheckedCreateWithoutWeeklyScoresInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWeeklyScoresInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWeeklyScoresInput, Prisma.UserUncheckedUpdateWithoutWeeklyScoresInput>
+}
+
+export type UserUpdateWithoutWeeklyScoresInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWeeklyScoresInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -482,10 +861,18 @@ export type UserUncheckedUpdateWithoutHostedRoomsInput = {
 
 export type UserCountOutputType = {
   HostedRooms: number
+  wonRooms: number
+  roomPlayers: number
+  answers: number
+  weeklyScores: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   HostedRooms?: boolean | UserCountOutputTypeCountHostedRoomsArgs
+  wonRooms?: boolean | UserCountOutputTypeCountWonRoomsArgs
+  roomPlayers?: boolean | UserCountOutputTypeCountRoomPlayersArgs
+  answers?: boolean | UserCountOutputTypeCountAnswersArgs
+  weeklyScores?: boolean | UserCountOutputTypeCountWeeklyScoresArgs
 }
 
 /**
@@ -505,6 +892,34 @@ export type UserCountOutputTypeCountHostedRoomsArgs<ExtArgs extends runtime.Type
   where?: Prisma.RoomWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWonRoomsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRoomPlayersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomPlayerWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAnswersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AnswerWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWeeklyScoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WeeklyScoreWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -514,6 +929,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   passwordHash?: boolean
   globalXp?: boolean
   HostedRooms?: boolean | Prisma.User$HostedRoomsArgs<ExtArgs>
+  wonRooms?: boolean | Prisma.User$wonRoomsArgs<ExtArgs>
+  roomPlayers?: boolean | Prisma.User$roomPlayersArgs<ExtArgs>
+  answers?: boolean | Prisma.User$answersArgs<ExtArgs>
+  weeklyScores?: boolean | Prisma.User$weeklyScoresArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -547,6 +966,10 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tag" | "email" | "passwordHash" | "globalXp", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   HostedRooms?: boolean | Prisma.User$HostedRoomsArgs<ExtArgs>
+  wonRooms?: boolean | Prisma.User$wonRoomsArgs<ExtArgs>
+  roomPlayers?: boolean | Prisma.User$roomPlayersArgs<ExtArgs>
+  answers?: boolean | Prisma.User$answersArgs<ExtArgs>
+  weeklyScores?: boolean | Prisma.User$weeklyScoresArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -556,6 +979,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     HostedRooms: Prisma.$RoomPayload<ExtArgs>[]
+    wonRooms: Prisma.$RoomPayload<ExtArgs>[]
+    roomPlayers: Prisma.$RoomPlayerPayload<ExtArgs>[]
+    answers: Prisma.$AnswerPayload<ExtArgs>[]
+    weeklyScores: Prisma.$WeeklyScorePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -959,6 +1386,10 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   HostedRooms<T extends Prisma.User$HostedRoomsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$HostedRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  wonRooms<T extends Prisma.User$wonRoomsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$wonRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roomPlayers<T extends Prisma.User$roomPlayersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roomPlayersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  answers<T extends Prisma.User$answersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$answersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  weeklyScores<T extends Prisma.User$weeklyScoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$weeklyScoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WeeklyScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1408,6 +1839,102 @@ export type User$HostedRoomsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.RoomScalarFieldEnum | Prisma.RoomScalarFieldEnum[]
+}
+
+/**
+ * User.wonRooms
+ */
+export type User$wonRoomsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Room
+   */
+  select?: Prisma.RoomSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Room
+   */
+  omit?: Prisma.RoomOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomInclude<ExtArgs> | null
+  where?: Prisma.RoomWhereInput
+  orderBy?: Prisma.RoomOrderByWithRelationInput | Prisma.RoomOrderByWithRelationInput[]
+  cursor?: Prisma.RoomWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomScalarFieldEnum | Prisma.RoomScalarFieldEnum[]
+}
+
+/**
+ * User.roomPlayers
+ */
+export type User$roomPlayersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomPlayer
+   */
+  select?: Prisma.RoomPlayerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoomPlayer
+   */
+  omit?: Prisma.RoomPlayerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomPlayerInclude<ExtArgs> | null
+  where?: Prisma.RoomPlayerWhereInput
+  orderBy?: Prisma.RoomPlayerOrderByWithRelationInput | Prisma.RoomPlayerOrderByWithRelationInput[]
+  cursor?: Prisma.RoomPlayerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomPlayerScalarFieldEnum | Prisma.RoomPlayerScalarFieldEnum[]
+}
+
+/**
+ * User.answers
+ */
+export type User$answersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Answer
+   */
+  select?: Prisma.AnswerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Answer
+   */
+  omit?: Prisma.AnswerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnswerInclude<ExtArgs> | null
+  where?: Prisma.AnswerWhereInput
+  orderBy?: Prisma.AnswerOrderByWithRelationInput | Prisma.AnswerOrderByWithRelationInput[]
+  cursor?: Prisma.AnswerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AnswerScalarFieldEnum | Prisma.AnswerScalarFieldEnum[]
+}
+
+/**
+ * User.weeklyScores
+ */
+export type User$weeklyScoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WeeklyScore
+   */
+  select?: Prisma.WeeklyScoreSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WeeklyScore
+   */
+  omit?: Prisma.WeeklyScoreOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WeeklyScoreInclude<ExtArgs> | null
+  where?: Prisma.WeeklyScoreWhereInput
+  orderBy?: Prisma.WeeklyScoreOrderByWithRelationInput | Prisma.WeeklyScoreOrderByWithRelationInput[]
+  cursor?: Prisma.WeeklyScoreWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WeeklyScoreScalarFieldEnum | Prisma.WeeklyScoreScalarFieldEnum[]
 }
 
 /**

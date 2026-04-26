@@ -5,11 +5,14 @@ import { useRouter } from 'next/navigation'
 import { LogoMark } from '@/components/ui/LogoMark'
 import { LoginForm } from '@/components/auth/LoginForm'
 import { LoginScene } from '@/components/auth/LoginScene'
+import { login, register, recoverPassword } from '@/services/auth'
+import { useAuthStore } from '@/lib/store/useAuthStore'
 
 export default function LoginPage() {
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(false)
   const router = useRouter()
+  const storeLogin = useAuthStore((s) => s.login)
 
   async function handleLogin(email: string, senha: string) {
     if (!email.trim() || !senha.trim()) {
@@ -21,22 +24,15 @@ export default function LoginPage() {
     setErro('')
 
     try {
-      const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, senha }),
-      })
-
-      if (!resposta.ok) {
-        setErro('Email ou senha inválidos!')
-        return
-      }
-
-      const dados = await resposta.json()
-      localStorage.setItem('token', dados.access_token)
+      const dados = await login(email, senha)
+      storeLogin(dados.access_token, dados.user)
       router.push('/lobby')
-    } catch {
-      setErro('Erro de conexão. Verifique se o servidor está rodando!')
+    } catch (err) {
+      if (err instanceof Error && err.message) {
+        setErro(err.message)
+      } else {
+        setErro('Erro de conexão. Verifique se o servidor está rodando!')
+      }
     } finally {
       setCarregando(false)
     }
@@ -52,24 +48,25 @@ export default function LoginPage() {
     setErro('')
 
     try {
-      const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tag: apelido, email, senha }),
-      })
-
-      if (!resposta.ok) {
-        const data = await resposta.json().catch(() => ({}))
-        setErro(data.message || 'Erro ao criar conta.')
-        return
+      const dados = await register({ name: apelido, tag: apelido, email, password: senha })
+      storeLogin(dados.access_token, dados.user)
+      router.push('/lobby')
+    } catch (err) {
+      if (err instanceof Error && err.message) {
+        setErro(err.message)
+      } else {
+        setErro('Erro de conexão. Verifique se o servidor está rodando!')
       }
-
-      // Auto-login after registration
-      await handleLogin(email, senha)
-    } catch {
-      setErro('Erro de conexão. Verifique se o servidor está rodando!')
     } finally {
       setCarregando(false)
+    }
+  }
+
+  async function handleRecover(email: string) {
+    try {
+      await recoverPassword(email)
+    } catch {
+      // Sempre mostra sucesso para evitar enumeração de emails
     }
   }
 
@@ -123,6 +120,7 @@ export default function LoginPage() {
           <LoginForm
             onLogin={handleLogin}
             onSignup={handleSignup}
+            onRecover={handleRecover}
             carregando={carregando}
             erro={erro}
           />

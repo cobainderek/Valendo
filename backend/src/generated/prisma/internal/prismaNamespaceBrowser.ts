@@ -53,8 +53,11 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Room: 'Room',
+  RoomPlayer: 'RoomPlayer',
   Duel: 'Duel',
-  Question: 'Question'
+  Question: 'Question',
+  Answer: 'Answer',
+  WeeklyScore: 'WeeklyScore'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -91,10 +94,30 @@ export const RoomScalarFieldEnum = {
   hostId: 'hostId',
   theme: 'theme',
   status: 'status',
-  isPrivate: 'isPrivate'
+  isPrivate: 'isPrivate',
+  isSoloMode: 'isSoloMode',
+  maxPlayers: 'maxPlayers',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  winnerId: 'winnerId'
 } as const
 
 export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
+
+
+export const RoomPlayerScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  userId: 'userId',
+  joinedAt: 'joinedAt',
+  score: 'score',
+  correct: 'correct',
+  finished: 'finished',
+  isBot: 'isBot',
+  botName: 'botName'
+} as const
+
+export type RoomPlayerScalarFieldEnum = (typeof RoomPlayerScalarFieldEnum)[keyof typeof RoomPlayerScalarFieldEnum]
 
 
 export const DuelScalarFieldEnum = {
@@ -117,6 +140,29 @@ export const QuestionScalarFieldEnum = {
 } as const
 
 export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+export const AnswerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  questionId: 'questionId',
+  selectedAnswer: 'selectedAnswer',
+  isCorrect: 'isCorrect',
+  answeredAt: 'answeredAt'
+} as const
+
+export type AnswerScalarFieldEnum = (typeof AnswerScalarFieldEnum)[keyof typeof AnswerScalarFieldEnum]
+
+
+export const WeeklyScoreScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  year: 'year',
+  week: 'week',
+  xp: 'xp'
+} as const
+
+export type WeeklyScoreScalarFieldEnum = (typeof WeeklyScoreScalarFieldEnum)[keyof typeof WeeklyScoreScalarFieldEnum]
 
 
 export const SortOrder = {

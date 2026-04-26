@@ -21,10 +21,11 @@ model User {
   passwordHash String   @map("password_hash") @db.VarChar(255)
   globalXp     Int      @default(0) @map("global_xp")
 
-  // For future relationships:
   HostedRooms     Room[]          @relation("rooms_host")
-  // Answers         Answer[]
-  // WeeklyScores    WeeklyScore[]
+  wonRooms        Room[]          @relation("room_winner")
+  roomPlayers     RoomPlayer[]
+  answers         Answer[]
+  weeklyScores    WeeklyScore[]
   // Friendships1    Friendship[]    @relation("friendships_user1")
   // Friendships2    Friendship[]    @relation("friendships_user2")
 
@@ -32,17 +33,42 @@ model User {
 }
 
 model Room {
-  id        BigInt   @id @default(autoincrement())
-  code      String   @unique @db.Char(6)
-  hostId    BigInt   @map("host_id")
-  theme     String?  @db.VarChar(255)
-  status    String   @default("waiting") @db.VarChar(20)
-  isPrivate Boolean  @default(false) @map("is_private")
+  id         BigInt    @id @default(autoincrement())
+  code       String    @unique @db.Char(6)
+  hostId     BigInt    @map("host_id")
+  theme      String?   @db.VarChar(255)
+  status     String    @default("waiting") @db.VarChar(20)
+  isPrivate  Boolean   @default(false) @map("is_private")
+  isSoloMode Boolean   @default(false) @map("is_solo_mode")
+  maxPlayers Int       @default(4) @map("max_players")
+  startedAt  DateTime? @map("started_at")
+  finishedAt DateTime? @map("finished_at")
+  winnerId   BigInt?   @map("winner_id")
 
-  host      User     @relation("rooms_host", fields: [hostId], references: [id])
-  duel      Duel?
+  host       User         @relation("rooms_host", fields: [hostId], references: [id])
+  winner     User?        @relation("room_winner", fields: [winnerId], references: [id])
+  duel       Duel?
+  players    RoomPlayer[]
 
   @@map("rooms")
+}
+
+model RoomPlayer {
+  id       BigInt   @id @default(autoincrement())
+  roomId   BigInt   @map("room_id")
+  userId   BigInt   @map("user_id")
+  joinedAt DateTime @default(now()) @map("joined_at")
+  score    Int      @default(0)
+  correct  Int      @default(0)
+  finished Boolean  @default(false)
+  isBot    Boolean  @default(false) @map("is_bot")
+  botName  String?  @map("bot_name") @db.VarChar(50)
+
+  room     Room     @relation(fields: [roomId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([roomId, userId, isBot])
+  @@map("room_players")
 }
 
 model Duel {
@@ -66,7 +92,36 @@ model Question {
   explanationAi String?  @map("explanation_ai")
 
   duel          Duel     @relation(fields: [duelId], references: [id])
-  // answers    Answer[]
+  answers       Answer[]
 
   @@map("questions")
+}
+
+model Answer {
+  id             BigInt   @id @default(autoincrement())
+  userId         BigInt   @map("user_id")
+  questionId     BigInt   @map("question_id")
+  selectedAnswer String   @map("selected_answer") @db.VarChar(255)
+  isCorrect      Boolean  @map("is_correct")
+  answeredAt     DateTime @default(now()) @map("answered_at")
+
+  user           User     @relation(fields: [userId], references: [id])
+  question       Question @relation(fields: [questionId], references: [id])
+
+  @@unique([userId, questionId])
+  @@map("answers")
+}
+
+model WeeklyScore {
+  id     BigInt @id @default(autoincrement())
+  userId BigInt @map("user_id")
+  year   Int
+  week   Int
+  xp     Int    @default(0)
+
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, year, week])
+  @@index([year, week, xp(sort: Desc)])
+  @@map("weekly_scores")
 }

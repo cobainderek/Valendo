@@ -6,11 +6,12 @@ import { DoodleIcon } from '@/components/ui/DoodleIcon'
 interface LoginFormProps {
   onLogin: (email: string, senha: string) => void
   onSignup: (apelido: string, email: string, senha: string) => void
+  onRecover?: (email: string) => Promise<void>
   carregando?: boolean
   erro?: string
 }
 
-export function LoginForm({ onLogin, onSignup, carregando = false, erro = '' }: LoginFormProps) {
+export function LoginForm({ onLogin, onSignup, onRecover, carregando = false, erro = '' }: LoginFormProps) {
   const [mode, setMode] = useState<'login' | 'signup' | 'recover'>('login')
   const [apelido, setApelido] = useState('')
   const [email, setEmail] = useState('')
@@ -26,7 +27,7 @@ export function LoginForm({ onLogin, onSignup, carregando = false, erro = '' }: 
   }
 
   if (mode === 'recover') {
-    return <RecoverForm onBack={() => setMode('login')} />
+    return <RecoverForm onBack={() => setMode('login')} onRecover={onRecover} />
   }
 
   return (
@@ -157,7 +158,20 @@ export function LoginForm({ onLogin, onSignup, carregando = false, erro = '' }: 
   )
 }
 
-function RecoverForm({ onBack }: { onBack: () => void }) {
+function RecoverForm({ onBack, onRecover }: { onBack: () => void; onRecover?: (email: string) => Promise<void> }) {
+  const [email, setEmail] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const [enviado, setEnviado] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email.trim() || !onRecover) return
+    setEnviando(true)
+    await onRecover(email)
+    setEnviando(false)
+    setEnviado(true)
+  }
+
   return (
     <div>
       <h1
@@ -176,14 +190,47 @@ function RecoverForm({ onBack }: { onBack: () => void }) {
       <p style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 16, margin: '10px 0 28px' }}>
         Acontece. Coloca teu email que a gente manda um link de recuperação.
       </p>
-      <div className="input-wrap">
-        <label>Email</label>
-        <span className="input-icon"><DoodleIcon name="mail" size={20} /></span>
-        <input className="input" type="email" placeholder="voce@faesa.br" />
-      </div>
-      <button className="btn btn-primary" style={{ width: '100%', marginTop: 8 }}>
-        Enviar link mágico
-      </button>
+
+      {enviado ? (
+        <div style={{
+          background: '#e8f8ee',
+          border: '2px solid var(--green)',
+          borderRadius: 12,
+          padding: '16px 20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          <p style={{ color: '#1a7a3a', fontWeight: 700, fontSize: 14, margin: 0 }}>
+            Se esse email estiver cadastrado, enviamos um link de recuperação!
+          </p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="input-wrap">
+            <label>Email</label>
+            <span className="input-icon"><DoodleIcon name="mail" size={20} /></span>
+            <input
+              className="input"
+              type="email"
+              placeholder="voce@faesa.br"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ width: '100%', marginTop: 8 }}
+            disabled={enviando}
+          >
+            {enviando ? 'Enviando...' : 'Enviar link mágico'}
+          </button>
+        </form>
+      )}
+
       <p style={{ textAlign: 'center', marginTop: 22 }}>
         <a className="link-hand" href="#" onClick={(e) => { e.preventDefault(); onBack() }}>
           ← voltar ao login

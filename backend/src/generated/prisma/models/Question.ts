@@ -225,6 +225,7 @@ export type QuestionWhereInput = {
   correctAnswer?: Prisma.StringFilter<"Question"> | string
   explanationAi?: Prisma.StringNullableFilter<"Question"> | string | null
   duel?: Prisma.XOR<Prisma.DuelScalarRelationFilter, Prisma.DuelWhereInput>
+  answers?: Prisma.AnswerListRelationFilter
 }
 
 export type QuestionOrderByWithRelationInput = {
@@ -235,6 +236,7 @@ export type QuestionOrderByWithRelationInput = {
   correctAnswer?: Prisma.SortOrder
   explanationAi?: Prisma.SortOrderInput | Prisma.SortOrder
   duel?: Prisma.DuelOrderByWithRelationInput
+  answers?: Prisma.AnswerOrderByRelationAggregateInput
 }
 
 export type QuestionWhereUniqueInput = Prisma.AtLeast<{
@@ -248,6 +250,7 @@ export type QuestionWhereUniqueInput = Prisma.AtLeast<{
   correctAnswer?: Prisma.StringFilter<"Question"> | string
   explanationAi?: Prisma.StringNullableFilter<"Question"> | string | null
   duel?: Prisma.XOR<Prisma.DuelScalarRelationFilter, Prisma.DuelWhereInput>
+  answers?: Prisma.AnswerListRelationFilter
 }, "id">
 
 export type QuestionOrderByWithAggregationInput = {
@@ -283,6 +286,7 @@ export type QuestionCreateInput = {
   correctAnswer: string
   explanationAi?: string | null
   duel: Prisma.DuelCreateNestedOneWithoutQuestionsInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutQuestionInput
 }
 
 export type QuestionUncheckedCreateInput = {
@@ -292,6 +296,7 @@ export type QuestionUncheckedCreateInput = {
   options: Prisma.JsonNullValueInput | runtime.InputJsonValue
   correctAnswer: string
   explanationAi?: string | null
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutQuestionInput
 }
 
 export type QuestionUpdateInput = {
@@ -301,6 +306,7 @@ export type QuestionUpdateInput = {
   correctAnswer?: Prisma.StringFieldUpdateOperationsInput | string
   explanationAi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   duel?: Prisma.DuelUpdateOneRequiredWithoutQuestionsNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutQuestionNestedInput
 }
 
 export type QuestionUncheckedUpdateInput = {
@@ -310,6 +316,7 @@ export type QuestionUncheckedUpdateInput = {
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   correctAnswer?: Prisma.StringFieldUpdateOperationsInput | string
   explanationAi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutQuestionNestedInput
 }
 
 export type QuestionCreateManyInput = {
@@ -383,6 +390,11 @@ export type QuestionSumOrderByAggregateInput = {
   duelId?: Prisma.SortOrder
 }
 
+export type QuestionScalarRelationFilter = {
+  is?: Prisma.QuestionWhereInput
+  isNot?: Prisma.QuestionWhereInput
+}
+
 export type QuestionCreateNestedManyWithoutDuelInput = {
   create?: Prisma.XOR<Prisma.QuestionCreateWithoutDuelInput, Prisma.QuestionUncheckedCreateWithoutDuelInput> | Prisma.QuestionCreateWithoutDuelInput[] | Prisma.QuestionUncheckedCreateWithoutDuelInput[]
   connectOrCreate?: Prisma.QuestionCreateOrConnectWithoutDuelInput | Prisma.QuestionCreateOrConnectWithoutDuelInput[]
@@ -425,12 +437,27 @@ export type QuestionUncheckedUpdateManyWithoutDuelNestedInput = {
   deleteMany?: Prisma.QuestionScalarWhereInput | Prisma.QuestionScalarWhereInput[]
 }
 
+export type QuestionCreateNestedOneWithoutAnswersInput = {
+  create?: Prisma.XOR<Prisma.QuestionCreateWithoutAnswersInput, Prisma.QuestionUncheckedCreateWithoutAnswersInput>
+  connectOrCreate?: Prisma.QuestionCreateOrConnectWithoutAnswersInput
+  connect?: Prisma.QuestionWhereUniqueInput
+}
+
+export type QuestionUpdateOneRequiredWithoutAnswersNestedInput = {
+  create?: Prisma.XOR<Prisma.QuestionCreateWithoutAnswersInput, Prisma.QuestionUncheckedCreateWithoutAnswersInput>
+  connectOrCreate?: Prisma.QuestionCreateOrConnectWithoutAnswersInput
+  upsert?: Prisma.QuestionUpsertWithoutAnswersInput
+  connect?: Prisma.QuestionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuestionUpdateToOneWithWhereWithoutAnswersInput, Prisma.QuestionUpdateWithoutAnswersInput>, Prisma.QuestionUncheckedUpdateWithoutAnswersInput>
+}
+
 export type QuestionCreateWithoutDuelInput = {
   id?: bigint | number
   text: string
   options: Prisma.JsonNullValueInput | runtime.InputJsonValue
   correctAnswer: string
   explanationAi?: string | null
+  answers?: Prisma.AnswerCreateNestedManyWithoutQuestionInput
 }
 
 export type QuestionUncheckedCreateWithoutDuelInput = {
@@ -439,6 +466,7 @@ export type QuestionUncheckedCreateWithoutDuelInput = {
   options: Prisma.JsonNullValueInput | runtime.InputJsonValue
   correctAnswer: string
   explanationAi?: string | null
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutQuestionInput
 }
 
 export type QuestionCreateOrConnectWithoutDuelInput = {
@@ -479,6 +507,58 @@ export type QuestionScalarWhereInput = {
   explanationAi?: Prisma.StringNullableFilter<"Question"> | string | null
 }
 
+export type QuestionCreateWithoutAnswersInput = {
+  id?: bigint | number
+  text: string
+  options: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  correctAnswer: string
+  explanationAi?: string | null
+  duel: Prisma.DuelCreateNestedOneWithoutQuestionsInput
+}
+
+export type QuestionUncheckedCreateWithoutAnswersInput = {
+  id?: bigint | number
+  duelId: bigint | number
+  text: string
+  options: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  correctAnswer: string
+  explanationAi?: string | null
+}
+
+export type QuestionCreateOrConnectWithoutAnswersInput = {
+  where: Prisma.QuestionWhereUniqueInput
+  create: Prisma.XOR<Prisma.QuestionCreateWithoutAnswersInput, Prisma.QuestionUncheckedCreateWithoutAnswersInput>
+}
+
+export type QuestionUpsertWithoutAnswersInput = {
+  update: Prisma.XOR<Prisma.QuestionUpdateWithoutAnswersInput, Prisma.QuestionUncheckedUpdateWithoutAnswersInput>
+  create: Prisma.XOR<Prisma.QuestionCreateWithoutAnswersInput, Prisma.QuestionUncheckedCreateWithoutAnswersInput>
+  where?: Prisma.QuestionWhereInput
+}
+
+export type QuestionUpdateToOneWithWhereWithoutAnswersInput = {
+  where?: Prisma.QuestionWhereInput
+  data: Prisma.XOR<Prisma.QuestionUpdateWithoutAnswersInput, Prisma.QuestionUncheckedUpdateWithoutAnswersInput>
+}
+
+export type QuestionUpdateWithoutAnswersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  correctAnswer?: Prisma.StringFieldUpdateOperationsInput | string
+  explanationAi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duel?: Prisma.DuelUpdateOneRequiredWithoutQuestionsNestedInput
+}
+
+export type QuestionUncheckedUpdateWithoutAnswersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  duelId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  text?: Prisma.StringFieldUpdateOperationsInput | string
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  correctAnswer?: Prisma.StringFieldUpdateOperationsInput | string
+  explanationAi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type QuestionCreateManyDuelInput = {
   id?: bigint | number
   text: string
@@ -493,6 +573,7 @@ export type QuestionUpdateWithoutDuelInput = {
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   correctAnswer?: Prisma.StringFieldUpdateOperationsInput | string
   explanationAi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answers?: Prisma.AnswerUpdateManyWithoutQuestionNestedInput
 }
 
 export type QuestionUncheckedUpdateWithoutDuelInput = {
@@ -501,6 +582,7 @@ export type QuestionUncheckedUpdateWithoutDuelInput = {
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   correctAnswer?: Prisma.StringFieldUpdateOperationsInput | string
   explanationAi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutQuestionNestedInput
 }
 
 export type QuestionUncheckedUpdateManyWithoutDuelInput = {
@@ -512,6 +594,35 @@ export type QuestionUncheckedUpdateManyWithoutDuelInput = {
 }
 
 
+/**
+ * Count Type QuestionCountOutputType
+ */
+
+export type QuestionCountOutputType = {
+  answers: number
+}
+
+export type QuestionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  answers?: boolean | QuestionCountOutputTypeCountAnswersArgs
+}
+
+/**
+ * QuestionCountOutputType without action
+ */
+export type QuestionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the QuestionCountOutputType
+   */
+  select?: Prisma.QuestionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * QuestionCountOutputType without action
+ */
+export type QuestionCountOutputTypeCountAnswersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AnswerWhereInput
+}
+
 
 export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -521,6 +632,8 @@ export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   correctAnswer?: boolean
   explanationAi?: boolean
   duel?: boolean | Prisma.DuelDefaultArgs<ExtArgs>
+  answers?: boolean | Prisma.Question$answersArgs<ExtArgs>
+  _count?: boolean | Prisma.QuestionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["question"]>
 
 export type QuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -555,6 +668,8 @@ export type QuestionSelectScalar = {
 export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "duelId" | "text" | "options" | "correctAnswer" | "explanationAi", ExtArgs["result"]["question"]>
 export type QuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   duel?: boolean | Prisma.DuelDefaultArgs<ExtArgs>
+  answers?: boolean | Prisma.Question$answersArgs<ExtArgs>
+  _count?: boolean | Prisma.QuestionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type QuestionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   duel?: boolean | Prisma.DuelDefaultArgs<ExtArgs>
@@ -567,6 +682,7 @@ export type $QuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Question"
   objects: {
     duel: Prisma.$DuelPayload<ExtArgs>
+    answers: Prisma.$AnswerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -970,6 +1086,7 @@ readonly fields: QuestionFieldRefs;
 export interface Prisma__QuestionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   duel<T extends Prisma.DuelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DuelDefaultArgs<ExtArgs>>): Prisma.Prisma__DuelClient<runtime.Types.Result.GetResult<Prisma.$DuelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  answers<T extends Prisma.Question$answersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Question$answersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1403,6 +1520,30 @@ export type QuestionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Questions to delete.
    */
   limit?: number
+}
+
+/**
+ * Question.answers
+ */
+export type Question$answersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Answer
+   */
+  select?: Prisma.AnswerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Answer
+   */
+  omit?: Prisma.AnswerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnswerInclude<ExtArgs> | null
+  where?: Prisma.AnswerWhereInput
+  orderBy?: Prisma.AnswerOrderByWithRelationInput | Prisma.AnswerOrderByWithRelationInput[]
+  cursor?: Prisma.AnswerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AnswerScalarFieldEnum | Prisma.AnswerScalarFieldEnum[]
 }
 
 /**

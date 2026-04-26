@@ -10,11 +10,13 @@ export async function apiFetch<T = unknown>(
 ): Promise<T> {
   const { token, headers, ...rest } = options
 
+  const storedToken = token || (typeof window !== 'undefined' ? localStorage.getItem('token') : null)
+
   const res = await fetch(`${API_URL}${endpoint}`, {
     ...rest,
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(storedToken ? { Authorization: `Bearer ${storedToken}` } : {}),
       ...headers,
     },
   })

@@ -1,23 +1,40 @@
 import { create } from 'zustand'
+import type { User } from '@/services/auth'
+
+export type { User }
 
 interface AuthState {
   token: string | null
-  setToken: (token: string) => void
+  user: User | null
+  login: (token: string, user: User) => void
   logout: () => void
   isLoggedIn: () => boolean
 }
 
+function getStoredUser(): User | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem('user')
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
 export const useAuthStore = create<AuthState>((set, get) => ({
   token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
+  user: getStoredUser(),
 
-  setToken: (token: string) => {
+  login: (token: string, user: User) => {
     localStorage.setItem('token', token)
-    set({ token })
+    localStorage.setItem('user', JSON.stringify(user))
+    set({ token, user })
   },
 
   logout: () => {
     localStorage.removeItem('token')
-    set({ token: null })
+    localStorage.removeItem('user')
+    set({ token: null, user: null })
   },
 
   isLoggedIn: () => !!get().token,

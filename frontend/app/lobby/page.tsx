@@ -1,17 +1,57 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Sidebar } from '@/components/lobby/Sidebar'
 import { SalasList } from '@/components/lobby/SalasList'
 import { TemaGrid, RankingCard } from '@/components/lobby/LobbyComponents'
 import { TEMAS } from '@/lib/temas'
-import { SALAS } from '@/lib/salas'
+import type { Sala } from '@/lib/salas'
+import { useAuthGuard } from '@/lib/hooks/useAuthGuard'
+import { useAuthStore } from '@/lib/store/useAuthStore'
+import { listarSalas, type SalaAPI } from '@/services/rooms'
+import { buscarRankingSemanal } from '@/services/ranking'
+
+function mapearSala(sala: SalaAPI): Sala {
+  return {
+    id: sala.code,
+    nome: sala.code,
+    tema: sala.theme || 'Livre',
+    temaId: sala.theme?.toLowerCase() || 'livre',
+    jogadores: sala.playerCount ?? 0,
+    maxJogadores: sala.maxPlayers ?? 4,
+    privada: sala.isPrivate,
+    host: sala.host.tag,
+  }
+}
 
 export default function LobbyPage() {
+  const { carregando } = useAuthGuard()
   const router = useRouter()
+  const logout = useAuthStore((s) => s.logout)
+  const [salas, setSalas] = useState<Sala[]>([])
+  const [rankingData, setRankingData] = useState<{ p: number; n: string; s: number; me: boolean }[]>([])
+  const user = useAuthStore((s) => s.user)
+
+  useEffect(() => {
+    listarSalas()
+      .then((data) => setSalas(data.map(mapearSala)))
+      .catch(() => setSalas([]))
+
+    buscarRankingSemanal(5)
+      .then((data) => setRankingData(data.map((r) => ({
+        p: r.pos,
+        n: r.tag,
+        s: r.xp,
+        me: r.tag === user?.tag,
+      }))))
+      .catch(() => setRankingData([]))
+  }, [user?.tag])
+
+  if (carregando) return null
 
   function handleLogout() {
-    localStorage.removeItem('token')
+    logout()
     router.push('/auth/login')
   }
 
@@ -36,7 +76,7 @@ export default function LobbyPage() {
         gridTemplateColumns: '260px 1fr',
       }}
     >
-      <Sidebar onLogout={handleLogout} />
+      <Sidebar onLogout={handleLogout} usuario={useAuthStore.getState().user} activeRoute="/lobby" />
 
       <main style={{ padding: '32px 40px 60px', maxWidth: 1280 }}>
         {/* Saudação enxuta */}
@@ -74,7 +114,7 @@ export default function LobbyPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 24, alignItems: 'start' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 28, minWidth: 0 }}>
             <SalasList
-              salas={SALAS}
+              salas={salas}
               onCriar={handleCriarSala}
               onEntrar={handleEntrarSala}
             />
@@ -113,7 +153,7 @@ export default function LobbyPage() {
             </section>
           </div>
 
-          <RankingCard />
+          <RankingCard ranking={rankingData} />
         </div>
       </main>
     </div>

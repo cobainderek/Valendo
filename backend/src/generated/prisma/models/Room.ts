@@ -29,11 +29,15 @@ export type AggregateRoom = {
 export type RoomAvgAggregateOutputType = {
   id: number | null
   hostId: number | null
+  maxPlayers: number | null
+  winnerId: number | null
 }
 
 export type RoomSumAggregateOutputType = {
   id: bigint | null
   hostId: bigint | null
+  maxPlayers: number | null
+  winnerId: bigint | null
 }
 
 export type RoomMinAggregateOutputType = {
@@ -43,6 +47,11 @@ export type RoomMinAggregateOutputType = {
   theme: string | null
   status: string | null
   isPrivate: boolean | null
+  isSoloMode: boolean | null
+  maxPlayers: number | null
+  startedAt: Date | null
+  finishedAt: Date | null
+  winnerId: bigint | null
 }
 
 export type RoomMaxAggregateOutputType = {
@@ -52,6 +61,11 @@ export type RoomMaxAggregateOutputType = {
   theme: string | null
   status: string | null
   isPrivate: boolean | null
+  isSoloMode: boolean | null
+  maxPlayers: number | null
+  startedAt: Date | null
+  finishedAt: Date | null
+  winnerId: bigint | null
 }
 
 export type RoomCountAggregateOutputType = {
@@ -61,6 +75,11 @@ export type RoomCountAggregateOutputType = {
   theme: number
   status: number
   isPrivate: number
+  isSoloMode: number
+  maxPlayers: number
+  startedAt: number
+  finishedAt: number
+  winnerId: number
   _all: number
 }
 
@@ -68,11 +87,15 @@ export type RoomCountAggregateOutputType = {
 export type RoomAvgAggregateInputType = {
   id?: true
   hostId?: true
+  maxPlayers?: true
+  winnerId?: true
 }
 
 export type RoomSumAggregateInputType = {
   id?: true
   hostId?: true
+  maxPlayers?: true
+  winnerId?: true
 }
 
 export type RoomMinAggregateInputType = {
@@ -82,6 +105,11 @@ export type RoomMinAggregateInputType = {
   theme?: true
   status?: true
   isPrivate?: true
+  isSoloMode?: true
+  maxPlayers?: true
+  startedAt?: true
+  finishedAt?: true
+  winnerId?: true
 }
 
 export type RoomMaxAggregateInputType = {
@@ -91,6 +119,11 @@ export type RoomMaxAggregateInputType = {
   theme?: true
   status?: true
   isPrivate?: true
+  isSoloMode?: true
+  maxPlayers?: true
+  startedAt?: true
+  finishedAt?: true
+  winnerId?: true
 }
 
 export type RoomCountAggregateInputType = {
@@ -100,6 +133,11 @@ export type RoomCountAggregateInputType = {
   theme?: true
   status?: true
   isPrivate?: true
+  isSoloMode?: true
+  maxPlayers?: true
+  startedAt?: true
+  finishedAt?: true
+  winnerId?: true
   _all?: true
 }
 
@@ -196,6 +234,11 @@ export type RoomGroupByOutputType = {
   theme: string | null
   status: string
   isPrivate: boolean
+  isSoloMode: boolean
+  maxPlayers: number
+  startedAt: Date | null
+  finishedAt: Date | null
+  winnerId: bigint | null
   _count: RoomCountAggregateOutputType | null
   _avg: RoomAvgAggregateOutputType | null
   _sum: RoomSumAggregateOutputType | null
@@ -228,8 +271,15 @@ export type RoomWhereInput = {
   theme?: Prisma.StringNullableFilter<"Room"> | string | null
   status?: Prisma.StringFilter<"Room"> | string
   isPrivate?: Prisma.BoolFilter<"Room"> | boolean
+  isSoloMode?: Prisma.BoolFilter<"Room"> | boolean
+  maxPlayers?: Prisma.IntFilter<"Room"> | number
+  startedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
+  winnerId?: Prisma.BigIntNullableFilter<"Room"> | bigint | number | null
   host?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  winner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   duel?: Prisma.XOR<Prisma.DuelNullableScalarRelationFilter, Prisma.DuelWhereInput> | null
+  players?: Prisma.RoomPlayerListRelationFilter
 }
 
 export type RoomOrderByWithRelationInput = {
@@ -239,8 +289,15 @@ export type RoomOrderByWithRelationInput = {
   theme?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
+  isSoloMode?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  winnerId?: Prisma.SortOrderInput | Prisma.SortOrder
   host?: Prisma.UserOrderByWithRelationInput
+  winner?: Prisma.UserOrderByWithRelationInput
   duel?: Prisma.DuelOrderByWithRelationInput
+  players?: Prisma.RoomPlayerOrderByRelationAggregateInput
 }
 
 export type RoomWhereUniqueInput = Prisma.AtLeast<{
@@ -253,8 +310,15 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<{
   theme?: Prisma.StringNullableFilter<"Room"> | string | null
   status?: Prisma.StringFilter<"Room"> | string
   isPrivate?: Prisma.BoolFilter<"Room"> | boolean
+  isSoloMode?: Prisma.BoolFilter<"Room"> | boolean
+  maxPlayers?: Prisma.IntFilter<"Room"> | number
+  startedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
+  winnerId?: Prisma.BigIntNullableFilter<"Room"> | bigint | number | null
   host?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  winner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   duel?: Prisma.XOR<Prisma.DuelNullableScalarRelationFilter, Prisma.DuelWhereInput> | null
+  players?: Prisma.RoomPlayerListRelationFilter
 }, "id" | "code">
 
 export type RoomOrderByWithAggregationInput = {
@@ -264,6 +328,11 @@ export type RoomOrderByWithAggregationInput = {
   theme?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
+  isSoloMode?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  winnerId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.RoomCountOrderByAggregateInput
   _avg?: Prisma.RoomAvgOrderByAggregateInput
   _max?: Prisma.RoomMaxOrderByAggregateInput
@@ -281,6 +350,11 @@ export type RoomScalarWhereWithAggregatesInput = {
   theme?: Prisma.StringNullableWithAggregatesFilter<"Room"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"Room"> | string
   isPrivate?: Prisma.BoolWithAggregatesFilter<"Room"> | boolean
+  isSoloMode?: Prisma.BoolWithAggregatesFilter<"Room"> | boolean
+  maxPlayers?: Prisma.IntWithAggregatesFilter<"Room"> | number
+  startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Room"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Room"> | Date | string | null
+  winnerId?: Prisma.BigIntNullableWithAggregatesFilter<"Room"> | bigint | number | null
 }
 
 export type RoomCreateInput = {
@@ -289,8 +363,14 @@ export type RoomCreateInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
+  winner?: Prisma.UserCreateNestedOneWithoutWonRoomsInput
   duel?: Prisma.DuelCreateNestedOneWithoutRoomInput
+  players?: Prisma.RoomPlayerCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUncheckedCreateInput = {
@@ -300,7 +380,13 @@ export type RoomUncheckedCreateInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  winnerId?: bigint | number | null
   duel?: Prisma.DuelUncheckedCreateNestedOneWithoutRoomInput
+  players?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUpdateInput = {
@@ -309,8 +395,14 @@ export type RoomUpdateInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
+  winner?: Prisma.UserUpdateOneWithoutWonRoomsNestedInput
   duel?: Prisma.DuelUpdateOneWithoutRoomNestedInput
+  players?: Prisma.RoomPlayerUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateInput = {
@@ -320,7 +412,13 @@ export type RoomUncheckedUpdateInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   duel?: Prisma.DuelUncheckedUpdateOneWithoutRoomNestedInput
+  players?: Prisma.RoomPlayerUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomCreateManyInput = {
@@ -330,6 +428,11 @@ export type RoomCreateManyInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  winnerId?: bigint | number | null
 }
 
 export type RoomUpdateManyMutationInput = {
@@ -338,6 +441,10 @@ export type RoomUpdateManyMutationInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RoomUncheckedUpdateManyInput = {
@@ -347,6 +454,11 @@ export type RoomUncheckedUpdateManyInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type RoomListRelationFilter = {
@@ -366,11 +478,18 @@ export type RoomCountOrderByAggregateInput = {
   theme?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
+  isSoloMode?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
+  winnerId?: Prisma.SortOrder
 }
 
 export type RoomAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
+  winnerId?: Prisma.SortOrder
 }
 
 export type RoomMaxOrderByAggregateInput = {
@@ -380,6 +499,11 @@ export type RoomMaxOrderByAggregateInput = {
   theme?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
+  isSoloMode?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
+  winnerId?: Prisma.SortOrder
 }
 
 export type RoomMinOrderByAggregateInput = {
@@ -389,11 +513,18 @@ export type RoomMinOrderByAggregateInput = {
   theme?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
+  isSoloMode?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  finishedAt?: Prisma.SortOrder
+  winnerId?: Prisma.SortOrder
 }
 
 export type RoomSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
+  maxPlayers?: Prisma.SortOrder
+  winnerId?: Prisma.SortOrder
 }
 
 export type RoomScalarRelationFilter = {
@@ -408,10 +539,24 @@ export type RoomCreateNestedManyWithoutHostInput = {
   connect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
 }
 
+export type RoomCreateNestedManyWithoutWinnerInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutWinnerInput, Prisma.RoomUncheckedCreateWithoutWinnerInput> | Prisma.RoomCreateWithoutWinnerInput[] | Prisma.RoomUncheckedCreateWithoutWinnerInput[]
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutWinnerInput | Prisma.RoomCreateOrConnectWithoutWinnerInput[]
+  createMany?: Prisma.RoomCreateManyWinnerInputEnvelope
+  connect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+}
+
 export type RoomUncheckedCreateNestedManyWithoutHostInput = {
   create?: Prisma.XOR<Prisma.RoomCreateWithoutHostInput, Prisma.RoomUncheckedCreateWithoutHostInput> | Prisma.RoomCreateWithoutHostInput[] | Prisma.RoomUncheckedCreateWithoutHostInput[]
   connectOrCreate?: Prisma.RoomCreateOrConnectWithoutHostInput | Prisma.RoomCreateOrConnectWithoutHostInput[]
   createMany?: Prisma.RoomCreateManyHostInputEnvelope
+  connect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+}
+
+export type RoomUncheckedCreateNestedManyWithoutWinnerInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutWinnerInput, Prisma.RoomUncheckedCreateWithoutWinnerInput> | Prisma.RoomCreateWithoutWinnerInput[] | Prisma.RoomUncheckedCreateWithoutWinnerInput[]
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutWinnerInput | Prisma.RoomCreateOrConnectWithoutWinnerInput[]
+  createMany?: Prisma.RoomCreateManyWinnerInputEnvelope
   connect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
 }
 
@@ -429,6 +574,20 @@ export type RoomUpdateManyWithoutHostNestedInput = {
   deleteMany?: Prisma.RoomScalarWhereInput | Prisma.RoomScalarWhereInput[]
 }
 
+export type RoomUpdateManyWithoutWinnerNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutWinnerInput, Prisma.RoomUncheckedCreateWithoutWinnerInput> | Prisma.RoomCreateWithoutWinnerInput[] | Prisma.RoomUncheckedCreateWithoutWinnerInput[]
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutWinnerInput | Prisma.RoomCreateOrConnectWithoutWinnerInput[]
+  upsert?: Prisma.RoomUpsertWithWhereUniqueWithoutWinnerInput | Prisma.RoomUpsertWithWhereUniqueWithoutWinnerInput[]
+  createMany?: Prisma.RoomCreateManyWinnerInputEnvelope
+  set?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  disconnect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  delete?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  connect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  update?: Prisma.RoomUpdateWithWhereUniqueWithoutWinnerInput | Prisma.RoomUpdateWithWhereUniqueWithoutWinnerInput[]
+  updateMany?: Prisma.RoomUpdateManyWithWhereWithoutWinnerInput | Prisma.RoomUpdateManyWithWhereWithoutWinnerInput[]
+  deleteMany?: Prisma.RoomScalarWhereInput | Prisma.RoomScalarWhereInput[]
+}
+
 export type RoomUncheckedUpdateManyWithoutHostNestedInput = {
   create?: Prisma.XOR<Prisma.RoomCreateWithoutHostInput, Prisma.RoomUncheckedCreateWithoutHostInput> | Prisma.RoomCreateWithoutHostInput[] | Prisma.RoomUncheckedCreateWithoutHostInput[]
   connectOrCreate?: Prisma.RoomCreateOrConnectWithoutHostInput | Prisma.RoomCreateOrConnectWithoutHostInput[]
@@ -443,12 +602,52 @@ export type RoomUncheckedUpdateManyWithoutHostNestedInput = {
   deleteMany?: Prisma.RoomScalarWhereInput | Prisma.RoomScalarWhereInput[]
 }
 
+export type RoomUncheckedUpdateManyWithoutWinnerNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutWinnerInput, Prisma.RoomUncheckedCreateWithoutWinnerInput> | Prisma.RoomCreateWithoutWinnerInput[] | Prisma.RoomUncheckedCreateWithoutWinnerInput[]
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutWinnerInput | Prisma.RoomCreateOrConnectWithoutWinnerInput[]
+  upsert?: Prisma.RoomUpsertWithWhereUniqueWithoutWinnerInput | Prisma.RoomUpsertWithWhereUniqueWithoutWinnerInput[]
+  createMany?: Prisma.RoomCreateManyWinnerInputEnvelope
+  set?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  disconnect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  delete?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  connect?: Prisma.RoomWhereUniqueInput | Prisma.RoomWhereUniqueInput[]
+  update?: Prisma.RoomUpdateWithWhereUniqueWithoutWinnerInput | Prisma.RoomUpdateWithWhereUniqueWithoutWinnerInput[]
+  updateMany?: Prisma.RoomUpdateManyWithWhereWithoutWinnerInput | Prisma.RoomUpdateManyWithWhereWithoutWinnerInput[]
+  deleteMany?: Prisma.RoomScalarWhereInput | Prisma.RoomScalarWhereInput[]
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type NullableBigIntFieldUpdateOperationsInput = {
+  set?: bigint | number | null
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
+}
+
+export type RoomCreateNestedOneWithoutPlayersInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutPlayersInput, Prisma.RoomUncheckedCreateWithoutPlayersInput>
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutPlayersInput
+  connect?: Prisma.RoomWhereUniqueInput
+}
+
+export type RoomUpdateOneRequiredWithoutPlayersNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomCreateWithoutPlayersInput, Prisma.RoomUncheckedCreateWithoutPlayersInput>
+  connectOrCreate?: Prisma.RoomCreateOrConnectWithoutPlayersInput
+  upsert?: Prisma.RoomUpsertWithoutPlayersInput
+  connect?: Prisma.RoomWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoomUpdateToOneWithWhereWithoutPlayersInput, Prisma.RoomUpdateWithoutPlayersInput>, Prisma.RoomUncheckedUpdateWithoutPlayersInput>
 }
 
 export type RoomCreateNestedOneWithoutDuelInput = {
@@ -471,7 +670,13 @@ export type RoomCreateWithoutHostInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  winner?: Prisma.UserCreateNestedOneWithoutWonRoomsInput
   duel?: Prisma.DuelCreateNestedOneWithoutRoomInput
+  players?: Prisma.RoomPlayerCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUncheckedCreateWithoutHostInput = {
@@ -480,7 +685,13 @@ export type RoomUncheckedCreateWithoutHostInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  winnerId?: bigint | number | null
   duel?: Prisma.DuelUncheckedCreateNestedOneWithoutRoomInput
+  players?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutRoomInput
 }
 
 export type RoomCreateOrConnectWithoutHostInput = {
@@ -490,6 +701,46 @@ export type RoomCreateOrConnectWithoutHostInput = {
 
 export type RoomCreateManyHostInputEnvelope = {
   data: Prisma.RoomCreateManyHostInput | Prisma.RoomCreateManyHostInput[]
+  skipDuplicates?: boolean
+}
+
+export type RoomCreateWithoutWinnerInput = {
+  id?: bigint | number
+  code: string
+  theme?: string | null
+  status?: string
+  isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
+  duel?: Prisma.DuelCreateNestedOneWithoutRoomInput
+  players?: Prisma.RoomPlayerCreateNestedManyWithoutRoomInput
+}
+
+export type RoomUncheckedCreateWithoutWinnerInput = {
+  id?: bigint | number
+  code: string
+  hostId: bigint | number
+  theme?: string | null
+  status?: string
+  isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  duel?: Prisma.DuelUncheckedCreateNestedOneWithoutRoomInput
+  players?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutRoomInput
+}
+
+export type RoomCreateOrConnectWithoutWinnerInput = {
+  where: Prisma.RoomWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoomCreateWithoutWinnerInput, Prisma.RoomUncheckedCreateWithoutWinnerInput>
+}
+
+export type RoomCreateManyWinnerInputEnvelope = {
+  data: Prisma.RoomCreateManyWinnerInput | Prisma.RoomCreateManyWinnerInput[]
   skipDuplicates?: boolean
 }
 
@@ -519,6 +770,103 @@ export type RoomScalarWhereInput = {
   theme?: Prisma.StringNullableFilter<"Room"> | string | null
   status?: Prisma.StringFilter<"Room"> | string
   isPrivate?: Prisma.BoolFilter<"Room"> | boolean
+  isSoloMode?: Prisma.BoolFilter<"Room"> | boolean
+  maxPlayers?: Prisma.IntFilter<"Room"> | number
+  startedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
+  finishedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
+  winnerId?: Prisma.BigIntNullableFilter<"Room"> | bigint | number | null
+}
+
+export type RoomUpsertWithWhereUniqueWithoutWinnerInput = {
+  where: Prisma.RoomWhereUniqueInput
+  update: Prisma.XOR<Prisma.RoomUpdateWithoutWinnerInput, Prisma.RoomUncheckedUpdateWithoutWinnerInput>
+  create: Prisma.XOR<Prisma.RoomCreateWithoutWinnerInput, Prisma.RoomUncheckedCreateWithoutWinnerInput>
+}
+
+export type RoomUpdateWithWhereUniqueWithoutWinnerInput = {
+  where: Prisma.RoomWhereUniqueInput
+  data: Prisma.XOR<Prisma.RoomUpdateWithoutWinnerInput, Prisma.RoomUncheckedUpdateWithoutWinnerInput>
+}
+
+export type RoomUpdateManyWithWhereWithoutWinnerInput = {
+  where: Prisma.RoomScalarWhereInput
+  data: Prisma.XOR<Prisma.RoomUpdateManyMutationInput, Prisma.RoomUncheckedUpdateManyWithoutWinnerInput>
+}
+
+export type RoomCreateWithoutPlayersInput = {
+  id?: bigint | number
+  code: string
+  theme?: string | null
+  status?: string
+  isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
+  winner?: Prisma.UserCreateNestedOneWithoutWonRoomsInput
+  duel?: Prisma.DuelCreateNestedOneWithoutRoomInput
+}
+
+export type RoomUncheckedCreateWithoutPlayersInput = {
+  id?: bigint | number
+  code: string
+  hostId: bigint | number
+  theme?: string | null
+  status?: string
+  isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  winnerId?: bigint | number | null
+  duel?: Prisma.DuelUncheckedCreateNestedOneWithoutRoomInput
+}
+
+export type RoomCreateOrConnectWithoutPlayersInput = {
+  where: Prisma.RoomWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoomCreateWithoutPlayersInput, Prisma.RoomUncheckedCreateWithoutPlayersInput>
+}
+
+export type RoomUpsertWithoutPlayersInput = {
+  update: Prisma.XOR<Prisma.RoomUpdateWithoutPlayersInput, Prisma.RoomUncheckedUpdateWithoutPlayersInput>
+  create: Prisma.XOR<Prisma.RoomCreateWithoutPlayersInput, Prisma.RoomUncheckedCreateWithoutPlayersInput>
+  where?: Prisma.RoomWhereInput
+}
+
+export type RoomUpdateToOneWithWhereWithoutPlayersInput = {
+  where?: Prisma.RoomWhereInput
+  data: Prisma.XOR<Prisma.RoomUpdateWithoutPlayersInput, Prisma.RoomUncheckedUpdateWithoutPlayersInput>
+}
+
+export type RoomUpdateWithoutPlayersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
+  winner?: Prisma.UserUpdateOneWithoutWonRoomsNestedInput
+  duel?: Prisma.DuelUpdateOneWithoutRoomNestedInput
+}
+
+export type RoomUncheckedUpdateWithoutPlayersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  hostId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  duel?: Prisma.DuelUncheckedUpdateOneWithoutRoomNestedInput
 }
 
 export type RoomCreateWithoutDuelInput = {
@@ -527,7 +875,13 @@ export type RoomCreateWithoutDuelInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
+  winner?: Prisma.UserCreateNestedOneWithoutWonRoomsInput
+  players?: Prisma.RoomPlayerCreateNestedManyWithoutRoomInput
 }
 
 export type RoomUncheckedCreateWithoutDuelInput = {
@@ -537,6 +891,12 @@ export type RoomUncheckedCreateWithoutDuelInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  winnerId?: bigint | number | null
+  players?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutRoomInput
 }
 
 export type RoomCreateOrConnectWithoutDuelInput = {
@@ -561,7 +921,13 @@ export type RoomUpdateWithoutDuelInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
+  winner?: Prisma.UserUpdateOneWithoutWonRoomsNestedInput
+  players?: Prisma.RoomPlayerUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateWithoutDuelInput = {
@@ -571,6 +937,12 @@ export type RoomUncheckedUpdateWithoutDuelInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  players?: Prisma.RoomPlayerUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomCreateManyHostInput = {
@@ -579,6 +951,24 @@ export type RoomCreateManyHostInput = {
   theme?: string | null
   status?: string
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
+  winnerId?: bigint | number | null
+}
+
+export type RoomCreateManyWinnerInput = {
+  id?: bigint | number
+  code: string
+  hostId: bigint | number
+  theme?: string | null
+  status?: string
+  isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: number
+  startedAt?: Date | string | null
+  finishedAt?: Date | string | null
 }
 
 export type RoomUpdateWithoutHostInput = {
@@ -587,7 +977,13 @@ export type RoomUpdateWithoutHostInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  winner?: Prisma.UserUpdateOneWithoutWonRoomsNestedInput
   duel?: Prisma.DuelUpdateOneWithoutRoomNestedInput
+  players?: Prisma.RoomPlayerUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateWithoutHostInput = {
@@ -596,7 +992,13 @@ export type RoomUncheckedUpdateWithoutHostInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   duel?: Prisma.DuelUncheckedUpdateOneWithoutRoomNestedInput
+  players?: Prisma.RoomPlayerUncheckedUpdateManyWithoutRoomNestedInput
 }
 
 export type RoomUncheckedUpdateManyWithoutHostInput = {
@@ -605,8 +1007,85 @@ export type RoomUncheckedUpdateManyWithoutHostInput = {
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
+export type RoomUpdateWithoutWinnerInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
+  duel?: Prisma.DuelUpdateOneWithoutRoomNestedInput
+  players?: Prisma.RoomPlayerUpdateManyWithoutRoomNestedInput
+}
+
+export type RoomUncheckedUpdateWithoutWinnerInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  hostId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  duel?: Prisma.DuelUncheckedUpdateOneWithoutRoomNestedInput
+  players?: Prisma.RoomPlayerUncheckedUpdateManyWithoutRoomNestedInput
+}
+
+export type RoomUncheckedUpdateManyWithoutWinnerInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  hostId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+
+/**
+ * Count Type RoomCountOutputType
+ */
+
+export type RoomCountOutputType = {
+  players: number
+}
+
+export type RoomCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  players?: boolean | RoomCountOutputTypeCountPlayersArgs
+}
+
+/**
+ * RoomCountOutputType without action
+ */
+export type RoomCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomCountOutputType
+   */
+  select?: Prisma.RoomCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * RoomCountOutputType without action
+ */
+export type RoomCountOutputTypeCountPlayersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomPlayerWhereInput
+}
 
 
 export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -616,8 +1095,16 @@ export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   theme?: boolean
   status?: boolean
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
+  winnerId?: boolean
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  winner?: boolean | Prisma.Room$winnerArgs<ExtArgs>
   duel?: boolean | Prisma.Room$duelArgs<ExtArgs>
+  players?: boolean | Prisma.Room$playersArgs<ExtArgs>
+  _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["room"]>
 
 export type RoomSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -627,7 +1114,13 @@ export type RoomSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   theme?: boolean
   status?: boolean
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
+  winnerId?: boolean
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  winner?: boolean | Prisma.Room$winnerArgs<ExtArgs>
 }, ExtArgs["result"]["room"]>
 
 export type RoomSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -637,7 +1130,13 @@ export type RoomSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   theme?: boolean
   status?: boolean
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
+  winnerId?: boolean
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  winner?: boolean | Prisma.Room$winnerArgs<ExtArgs>
 }, ExtArgs["result"]["room"]>
 
 export type RoomSelectScalar = {
@@ -647,25 +1146,37 @@ export type RoomSelectScalar = {
   theme?: boolean
   status?: boolean
   isPrivate?: boolean
+  isSoloMode?: boolean
+  maxPlayers?: boolean
+  startedAt?: boolean
+  finishedAt?: boolean
+  winnerId?: boolean
 }
 
-export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "hostId" | "theme" | "status" | "isPrivate", ExtArgs["result"]["room"]>
+export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "hostId" | "theme" | "status" | "isPrivate" | "isSoloMode" | "maxPlayers" | "startedAt" | "finishedAt" | "winnerId", ExtArgs["result"]["room"]>
 export type RoomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  winner?: boolean | Prisma.Room$winnerArgs<ExtArgs>
   duel?: boolean | Prisma.Room$duelArgs<ExtArgs>
+  players?: boolean | Prisma.Room$playersArgs<ExtArgs>
+  _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RoomIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  winner?: boolean | Prisma.Room$winnerArgs<ExtArgs>
 }
 export type RoomIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  winner?: boolean | Prisma.Room$winnerArgs<ExtArgs>
 }
 
 export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Room"
   objects: {
     host: Prisma.$UserPayload<ExtArgs>
+    winner: Prisma.$UserPayload<ExtArgs> | null
     duel: Prisma.$DuelPayload<ExtArgs> | null
+    players: Prisma.$RoomPlayerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -674,6 +1185,11 @@ export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     theme: string | null
     status: string
     isPrivate: boolean
+    isSoloMode: boolean
+    maxPlayers: number
+    startedAt: Date | null
+    finishedAt: Date | null
+    winnerId: bigint | null
   }, ExtArgs["result"]["room"]>
   composites: {}
 }
@@ -1069,7 +1585,9 @@ readonly fields: RoomFieldRefs;
 export interface Prisma__RoomClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   host<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  winner<T extends Prisma.Room$winnerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$winnerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   duel<T extends Prisma.Room$duelArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$duelArgs<ExtArgs>>): Prisma.Prisma__DuelClient<runtime.Types.Result.GetResult<Prisma.$DuelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  players<T extends Prisma.Room$playersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Room$playersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1105,6 +1623,11 @@ export interface RoomFieldRefs {
   readonly theme: Prisma.FieldRef<"Room", 'String'>
   readonly status: Prisma.FieldRef<"Room", 'String'>
   readonly isPrivate: Prisma.FieldRef<"Room", 'Boolean'>
+  readonly isSoloMode: Prisma.FieldRef<"Room", 'Boolean'>
+  readonly maxPlayers: Prisma.FieldRef<"Room", 'Int'>
+  readonly startedAt: Prisma.FieldRef<"Room", 'DateTime'>
+  readonly finishedAt: Prisma.FieldRef<"Room", 'DateTime'>
+  readonly winnerId: Prisma.FieldRef<"Room", 'BigInt'>
 }
     
 
@@ -1506,6 +2029,25 @@ export type RoomDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Room.winner
+ */
+export type Room$winnerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
  * Room.duel
  */
 export type Room$duelArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1522,6 +2064,30 @@ export type Room$duelArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
    */
   include?: Prisma.DuelInclude<ExtArgs> | null
   where?: Prisma.DuelWhereInput
+}
+
+/**
+ * Room.players
+ */
+export type Room$playersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomPlayer
+   */
+  select?: Prisma.RoomPlayerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoomPlayer
+   */
+  omit?: Prisma.RoomPlayerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomPlayerInclude<ExtArgs> | null
+  where?: Prisma.RoomPlayerWhereInput
+  orderBy?: Prisma.RoomPlayerOrderByWithRelationInput | Prisma.RoomPlayerOrderByWithRelationInput[]
+  cursor?: Prisma.RoomPlayerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomPlayerScalarFieldEnum | Prisma.RoomPlayerScalarFieldEnum[]
 }
 
 /**

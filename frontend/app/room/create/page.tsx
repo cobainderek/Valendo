@@ -5,13 +5,18 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { LogoMark } from '@/components/ui/LogoMark'
 import { CreateRoomForm, type NovaSala } from '@/components/room/CreateRoomForm'
 import { TEMAS } from '@/lib/temas'
+import { useAuthGuard } from '@/lib/hooks/useAuthGuard'
+import { criarSala } from '@/services/rooms'
 
 function CreateRoomPageInner() {
+  const { carregando: authCarregando } = useAuthGuard()
   const router = useRouter()
   const searchParams = useSearchParams()
   const temaInicial = searchParams.get('tema') || undefined
   const [carregando, setCarregando] = useState(false)
   const [erro, setErro] = useState('')
+
+  if (authCarregando) return null
 
   async function handleCreate(sala: NovaSala) {
     if (!sala.nome) {
@@ -21,10 +26,14 @@ function CreateRoomPageInner() {
     setCarregando(true)
     setErro('')
     try {
-      // TODO: services/rooms.ts → criarSala(sala)
-      await new Promise((r) => setTimeout(r, 400))
-      const salaId = Math.random().toString(36).slice(2, 10)
-      router.push(`/room/${salaId}`)
+      const tema = TEMAS.find((t) => t.id === sala.temaId)
+      const salaCriada = await criarSala({
+        theme: tema?.nome || sala.temaId || undefined,
+        isPrivate: sala.soloMode ? true : sala.privada,
+        isSoloMode: sala.soloMode,
+        maxPlayers: sala.soloMode ? 2 : sala.maxJogadores,
+      })
+      router.push(`/room/${salaCriada.code}`)
     } catch {
       setErro('Não rolou criar a sala. Tenta de novo.')
     } finally {

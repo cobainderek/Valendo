@@ -50,6 +50,11 @@ export type User = Prisma.UserModel
  */
 export type Room = Prisma.RoomModel
 /**
+ * Model RoomPlayer
+ * 
+ */
+export type RoomPlayer = Prisma.RoomPlayerModel
+/**
  * Model Duel
  * 
  */
@@ -59,3 +64,13 @@ export type Duel = Prisma.DuelModel
  * 
  */
 export type Question = Prisma.QuestionModel
+/**
+ * Model Answer
+ * 
+ */
+export type Answer = Prisma.AnswerModel
+/**
+ * Model WeeklyScore
+ * 
+ */
+export type WeeklyScore = Prisma.WeeklyScoreModel

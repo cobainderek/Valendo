@@ -386,8 +386,11 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Room: 'Room',
+  RoomPlayer: 'RoomPlayer',
   Duel: 'Duel',
-  Question: 'Question'
+  Question: 'Question',
+  Answer: 'Answer',
+  WeeklyScore: 'WeeklyScore'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "room" | "duel" | "question"
+    modelProps: "user" | "room" | "roomPlayer" | "duel" | "question" | "answer" | "weeklyScore"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -555,6 +558,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RoomPlayer: {
+      payload: Prisma.$RoomPlayerPayload<ExtArgs>
+      fields: Prisma.RoomPlayerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoomPlayerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoomPlayerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>
+        }
+        findFirst: {
+          args: Prisma.RoomPlayerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoomPlayerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>
+        }
+        findMany: {
+          args: Prisma.RoomPlayerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>[]
+        }
+        create: {
+          args: Prisma.RoomPlayerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>
+        }
+        createMany: {
+          args: Prisma.RoomPlayerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoomPlayerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>[]
+        }
+        delete: {
+          args: Prisma.RoomPlayerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>
+        }
+        update: {
+          args: Prisma.RoomPlayerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoomPlayerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoomPlayerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoomPlayerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoomPlayerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPlayerPayload>
+        }
+        aggregate: {
+          args: Prisma.RoomPlayerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoomPlayer>
+        }
+        groupBy: {
+          args: Prisma.RoomPlayerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoomPlayerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoomPlayerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoomPlayerCountAggregateOutputType> | number
+        }
+      }
+    }
     Duel: {
       payload: Prisma.$DuelPayload<ExtArgs>
       fields: Prisma.DuelFieldRefs
@@ -703,6 +780,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Answer: {
+      payload: Prisma.$AnswerPayload<ExtArgs>
+      fields: Prisma.AnswerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AnswerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AnswerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>
+        }
+        findFirst: {
+          args: Prisma.AnswerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AnswerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>
+        }
+        findMany: {
+          args: Prisma.AnswerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>[]
+        }
+        create: {
+          args: Prisma.AnswerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>
+        }
+        createMany: {
+          args: Prisma.AnswerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AnswerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>[]
+        }
+        delete: {
+          args: Prisma.AnswerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>
+        }
+        update: {
+          args: Prisma.AnswerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>
+        }
+        deleteMany: {
+          args: Prisma.AnswerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AnswerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AnswerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>[]
+        }
+        upsert: {
+          args: Prisma.AnswerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AnswerPayload>
+        }
+        aggregate: {
+          args: Prisma.AnswerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAnswer>
+        }
+        groupBy: {
+          args: Prisma.AnswerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AnswerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AnswerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AnswerCountAggregateOutputType> | number
+        }
+      }
+    }
+    WeeklyScore: {
+      payload: Prisma.$WeeklyScorePayload<ExtArgs>
+      fields: Prisma.WeeklyScoreFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WeeklyScoreFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WeeklyScoreFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>
+        }
+        findFirst: {
+          args: Prisma.WeeklyScoreFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WeeklyScoreFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>
+        }
+        findMany: {
+          args: Prisma.WeeklyScoreFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>[]
+        }
+        create: {
+          args: Prisma.WeeklyScoreCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>
+        }
+        createMany: {
+          args: Prisma.WeeklyScoreCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WeeklyScoreCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>[]
+        }
+        delete: {
+          args: Prisma.WeeklyScoreDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>
+        }
+        update: {
+          args: Prisma.WeeklyScoreUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>
+        }
+        deleteMany: {
+          args: Prisma.WeeklyScoreDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WeeklyScoreUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WeeklyScoreUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>[]
+        }
+        upsert: {
+          args: Prisma.WeeklyScoreUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyScorePayload>
+        }
+        aggregate: {
+          args: Prisma.WeeklyScoreAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWeeklyScore>
+        }
+        groupBy: {
+          args: Prisma.WeeklyScoreGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WeeklyScoreGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WeeklyScoreCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WeeklyScoreCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -760,10 +985,30 @@ export const RoomScalarFieldEnum = {
   hostId: 'hostId',
   theme: 'theme',
   status: 'status',
-  isPrivate: 'isPrivate'
+  isPrivate: 'isPrivate',
+  isSoloMode: 'isSoloMode',
+  maxPlayers: 'maxPlayers',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  winnerId: 'winnerId'
 } as const
 
 export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
+
+
+export const RoomPlayerScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  userId: 'userId',
+  joinedAt: 'joinedAt',
+  score: 'score',
+  correct: 'correct',
+  finished: 'finished',
+  isBot: 'isBot',
+  botName: 'botName'
+} as const
+
+export type RoomPlayerScalarFieldEnum = (typeof RoomPlayerScalarFieldEnum)[keyof typeof RoomPlayerScalarFieldEnum]
 
 
 export const DuelScalarFieldEnum = {
@@ -786,6 +1031,29 @@ export const QuestionScalarFieldEnum = {
 } as const
 
 export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+export const AnswerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  questionId: 'questionId',
+  selectedAnswer: 'selectedAnswer',
+  isCorrect: 'isCorrect',
+  answeredAt: 'answeredAt'
+} as const
+
+export type AnswerScalarFieldEnum = (typeof AnswerScalarFieldEnum)[keyof typeof AnswerScalarFieldEnum]
+
+
+export const WeeklyScoreScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  year: 'year',
+  week: 'week',
+  xp: 'xp'
+} as const
+
+export type WeeklyScoreScalarFieldEnum = (typeof WeeklyScoreScalarFieldEnum)[keyof typeof WeeklyScoreScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1021,8 +1289,11 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   room?: Prisma.RoomOmit
+  roomPlayer?: Prisma.RoomPlayerOmit
   duel?: Prisma.DuelOmit
   question?: Prisma.QuestionOmit
+  answer?: Prisma.AnswerOmit
+  weeklyScore?: Prisma.WeeklyScoreOmit
 }
 
 /* Types for Logging */

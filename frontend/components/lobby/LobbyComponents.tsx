@@ -82,15 +82,11 @@ export function TemaGrid({ temas, onSelect }: TemaGridProps) {
   )
 }
 
-export function RankingCard() {
-  const ranking = [
-    { p: 1, n: 'mari.04', s: 3420, me: false },
-    { p: 2, n: 'leo_z', s: 2980, me: false },
-    { p: 3, n: 'derek_o_insup', s: 1840, me: true },
-    { p: 4, n: 'bia.99', s: 1520, me: false },
-    { p: 5, n: 'rafa_x', s: 1210, me: false },
-  ]
+interface RankingCardProps {
+  ranking?: { p: number; n: string; s: number; me: boolean }[]
+}
 
+export function RankingCard({ ranking = [] }: RankingCardProps) {
   return (
     <aside className="doodle-card" style={{ padding: 18, background: 'var(--bg-cream)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
@@ -107,6 +103,11 @@ export function RankingCard() {
           Ranking da semana
         </h3>
       </div>
+      {ranking.length === 0 ? (
+        <p style={{ color: 'var(--muted)', fontWeight: 700, fontSize: 13, textAlign: 'center', padding: '16px 0' }}>
+          Nenhum jogador pontuou esta semana ainda.
+        </p>
+      ) : null}
       <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 5 }}>
         {ranking.map((r) => (
           <li

@@ -10,6 +10,7 @@ export interface NovaSala {
   maxJogadores: number
   tempoPergunta: number
   privada: boolean
+  soloMode: boolean
 }
 
 interface CreateRoomFormProps {
@@ -34,14 +35,64 @@ export function CreateRoomForm({
   const [maxJogadores, setMaxJogadores] = useState(4)
   const [tempoPergunta, setTempoPergunta] = useState(20)
   const [privada, setPrivada] = useState(false)
+  const [soloMode, setSoloMode] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ nome: nome.trim(), temaId, maxJogadores, tempoPergunta, privada })
+    onSubmit({ nome: nome.trim(), temaId, maxJogadores: soloMode ? 2 : maxJogadores, tempoPergunta, privada, soloMode })
   }
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      {/* Modo de jogo */}
+      <div>
+        <span style={{ display: 'block', fontWeight: 800, fontSize: 13, marginBottom: 8 }}>
+          Modo de jogo
+        </span>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <button
+            type="button"
+            onClick={() => setSoloMode(false)}
+            style={{
+              padding: '14px 12px',
+              border: '2.5px solid var(--ink)',
+              borderRadius: 12,
+              background: !soloMode ? 'var(--primary)' : 'var(--bg-card)',
+              color: !soloMode ? '#fff' : 'var(--ink)',
+              boxShadow: !soloMode ? '2px 2px 0 var(--ink)' : 'none',
+              fontWeight: 800,
+              fontSize: 14,
+              cursor: 'pointer',
+              textAlign: 'center',
+              font: 'inherit',
+            }}
+          >
+            <DoodleIcon name="people" size={20} strokeColor={!soloMode ? '#fff' : 'var(--ink)'} color="transparent" />
+            <div style={{ marginTop: 4 }}>Multiplayer</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => setSoloMode(true)}
+            style={{
+              padding: '14px 12px',
+              border: '2.5px solid var(--ink)',
+              borderRadius: 12,
+              background: soloMode ? 'var(--accent)' : 'var(--bg-card)',
+              color: soloMode ? 'var(--accent-ink)' : 'var(--ink)',
+              boxShadow: soloMode ? '2px 2px 0 var(--ink)' : 'none',
+              fontWeight: 800,
+              fontSize: 14,
+              cursor: 'pointer',
+              textAlign: 'center',
+              font: 'inherit',
+            }}
+          >
+            <DoodleIcon name="bolt" size={20} strokeColor={soloMode ? 'var(--accent-ink)' : 'var(--ink)'} color="transparent" />
+            <div style={{ marginTop: 4 }}>Solo vs Bot</div>
+          </button>
+        </div>
+      </div>
+
       {/* Nome */}
       <label className="input-wrap" style={{ margin: 0 }}>
         <span style={{ display: 'block', fontWeight: 800, fontSize: 13, marginBottom: 6 }}>
@@ -96,6 +147,7 @@ export function CreateRoomForm({
       </div>
 
       {/* Jogadores + tempo — lado a lado */}
+      {!soloMode && (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <StepperField
           label="Máx. jogadores"
@@ -114,6 +166,7 @@ export function CreateRoomForm({
           onChange={setTempoPergunta}
         />
       </div>
+      )}
 
       {/* Privacidade */}
       <label

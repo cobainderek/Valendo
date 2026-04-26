@@ -3,6 +3,7 @@
 import { use, useEffect, useState } from 'react'
 import { PlayerSideCard, type PlayerInfo } from '@/components/room/PlayerSideCard'
 import { Valdo } from '@/components/ui/Valdo'
+import { useAuthGuard } from '@/lib/hooks/useAuthGuard'
 
 type Fase = 'player1' | 'player2' | 'vs' | 'fight' | 'jogando'
 
@@ -23,8 +24,11 @@ const OPONENTE: PlayerInfo = {
 }
 
 export default function DuelPage({ params }: { params: Promise<{ id: string }> }) {
+  const { carregando: authCarregando } = useAuthGuard()
   const { id } = use(params)
   const [fase, setFase] = useState<Fase>('player1')
+
+  if (authCarregando) return null
 
   useEffect(() => {
     // P1 entra (0-1.5s) → pausa → VS aparece (2.2s) → P2 entra (4s) → FIGHT (6s)

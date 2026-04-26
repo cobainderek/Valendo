@@ -5,16 +5,21 @@ import { DoodleIcon } from '@/components/ui/DoodleIcon'
 
 interface SidebarProps {
   onLogout: () => void
+  usuario?: { name: string; tag: string } | null
+  activeRoute?: string
 }
 
 const NAV_ITEMS = [
-  { label: 'Jogar agora', icon: 'swords', href: '/lobby', active: true },
+  { label: 'Jogar agora', icon: 'swords', href: '/lobby' },
   { label: 'Meus amigos', icon: 'people', href: '#' },
   { label: 'Ranking', icon: 'trophy', href: '/ranking' },
   { label: 'Minhas apostilas', icon: 'folder', href: '#' },
 ]
 
-export function Sidebar({ onLogout }: SidebarProps) {
+export function Sidebar({ onLogout, usuario, activeRoute }: SidebarProps) {
+  const inicial = usuario?.name?.[0]?.toUpperCase() || '?'
+  const tag = usuario?.tag || 'jogador'
+
   return (
     <aside
       style={{
@@ -48,34 +53,37 @@ export function Sidebar({ onLogout }: SidebarProps) {
 
       {/* Nav */}
       <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        {NAV_ITEMS.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              padding: '11px 12px',
-              borderRadius: 10,
-              textDecoration: 'none',
-              color: item.active ? 'var(--accent-ink)' : '#fff',
-              background: item.active ? 'var(--accent)' : 'transparent',
-              border: item.active ? '2.5px solid var(--ink)' : '2.5px solid transparent',
-              boxShadow: item.active ? '2px 2px 0 var(--ink)' : 'none',
-              fontWeight: 800,
-              fontSize: 14,
-            }}
-          >
-            <DoodleIcon
-              name={item.icon}
-              size={20}
-              strokeColor={item.active ? 'var(--accent-ink)' : '#fff'}
-              color="transparent"
-            />
-            {item.label}
-          </a>
-        ))}
+        {NAV_ITEMS.map((item) => {
+          const active = activeRoute === item.href
+          return (
+            <a
+              key={item.label}
+              href={item.href}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '11px 12px',
+                borderRadius: 10,
+                textDecoration: 'none',
+                color: active ? 'var(--accent-ink)' : '#fff',
+                background: active ? 'var(--accent)' : 'transparent',
+                border: active ? '2.5px solid var(--ink)' : '2.5px solid transparent',
+                boxShadow: active ? '2px 2px 0 var(--ink)' : 'none',
+                fontWeight: 800,
+                fontSize: 14,
+              }}
+            >
+              <DoodleIcon
+                name={item.icon}
+                size={20}
+                strokeColor={active ? 'var(--accent-ink)' : '#fff'}
+                color="transparent"
+              />
+              {item.label}
+            </a>
+          )
+        })}
       </nav>
 
       {/* Perfil minimalista no rodapé */}
@@ -90,7 +98,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
             borderRadius: 10,
             textDecoration: 'none',
             color: '#fff',
-            background: 'rgba(255,255,255,0.08)',
+            background: activeRoute === '/profile' ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.08)',
             border: '2px solid rgba(255,255,255,0.18)',
           }}
         >
@@ -110,7 +118,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
               flexShrink: 0,
             }}
           >
-            D
+            {inicial}
           </div>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div
@@ -122,7 +130,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
                 whiteSpace: 'nowrap',
               }}
             >
-              derek_o_insup
+              {tag}
             </div>
             <div style={{ fontSize: 11, opacity: 0.75, fontWeight: 700 }}>ver perfil</div>
           </div>

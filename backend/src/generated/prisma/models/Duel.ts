@@ -390,10 +390,6 @@ export type DuelUncheckedUpdateOneWithoutRoomNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DuelUpdateToOneWithWhereWithoutRoomInput, Prisma.DuelUpdateWithoutRoomInput>, Prisma.DuelUncheckedUpdateWithoutRoomInput>
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type DuelCreateNestedOneWithoutQuestionsInput = {
   create?: Prisma.XOR<Prisma.DuelCreateWithoutQuestionsInput, Prisma.DuelUncheckedCreateWithoutQuestionsInput>
   connectOrCreate?: Prisma.DuelCreateOrConnectWithoutQuestionsInput
