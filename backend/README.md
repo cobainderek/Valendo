@@ -32,7 +32,7 @@ Para rodar este projeto localmente, você precisa ter o **Node.js** (v20+), **Po
 Clone na pasta raiz do backend um arquivo `.env` seguindo os mesmos moldes:
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/valendo?schema=public"
-PORT=3000
+PORT=3001
 API_HOST="0.0.0.0"
 
 # Segurança e Sessão
