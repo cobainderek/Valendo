@@ -23,7 +23,8 @@ function CreateRoomPageInner() {
     try {
       // TODO: services/rooms.ts → criarSala(sala)
       await new Promise((r) => setTimeout(r, 400))
-      router.push('/lobby')
+      const salaId = Math.random().toString(36).slice(2, 10)
+      router.push(`/room/${salaId}`)
     } catch {
       setErro('Não rolou criar a sala. Tenta de novo.')
     } finally {
