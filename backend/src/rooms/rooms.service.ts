@@ -5,10 +5,13 @@ import {
   BadRequestException,
   ForbiddenException,
   ConflictException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { QuestionsService } from '../questions/questions.service';
 import { CreateRoomDto } from './dto/create-room.dto';
+import { RoomsGateway } from './rooms.gateway';
 
 function getIsoWeekAndYear(date: Date): { year: number; week: number } {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -23,6 +26,8 @@ export class RoomsService {
   constructor(
     private prisma: PrismaService,
     private questionsService: QuestionsService,
+    @Inject(forwardRef(() => RoomsGateway))
+    private gateway: RoomsGateway,
   ) {}
 
   private generateRoomCode(): string {
@@ -193,7 +198,14 @@ export class RoomsService {
       data: { roomId: room.id, userId },
     });
 
-    return this.getRoomByCode(code);
+    const state = await this.getRoomByCode(code);
+    // Notifica os outros sockets da sala
+    const me = state.players.find(
+      (p: any) => !p.isBot && p.id === userId.toString(),
+    );
+    if (me) this.gateway.emitPlayerJoined(code, me);
+    await this.gateway.broadcastRoomState(code);
+    return state;
   }
 
   async startGame(userId: bigint, code: string) {
@@ -219,7 +231,12 @@ export class RoomsService {
       data: { status: 'playing', startedAt: new Date() },
     });
 
-    return this.getRoomByCode(code);
+    const state = await this.getRoomByCode(code);
+    this.gateway.emitDuelStart(code, {
+      totalRounds: state.totalRounds ?? 0,
+    });
+    await this.gateway.broadcastRoomState(code);
+    return state;
   }
 
   async submitAnswer(userId: bigint, code: string, questionId: string, selectedAnswer: string) {
@@ -317,6 +334,19 @@ export class RoomsService {
       await this.checkAndFinishGame(room.id, room.code);
     }
 
+    // Emitir resultado da pergunta + scoreboard atualizado pra todo mundo na sala
+    const fresh = await this.getRoomByCode(code);
+    this.gateway.emitQuestionResult(code, {
+      questionId: questionId,
+      answeredBy: userId.toString(),
+      isCorrect,
+      correctAnswer: question.correctAnswer,
+      scoreboard: fresh.players,
+    });
+    if (fresh.status !== 'finished') {
+      await this.gateway.broadcastRoomState(code);
+    }
+
     return {
       isCorrect,
       correctAnswer: question.correctAnswer,
@@ -347,6 +377,107 @@ export class RoomsService {
         finished: isHumanLastQuestion, // bot termina junto com o humano
       },
     });
+  }
+
+  async leaveRoom(userId: bigint, code: string) {
+    const room = await this.prisma.room.findUnique({
+      where: { code },
+      include: {
+        players: {
+          where: { isBot: false },
+          orderBy: { joinedAt: 'asc' },
+        },
+      },
+    });
+
+    if (!room) throw new NotFoundException('Sala não encontrada.');
+    if (room.status !== 'waiting') {
+      throw new BadRequestException(
+        'A partida já começou ou foi finalizada — não é possível sair agora.',
+      );
+    }
+
+    const player = room.players.find((p) => p.userId === userId);
+    if (!player) {
+      throw new ForbiddenException('Você não está nesta sala.');
+    }
+
+    const otherHumans = room.players.filter((p) => p.userId !== userId);
+
+    // Sala solo: o host saindo cancela tudo (apaga sala + bot)
+    if (room.isSoloMode && room.hostId === userId) {
+      const result = await this.cancelRoomInternal(room.id);
+      this.gateway.emitRoomCancelled(code);
+      return result;
+    }
+
+    // Não-host saindo: só remove o RoomPlayer
+    if (room.hostId !== userId) {
+      await this.prisma.roomPlayer.delete({ where: { id: player.id } });
+      this.gateway.emitPlayerLeft(code, { playerId: userId.toString() });
+      await this.gateway.broadcastRoomState(code);
+      return { ok: true, status: 'left' as const };
+    }
+
+    // Host saindo
+    if (otherHumans.length === 0) {
+      // Sala vazia → cancelar (apaga RoomPlayer dele e a Room)
+      const result = await this.cancelRoomInternal(room.id);
+      this.gateway.emitRoomCancelled(code);
+      return result;
+    }
+
+    // Transferir host pro próximo humano (mais antigo na sala)
+    const newHost = otherHumans[0];
+    await this.prisma.$transaction([
+      this.prisma.room.update({
+        where: { id: room.id },
+        data: { hostId: newHost.userId },
+      }),
+      this.prisma.roomPlayer.delete({ where: { id: player.id } }),
+    ]);
+
+    this.gateway.emitPlayerLeft(code, { playerId: userId.toString() });
+    await this.gateway.broadcastRoomState(code);
+
+    return {
+      ok: true,
+      status: 'host-transferred' as const,
+      newHostId: newHost.userId.toString(),
+    };
+  }
+
+  async cancelRoom(userId: bigint, code: string) {
+    const room = await this.prisma.room.findUnique({ where: { code } });
+    if (!room) throw new NotFoundException('Sala não encontrada.');
+    if (room.hostId !== userId) {
+      throw new ForbiddenException('Apenas o host pode cancelar a sala.');
+    }
+    if (room.status !== 'waiting') {
+      throw new BadRequestException(
+        'Só é possível cancelar uma sala enquanto ela aguarda jogadores.',
+      );
+    }
+    const result = await this.cancelRoomInternal(room.id);
+    this.gateway.emitRoomCancelled(code);
+    return result;
+  }
+
+  private async cancelRoomInternal(roomId: bigint) {
+    await this.prisma.$transaction(async (tx) => {
+      const duel = await tx.duel.findUnique({ where: { roomId } });
+      if (duel) {
+        await tx.answer.deleteMany({
+          where: { question: { duelId: duel.id } },
+        });
+        await tx.question.deleteMany({ where: { duelId: duel.id } });
+        await tx.duel.delete({ where: { id: duel.id } });
+      }
+      await tx.roomPlayer.deleteMany({ where: { roomId } });
+      await tx.room.delete({ where: { id: roomId } });
+    });
+
+    return { ok: true, status: 'cancelled' as const };
   }
 
   private async checkAndFinishGame(roomId: bigint, code: string) {
@@ -402,5 +533,13 @@ export class RoomsService {
         }
       }
     });
+
+    // Emitir estado final da sala + duel:finished
+    const finalState = await this.getRoomByCode(code);
+    this.gateway.emitDuelFinished(code, {
+      winnerId: winnerId ? winnerId.toString() : null,
+      scoreboard: finalState.players,
+    });
+    await this.gateway.broadcastRoomState(code);
   }
 }

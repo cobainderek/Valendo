@@ -2,10 +2,13 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   Body,
   Param,
   UseGuards,
   Request,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -55,5 +58,21 @@ export class RoomsController {
   ) {
     const userId = BigInt(req.user.id);
     return this.roomsService.submitAnswer(userId, code, body.questionId, body.selectedAnswer);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':code/leave')
+  @HttpCode(HttpStatus.OK)
+  leave(@Request() req: any, @Param('code') code: string) {
+    const userId = BigInt(req.user.id);
+    return this.roomsService.leaveRoom(userId, code);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':code')
+  @HttpCode(HttpStatus.OK)
+  cancel(@Request() req: any, @Param('code') code: string) {
+    const userId = BigInt(req.user.id);
+    return this.roomsService.cancelRoom(userId, code);
   }
 }

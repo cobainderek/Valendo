@@ -10,9 +10,25 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-  app.enableCors();
+  app.setGlobalPrefix('api');
+
+  const allowedOrigins = (process.env.CORS_ORIGINS ??
+    'https://dyotech.shop,https://www.dyotech.shop,http://localhost:3000')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  app.enableCors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  });
+
+  // Behind Nginx: trust X-Forwarded-* so req.ip / secure are accurate
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
   const port = process.env.PORT ?? 3001;
-  const host = process.env.API_HOST ?? '0.0.0.0';
+  const host = process.env.API_HOST ?? '127.0.0.1';
   await app.listen(port, host);
 }
 bootstrap();

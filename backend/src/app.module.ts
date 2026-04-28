@@ -8,8 +8,9 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { RoomsModule } from './rooms/rooms.module';
 import { QuestionsModule } from './questions/questions.module';
-import { AnswersModule } from './answers/answers.module';
 import { RankingModule } from './ranking/ranking.module';
+import { FriendsModule } from './friends/friends.module';
+import { ChatModule } from './chat/chat.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
@@ -20,8 +21,9 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     AuthModule,
     RoomsModule,
     QuestionsModule,
-    AnswersModule,
     RankingModule,
+    ChatModule,
+    FriendsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

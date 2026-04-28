@@ -26,8 +26,12 @@ model User {
   roomPlayers     RoomPlayer[]
   answers         Answer[]
   weeklyScores    WeeklyScore[]
-  // Friendships1    Friendship[]    @relation("friendships_user1")
-  // Friendships2    Friendship[]    @relation("friendships_user2")
+
+  friendshipsRequested  Friendship[]         @relation("friendship_requester")
+  friendshipsReceived   Friendship[]         @relation("friendship_addressee")
+  conversationsCreated  Conversation[]       @relation("conv_creator")
+  conversationMembers   ConversationMember[]
+  messages              Message[]
 
   @@map("users")
 }
@@ -124,4 +128,70 @@ model WeeklyScore {
   @@unique([userId, year, week])
   @@index([year, week, xp(sort: Desc)])
   @@map("weekly_scores")
+}
+
+// =====================================================================
+// Sistema social: amizades + conversas (DM/grupos) + mensagens
+// =====================================================================
+
+model Friendship {
+  id          BigInt    @id @default(autoincrement())
+  requesterId BigInt    @map("requester_id")
+  addresseeId BigInt    @map("addressee_id")
+  status      String    @default("pending") @db.VarChar(20) // pending | accepted | rejected
+  createdAt   DateTime  @default(now()) @map("created_at")
+  respondedAt DateTime? @map("responded_at")
+
+  requester   User      @relation("friendship_requester", fields: [requesterId], references: [id])
+  addressee   User      @relation("friendship_addressee", fields: [addresseeId], references: [id])
+
+  @@unique([requesterId, addresseeId])
+  @@index([addresseeId, status])
+  @@index([requesterId, status])
+  @@map("friendships")
+}
+
+model Conversation {
+  id          BigInt   @id @default(autoincrement())
+  type        String   @default("dm") @db.VarChar(20) // dm | group
+  name        String?  @db.VarChar(100)
+  createdById BigInt?  @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  createdBy   User?                  @relation("conv_creator", fields: [createdById], references: [id])
+  members     ConversationMember[]
+  messages    Message[]
+
+  @@map("conversations")
+}
+
+model ConversationMember {
+  id             BigInt    @id @default(autoincrement())
+  conversationId BigInt    @map("conversation_id")
+  userId         BigInt    @map("user_id")
+  joinedAt       DateTime  @default(now()) @map("joined_at")
+  lastReadAt     DateTime? @map("last_read_at")
+  role           String    @default("member") @db.VarChar(20) // member | admin
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@map("conversation_members")
+}
+
+model Message {
+  id             BigInt    @id @default(autoincrement())
+  conversationId BigInt    @map("conversation_id")
+  authorId       BigInt    @map("author_id")
+  text           String
+  sentAt         DateTime  @default(now()) @map("sent_at")
+  editedAt       DateTime? @map("edited_at")
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  author         User         @relation(fields: [authorId], references: [id])
+
+  @@index([conversationId, sentAt(sort: Desc)])
+  @@map("messages")
 }
