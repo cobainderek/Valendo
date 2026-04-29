@@ -1,0 +1,40 @@
+# Compose de producao (VM dyotech.shop).
+# Sobe APENAS o frontend, reusando a rede externa do backend que ja roda
+# na VM via backend/docker-compose.yml (network: backend_default).
+#
+# Pre-requisitos na VM:
+#   - Stack do backend ja rodando (postgres + redis + backend) na rede backend_default
+#   - Nginx com server block dyotech.shop -> 127.0.0.1:3000 (frontend) e /api/ -> 127.0.0.1:3001 (backend)
+#   - .env populado com NEXT_PUBLIC_API_URL e NEXT_PUBLIC_WS_URL (URLs publicas)
+#
+# Como subir na VM:
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Para dev local / "corp sim" use o docker-compose.yml padrao (full stack).
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # NEXT_PUBLIC_* sao embarcados no build do Next, precisam apontar
+        # pra URLs publicas alcancaveis pelo browser do usuario final.
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dyotech.shop/api}
+        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-wss://dyotech.shop}
+    container_name: valendo-frontend
+    ports:
+      # Bind apenas em loopback - quem expoe pra fora e o Nginx (TLS + proxy reverso)
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    restart: unless-stopped
+    networks:
+      - backend_default
+
+networks:
+  # Rede criada pelo backend/docker-compose.yml (project name "backend" -> "backend_default")
+  backend_default:
+    external: true

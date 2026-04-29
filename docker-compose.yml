@@ -1,0 +1,96 @@
+# Stack completa do Valendo: postgres + redis + backend (NestJS) + frontend (Next.js).
+# Simula um ambiente corporativo onde tudo sobe com um comando:
+#   docker compose up --build
+#
+# Servicos expostos no host:
+#   - frontend  http://localhost:3000
+#   - backend   http://localhost:3001
+#   - postgres  localhost:5432
+#   - redis     localhost:6379
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: valendo-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-valendo}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-valendo}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - valendo-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: valendo-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - valendo-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: valendo-backend
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-valendo}?schema=public
+      PORT: 3001
+      API_HOST: "0.0.0.0"
+      JWT_SECRET: ${JWT_SECRET}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - valendo-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # NEXT_PUBLIC_* sao embarcados no build do Next, precisam apontar
+        # para URLs alcancaveis pelo navegador (host), nao pela rede docker.
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-ws://localhost:3001}
+    container_name: valendo-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - valendo-net
+
+volumes:
+  pgdata:
+
+networks:
+  valendo-net:
+    driver: bridge
