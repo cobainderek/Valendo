@@ -6,6 +6,7 @@ export interface User {
   tag: string
   email: string
   globalXp: number
+  role: 'user' | 'admin'
 }
 
 interface LoginResponse {
