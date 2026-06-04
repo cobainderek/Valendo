@@ -54,6 +54,8 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       REDIS_URL: redis://redis:6379
       CORS_ORIGINS: ${CORS_ORIGINS:-https://dyotech.shop,https://www.dyotech.shop,http://localhost:3000}
+      # Login com Google (GIS). O client_id e publico - o secret NUNCA entra aqui.
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
     depends_on:
       postgres:
         condition: service_healthy

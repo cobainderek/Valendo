@@ -15,7 +15,17 @@ REDIS_URL=redis://...
 CORS_ORIGINS=https://dyotech.shop,https://www.dyotech.shop
 PORT=3001
 API_HOST=0.0.0.0          # atrás do Nginx
+GOOGLE_CLIENT_ID=<client_id público do OAuth — SEM o client_secret>
 ```
+
+### Login com Google (GIS)
+
+- Console: console.cloud.google.com → Credentials → OAuth Client ID (Web).
+  Origens JS autorizadas: `https://dyotech.shop` e `http://localhost:3000`.
+- O fluxo é por **ID Token** (popup no frontend) — o `client_secret` NÃO é
+  usado em lugar nenhum; nunca colocar em env/código.
+- Sem `GOOGLE_CLIENT_ID` no backend o endpoint `/auth/google` responde 503;
+  sem `NEXT_PUBLIC_GOOGLE_CLIENT_ID` no frontend o botão fica oculto.
 
 ## 2. Migration pendente
 
@@ -52,6 +62,7 @@ Envs do frontend (`.env.local` / build args):
 ```env
 NEXT_PUBLIC_API_URL=https://dyotech.shop/api
 NEXT_PUBLIC_WS_URL=wss://dyotech.shop   # opcional — deriva da API_URL se ausente
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=<client_id público>  # vazio = botão Google oculto
 ```
 
 ## 5. Nginx (conferir, sem mudança nova)
@@ -70,4 +81,6 @@ NEXT_PUBLIC_WS_URL=wss://dyotech.shop   # opcional — deriva da API_URL se ause
 4. Partida 1v1: intro VS, timer regressivo, placar ao vivo, F5 no meio
    retoma da pergunta certa, primeiro a terminar vê tela de espera,
    resultado aparece pros dois.
-5. `npm run test` no backend: 17/17.
+5. Login com Google: conta nova → cria usuário (tag única) e cai no lobby;
+   mesma conta de novo → loga na conta existente (XP preservado).
+6. `npm run test` no backend: 25/25.

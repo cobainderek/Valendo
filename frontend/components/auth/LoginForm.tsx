@@ -1,21 +1,45 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DoodleIcon } from '@/components/ui/DoodleIcon'
+import { renderizarBotaoGoogle } from '@/lib/google'
 
 interface LoginFormProps {
   onLogin: (email: string, senha: string) => void
   onSignup: (apelido: string, email: string, senha: string) => void
   onRecover?: (email: string) => Promise<void>
+  /** Recebe o ID Token do Google — se ausente, o botão Google é ocultado. */
+  onGoogleToken?: (idToken: string) => void
   carregando?: boolean
+  carregandoGoogle?: boolean
   erro?: string
 }
 
-export function LoginForm({ onLogin, onSignup, onRecover, carregando = false, erro = '' }: LoginFormProps) {
+export function LoginForm({
+  onLogin,
+  onSignup,
+  onRecover,
+  onGoogleToken,
+  carregando = false,
+  carregandoGoogle = false,
+  erro = '',
+}: LoginFormProps) {
   const [mode, setMode] = useState<'login' | 'signup' | 'recover'>('login')
   const [apelido, setApelido] = useState('')
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
+  const [googleErro, setGoogleErro] = useState('')
+  const googleRef = useRef<HTMLDivElement>(null)
+
+  // Renderiza o botão oficial do Google (invisível) por cima do botão doodle.
+  // Reexecuta ao voltar do modo "recover", quando o container remonta vazio.
+  useEffect(() => {
+    const el = googleRef.current
+    if (!onGoogleToken || !el || el.childElementCount > 0) return
+    renderizarBotaoGoogle(el, onGoogleToken).catch((e: Error) => {
+      setGoogleErro(e.message)
+    })
+  }, [onGoogleToken, mode])
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -66,13 +90,44 @@ export function LoginForm({ onLogin, onSignup, onRecover, carregando = false, er
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* Google */}
-        <button type="button" className="btn" style={{ width: '100%', background: '#fff', marginBottom: 14 }}>
-          <DoodleIcon name="google" size={22} />
-          Entrar com Google
-        </button>
-
-        <div className="hand-divider">ou com email</div>
+        {/* Google — o botão doodle é só o visual; o botão real do GIS fica
+            invisível por cima e recebe o clique (abre o popup sem bloqueio). */}
+        {onGoogleToken && (
+          <>
+            <div style={{ position: 'relative', marginBottom: googleErro ? 6 : 14 }}>
+              <button
+                type="button"
+                tabIndex={-1}
+                className="btn"
+                style={{ width: '100%', background: '#fff' }}
+                disabled={carregandoGoogle}
+              >
+                <DoodleIcon name="google" size={22} />
+                {carregandoGoogle ? 'Conectando com o Google...' : 'Entrar com Google'}
+              </button>
+              {!carregandoGoogle && (
+                <div
+                  ref={googleRef}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    opacity: 0.0001,
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                />
+              )}
+            </div>
+            {googleErro && (
+              <p style={{ color: 'var(--red)', fontWeight: 700, fontSize: 13, textAlign: 'center', margin: '0 0 12px' }}>
+                {googleErro}
+              </p>
+            )}
+            <div className="hand-divider">ou com email</div>
+          </>
+        )}
 
         {mode === 'signup' && (
           <div className="input-wrap">

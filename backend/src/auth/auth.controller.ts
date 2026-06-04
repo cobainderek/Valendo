@@ -1,6 +1,7 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { GoogleLoginDto } from './dto/google-login.dto';
 import { RecoverDto } from './dto/recover.dto';
 
 @Controller('auth')
@@ -11,6 +12,14 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  // Login social: recebe o ID Token do Google Identity Services (popup no
+  // frontend), valida e faz find-or-create do usuário pelo e-mail.
+  @Post('google')
+  @HttpCode(HttpStatus.OK)
+  loginGoogle(@Body() dto: GoogleLoginDto) {
+    return this.authService.loginComGoogle(dto.idToken);
   }
 
   // Placeholder seguro: sempre retorna { ok: true } para evitar

@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation'
 import { LogoMark } from '@/components/ui/LogoMark'
 import { LoginForm } from '@/components/auth/LoginForm'
 import { LoginScene } from '@/components/auth/LoginScene'
-import { login, register, recoverPassword } from '@/services/auth'
+import { login, register, recoverPassword, loginComGoogle } from '@/services/auth'
 import { useAuthStore } from '@/lib/store/useAuthStore'
+import { GOOGLE_CLIENT_ID } from '@/lib/google'
 
 export default function LoginPage() {
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(false)
+  const [carregandoGoogle, setCarregandoGoogle] = useState(false)
   const router = useRouter()
   const storeLogin = useAuthStore((s) => s.login)
 
@@ -59,6 +61,26 @@ export default function LoginPage() {
       }
     } finally {
       setCarregando(false)
+    }
+  }
+
+  // Recebe o ID Token do popup do Google e troca pelo JWT do Valendo.
+  // Conta nova é criada na hora pelo backend (find-or-create por email).
+  async function handleGoogleToken(idToken: string) {
+    setCarregandoGoogle(true)
+    setErro('')
+
+    try {
+      const dados = await loginComGoogle(idToken)
+      storeLogin(dados.access_token, dados.user)
+      router.push('/lobby')
+    } catch (err) {
+      setErro(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Não rolou entrar com o Google. Tenta de novo ou usa email e senha.',
+      )
+      setCarregandoGoogle(false)
     }
   }
 
@@ -121,7 +143,9 @@ export default function LoginPage() {
             onLogin={handleLogin}
             onSignup={handleSignup}
             onRecover={handleRecover}
+            onGoogleToken={GOOGLE_CLIENT_ID ? handleGoogleToken : undefined}
             carregando={carregando}
+            carregandoGoogle={carregandoGoogle}
             erro={erro}
           />
         </div>

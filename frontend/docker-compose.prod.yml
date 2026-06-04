@@ -19,6 +19,8 @@ services:
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dyotech.shop/api}
         NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-wss://dyotech.shop}
+        # Client ID publico do OAuth Google (GIS) - embutido no build do Next
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-645627375147-0ka9v5o97qovbuhj2sgjetahi8p3g9sh.apps.googleusercontent.com}
     container_name: valendo-frontend
     ports:
       # Bind apenas em loopback - quem expoe pra fora e o Nginx (TLS + proxy reverso)

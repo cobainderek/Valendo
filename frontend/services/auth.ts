@@ -36,6 +36,14 @@ export async function register(data: RegisterData): Promise<LoginResponse> {
   return login(data.email, data.password)
 }
 
+/** Troca o ID Token do Google (popup GIS) pelo JWT do Valendo. */
+export async function loginComGoogle(idToken: string): Promise<LoginResponse> {
+  return apiFetch<LoginResponse>('/auth/google', {
+    method: 'POST',
+    body: JSON.stringify({ idToken }),
+  })
+}
+
 export async function recoverPassword(email: string): Promise<void> {
   await apiFetch('/auth/recover', {
     method: 'POST',
