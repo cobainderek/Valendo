@@ -1,18 +1,27 @@
+# Stack de DEV do backend Valendo: postgres + redis + backend (NestJS).
+# Como subir (a partir desta pasta /backend):
+#   docker compose up -d --build
+#
+# Servicos expostos no host:
+#   - backend   http://localhost:3001
+#   - postgres  localhost:5432
+#   - redis     localhost:6379
+
 services:
   postgres:
     image: postgres:16-alpine
     container_name: valendo-db
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: valendo
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-valendo}
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d valendo"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-valendo}"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -21,7 +30,7 @@ services:
     image: redis:7-alpine
     container_name: valendo-redis
     ports:
-      - "127.0.0.1:6379:6379"
+      - "6379:6379"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -30,20 +39,19 @@ services:
       retries: 5
 
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: valendo-backend
     ports:
-      # Apenas loopback do host — quem expõe pra fora é o Nginx (proxy reverso)
-      - "127.0.0.1:3001:3001"
+      - "3001:3001"
     environment:
-      DATABASE_URL: postgresql://user:password@postgres:5432/valendo?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-valendo}?schema=public
       PORT: 3001
-      # Dentro do container precisa ouvir em 0.0.0.0 pra receber do bridge do Docker
       API_HOST: "0.0.0.0"
       JWT_SECRET: ${JWT_SECRET}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       REDIS_URL: redis://redis:6379
-      CORS_ORIGINS: "https://dyotech.shop,https://www.dyotech.shop,http://localhost:3000"
     depends_on:
       postgres:
         condition: service_healthy

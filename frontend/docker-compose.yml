@@ -1,0 +1,27 @@
+# Stack de DEV do frontend Valendo (Next.js).
+# Como subir (a partir desta pasta /frontend):
+#   docker compose up -d --build
+#
+# Servico exposto no host:
+#   - frontend  http://localhost:3000
+#
+# Importante: o backend deve estar rodando ANTES (a partir de /backend
+# com `docker compose up -d --build`). O browser fala direto com
+# http://localhost:3001 - as URLs NEXT_PUBLIC_* sao embarcadas no build.
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-ws://localhost:3001}
+    container_name: valendo-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    restart: unless-stopped
