@@ -178,10 +178,16 @@ export class QuestionsService {
         },
       });
     } else {
-      // Se já houver duelo (re-generation), podemos atualizar total_rounds com o total cumulativo
-      await this.prisma.duel.update({
+      // Re-geração: substitui as questões antigas em vez de acumular.
+      // Isso evita perguntas duplicadas e um totalRounds inflado/divergente
+      // da contagem real de questões.
+      await this.prisma.answer.deleteMany({
+        where: { question: { duelId: duel.id } },
+      });
+      await this.prisma.question.deleteMany({ where: { duelId: duel.id } });
+      duel = await this.prisma.duel.update({
         where: { id: duel.id },
-        data: { totalRounds: duel.totalRounds + parsedQuestions.length },
+        data: { totalRounds: parsedQuestions.length },
       });
     }
 

@@ -17,23 +17,51 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const { name, tag, email, password } = createUserDto;
 
-    const existingUser = await this.prisma.user.findFirst({
-      where: { OR: [{ email }, { tag }] },
+    // O e-mail é a identidade única do usuário — se já existir, bloqueia.
+    const existingEmail = await this.prisma.user.findUnique({
+      where: { email },
     });
-
-    if (existingUser) {
-      throw new ConflictException('O e-mail ou a tag já estão em uso.');
+    if (existingEmail) {
+      throw new ConflictException('Este e-mail já está em uso.');
     }
+
+    // A tag também é única, mas vários usuários podem escolher o mesmo
+    // apelido. Em vez de impedir o cadastro, geramos uma tag única
+    // adicionando um discriminador (ex.: "derek#1234").
+    const uniqueTag = await this.generateUniqueTag(tag);
 
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
     const user = await this.prisma.user.create({
-      data: { name, tag, email, passwordHash },
+      data: { name, tag: uniqueTag, email, passwordHash },
     });
 
     const { passwordHash: _, ...result } = user;
     return result;
+  }
+
+  private async generateUniqueTag(base: string): Promise<string> {
+    // Garante caber em VarChar(50): 45 chars de base + "#" + 4 dígitos = 50.
+    const clean = (base?.trim().slice(0, 45)) || 'user';
+
+    const existing = await this.prisma.user.findUnique({
+      where: { tag: clean },
+    });
+    if (!existing) return clean;
+
+    for (let i = 0; i < 10; i++) {
+      const suffix = Math.floor(1000 + Math.random() * 9000).toString();
+      const candidate = `${clean}#${suffix}`;
+      const taken = await this.prisma.user.findUnique({
+        where: { tag: candidate },
+      });
+      if (!taken) return candidate;
+    }
+
+    throw new ConflictException(
+      'Não foi possível gerar uma tag única — tente outro apelido.',
+    );
   }
 
   async findByEmail(email: string) {
