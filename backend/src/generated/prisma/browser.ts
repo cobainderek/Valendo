@@ -52,3 +52,23 @@ export type Answer = Prisma.AnswerModel
  * 
  */
 export type WeeklyScore = Prisma.WeeklyScoreModel
+/**
+ * Model Friendship
+ * 
+ */
+export type Friendship = Prisma.FriendshipModel
+/**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
+ * Model ConversationMember
+ * 
+ */
+export type ConversationMember = Prisma.ConversationMemberModel
+/**
+ * Model Message
+ * 
+ */
+export type Message = Prisma.MessageModel

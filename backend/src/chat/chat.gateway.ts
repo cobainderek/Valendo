@@ -41,6 +41,10 @@ export class ChatGateway
   @WebSocketServer() server!: Server;
   private readonly logger = new Logger(ChatGateway.name);
 
+  // Presença em memória: userId -> sockets conectados (várias abas/dispositivos).
+  // Online = pelo menos um socket; offline = nenhum.
+  private readonly onlineUsers = new Map<string, Set<string>>();
+
   constructor(
     private jwtService: JwtService,
     @Inject(forwardRef(() => ChatService))
@@ -57,7 +61,7 @@ export class ChatGateway
       if (!token) return next(new Error('Token JWT ausente'));
       try {
         const payload: any = this.jwtService.verify(token, {
-          secret: process.env.JWT_SECRET || 'sua-chave-secreta-aqui',
+          secret: process.env.JWT_SECRET, // garantido pelo fail-fast do main.ts
         });
         socket.data.userId = String(payload.sub);
         socket.data.tag = payload.tag;
@@ -70,14 +74,36 @@ export class ChatGateway
 
   handleConnection(socket: AuthSocket) {
     if (!socket.data.userId) return socket.disconnect();
+    const userId = socket.data.userId;
     // Toda mensagem direcionada a este user (notificações de amizade, novas DMs, etc)
-    socket.join(USER_PREFIX + socket.data.userId);
-    this.logger.log(
-      `chat WS connect: user=${socket.data.userId} sid=${socket.id}`,
-    );
+    socket.join(USER_PREFIX + userId);
+
+    // Presença: avisa todo mundo só na PRIMEIRA conexão do user (evita spam
+    // quando ele abre uma segunda aba).
+    const sockets = this.onlineUsers.get(userId) ?? new Set<string>();
+    const primeiraConexao = sockets.size === 0;
+    sockets.add(socket.id);
+    this.onlineUsers.set(userId, sockets);
+    if (primeiraConexao) {
+      this.server.emit('presence:update', { userId, online: true });
+    }
+
+    this.logger.log(`chat WS connect: user=${userId} sid=${socket.id}`);
   }
 
   handleDisconnect(socket: AuthSocket) {
+    const userId = socket.data.userId;
+    if (userId) {
+      const sockets = this.onlineUsers.get(userId);
+      if (sockets) {
+        sockets.delete(socket.id);
+        // Só fica offline quando o ÚLTIMO socket do user cair.
+        if (sockets.size === 0) {
+          this.onlineUsers.delete(userId);
+          this.server.emit('presence:update', { userId, online: false });
+        }
+      }
+    }
     this.logger.log(`chat WS disconnect: sid=${socket.id}`);
   }
 
@@ -139,6 +165,17 @@ export class ChatGateway
         isTyping: !!body.isTyping,
       });
     return { ok: true };
+  }
+
+  /**
+   * Consulta de presença inicial: o cliente manda os ids dos amigos e recebe
+   * (via ack) quais estão online agora. Atualizações chegam por presence:update.
+   */
+  @SubscribeMessage('presence:who')
+  onPresenceWho(@MessageBody() body: { userIds?: string[] }) {
+    const ids = Array.isArray(body?.userIds) ? body.userIds.map(String) : [];
+    const online = ids.filter((id) => this.onlineUsers.has(id));
+    return { online };
   }
 
   // ===== Métodos chamados pelos services =====

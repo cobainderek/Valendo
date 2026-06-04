@@ -8,6 +8,14 @@ import { ValidationPipe } from '@nestjs/common';
 };
 
 async function bootstrap() {
+  // Fail-fast: sem segredo JWT o app não pode subir — um fallback hardcoded
+  // permitiria forjar tokens em produção.
+  if (!process.env.JWT_SECRET) {
+    throw new Error(
+      'JWT_SECRET não definido. Configure a variável de ambiente (veja .env.example) antes de iniciar o backend.',
+    );
+  }
+
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.setGlobalPrefix('api');

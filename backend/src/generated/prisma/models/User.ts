@@ -43,6 +43,7 @@ export type UserMinAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   globalXp: number | null
+  role: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -52,6 +53,7 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   globalXp: number | null
+  role: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -61,6 +63,7 @@ export type UserCountAggregateOutputType = {
   email: number
   passwordHash: number
   globalXp: number
+  role: number
   _all: number
 }
 
@@ -82,6 +85,7 @@ export type UserMinAggregateInputType = {
   email?: true
   passwordHash?: true
   globalXp?: true
+  role?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -91,6 +95,7 @@ export type UserMaxAggregateInputType = {
   email?: true
   passwordHash?: true
   globalXp?: true
+  role?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -100,6 +105,7 @@ export type UserCountAggregateInputType = {
   email?: true
   passwordHash?: true
   globalXp?: true
+  role?: true
   _all?: true
 }
 
@@ -196,6 +202,7 @@ export type UserGroupByOutputType = {
   email: string
   passwordHash: string
   globalXp: number
+  role: string
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -228,11 +235,17 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   globalXp?: Prisma.IntFilter<"User"> | number
+  role?: Prisma.StringFilter<"User"> | string
   HostedRooms?: Prisma.RoomListRelationFilter
   wonRooms?: Prisma.RoomListRelationFilter
   roomPlayers?: Prisma.RoomPlayerListRelationFilter
   answers?: Prisma.AnswerListRelationFilter
   weeklyScores?: Prisma.WeeklyScoreListRelationFilter
+  friendshipsRequested?: Prisma.FriendshipListRelationFilter
+  friendshipsReceived?: Prisma.FriendshipListRelationFilter
+  conversationsCreated?: Prisma.ConversationListRelationFilter
+  conversationMembers?: Prisma.ConversationMemberListRelationFilter
+  messages?: Prisma.MessageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -242,11 +255,17 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   globalXp?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   HostedRooms?: Prisma.RoomOrderByRelationAggregateInput
   wonRooms?: Prisma.RoomOrderByRelationAggregateInput
   roomPlayers?: Prisma.RoomPlayerOrderByRelationAggregateInput
   answers?: Prisma.AnswerOrderByRelationAggregateInput
   weeklyScores?: Prisma.WeeklyScoreOrderByRelationAggregateInput
+  friendshipsRequested?: Prisma.FriendshipOrderByRelationAggregateInput
+  friendshipsReceived?: Prisma.FriendshipOrderByRelationAggregateInput
+  conversationsCreated?: Prisma.ConversationOrderByRelationAggregateInput
+  conversationMembers?: Prisma.ConversationMemberOrderByRelationAggregateInput
+  messages?: Prisma.MessageOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -259,11 +278,17 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   globalXp?: Prisma.IntFilter<"User"> | number
+  role?: Prisma.StringFilter<"User"> | string
   HostedRooms?: Prisma.RoomListRelationFilter
   wonRooms?: Prisma.RoomListRelationFilter
   roomPlayers?: Prisma.RoomPlayerListRelationFilter
   answers?: Prisma.AnswerListRelationFilter
   weeklyScores?: Prisma.WeeklyScoreListRelationFilter
+  friendshipsRequested?: Prisma.FriendshipListRelationFilter
+  friendshipsReceived?: Prisma.FriendshipListRelationFilter
+  conversationsCreated?: Prisma.ConversationListRelationFilter
+  conversationMembers?: Prisma.ConversationMemberListRelationFilter
+  messages?: Prisma.MessageListRelationFilter
 }, "id" | "tag" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -273,6 +298,7 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   globalXp?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -290,6 +316,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   globalXp?: Prisma.IntWithAggregatesFilter<"User"> | number
+  role?: Prisma.StringWithAggregatesFilter<"User"> | string
 }
 
 export type UserCreateInput = {
@@ -299,11 +326,17 @@ export type UserCreateInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -313,11 +346,17 @@ export type UserUncheckedCreateInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUpdateInput = {
@@ -327,11 +366,17 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -341,11 +386,17 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -355,6 +406,7 @@ export type UserCreateManyInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
 }
 
 export type UserUpdateManyMutationInput = {
@@ -364,6 +416,7 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -373,6 +426,7 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -382,6 +436,7 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   globalXp?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -396,6 +451,7 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   globalXp?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -405,6 +461,7 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   globalXp?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -514,6 +571,78 @@ export type UserUpdateOneRequiredWithoutWeeklyScoresNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWeeklyScoresInput, Prisma.UserUpdateWithoutWeeklyScoresInput>, Prisma.UserUncheckedUpdateWithoutWeeklyScoresInput>
 }
 
+export type UserCreateNestedOneWithoutFriendshipsRequestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsRequestedInput, Prisma.UserUncheckedCreateWithoutFriendshipsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendshipsRequestedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutFriendshipsReceivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsReceivedInput, Prisma.UserUncheckedCreateWithoutFriendshipsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendshipsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFriendshipsRequestedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsRequestedInput, Prisma.UserUncheckedCreateWithoutFriendshipsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendshipsRequestedInput
+  upsert?: Prisma.UserUpsertWithoutFriendshipsRequestedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriendshipsRequestedInput, Prisma.UserUpdateWithoutFriendshipsRequestedInput>, Prisma.UserUncheckedUpdateWithoutFriendshipsRequestedInput>
+}
+
+export type UserUpdateOneRequiredWithoutFriendshipsReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsReceivedInput, Prisma.UserUncheckedCreateWithoutFriendshipsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFriendshipsReceivedInput
+  upsert?: Prisma.UserUpsertWithoutFriendshipsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriendshipsReceivedInput, Prisma.UserUpdateWithoutFriendshipsReceivedInput>, Prisma.UserUncheckedUpdateWithoutFriendshipsReceivedInput>
+}
+
+export type UserCreateNestedOneWithoutConversationsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsCreatedInput, Prisma.UserUncheckedCreateWithoutConversationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutConversationsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsCreatedInput, Prisma.UserUncheckedCreateWithoutConversationsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutConversationsCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConversationsCreatedInput, Prisma.UserUpdateWithoutConversationsCreatedInput>, Prisma.UserUncheckedUpdateWithoutConversationsCreatedInput>
+}
+
+export type UserCreateNestedOneWithoutConversationMembersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationMembersInput, Prisma.UserUncheckedCreateWithoutConversationMembersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationMembersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutConversationMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationMembersInput, Prisma.UserUncheckedCreateWithoutConversationMembersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationMembersInput
+  upsert?: Prisma.UserUpsertWithoutConversationMembersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConversationMembersInput, Prisma.UserUpdateWithoutConversationMembersInput>, Prisma.UserUncheckedUpdateWithoutConversationMembersInput>
+}
+
+export type UserCreateNestedOneWithoutMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMessagesInput
+  upsert?: Prisma.UserUpsertWithoutMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMessagesInput, Prisma.UserUpdateWithoutMessagesInput>, Prisma.UserUncheckedUpdateWithoutMessagesInput>
+}
+
 export type UserCreateWithoutHostedRoomsInput = {
   id?: bigint | number
   name: string
@@ -521,10 +650,16 @@ export type UserCreateWithoutHostedRoomsInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutHostedRoomsInput = {
@@ -534,10 +669,16 @@ export type UserUncheckedCreateWithoutHostedRoomsInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutHostedRoomsInput = {
@@ -552,10 +693,16 @@ export type UserCreateWithoutWonRoomsInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutWonRoomsInput = {
@@ -565,10 +712,16 @@ export type UserUncheckedCreateWithoutWonRoomsInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutWonRoomsInput = {
@@ -594,10 +747,16 @@ export type UserUpdateWithoutHostedRoomsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutHostedRoomsInput = {
@@ -607,10 +766,16 @@ export type UserUncheckedUpdateWithoutHostedRoomsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUpsertWithoutWonRoomsInput = {
@@ -631,10 +796,16 @@ export type UserUpdateWithoutWonRoomsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWonRoomsInput = {
@@ -644,10 +815,16 @@ export type UserUncheckedUpdateWithoutWonRoomsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutRoomPlayersInput = {
@@ -657,10 +834,16 @@ export type UserCreateWithoutRoomPlayersInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
   answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutRoomPlayersInput = {
@@ -670,10 +853,16 @@ export type UserUncheckedCreateWithoutRoomPlayersInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
   answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutRoomPlayersInput = {
@@ -699,10 +888,16 @@ export type UserUpdateWithoutRoomPlayersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
   answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRoomPlayersInput = {
@@ -712,10 +907,16 @@ export type UserUncheckedUpdateWithoutRoomPlayersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
   answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutAnswersInput = {
@@ -725,10 +926,16 @@ export type UserCreateWithoutAnswersInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutAnswersInput = {
@@ -738,10 +945,16 @@ export type UserUncheckedCreateWithoutAnswersInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutAnswersInput = {
@@ -767,10 +980,16 @@ export type UserUpdateWithoutAnswersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAnswersInput = {
@@ -780,10 +999,16 @@ export type UserUncheckedUpdateWithoutAnswersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
   weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutWeeklyScoresInput = {
@@ -793,10 +1018,16 @@ export type UserCreateWithoutWeeklyScoresInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutWeeklyScoresInput = {
@@ -806,10 +1037,16 @@ export type UserUncheckedCreateWithoutWeeklyScoresInput = {
   email: string
   passwordHash: string
   globalXp?: number
+  role?: string
   HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
   wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
   roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
   answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutWeeklyScoresInput = {
@@ -835,10 +1072,16 @@ export type UserUpdateWithoutWeeklyScoresInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWeeklyScoresInput = {
@@ -848,10 +1091,476 @@ export type UserUncheckedUpdateWithoutWeeklyScoresInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
   HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
   wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
   roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
   answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutFriendshipsRequestedInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutFriendshipsRequestedInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutFriendshipsRequestedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsRequestedInput, Prisma.UserUncheckedCreateWithoutFriendshipsRequestedInput>
+}
+
+export type UserCreateWithoutFriendshipsReceivedInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutFriendshipsReceivedInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutFriendshipsReceivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsReceivedInput, Prisma.UserUncheckedCreateWithoutFriendshipsReceivedInput>
+}
+
+export type UserUpsertWithoutFriendshipsRequestedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriendshipsRequestedInput, Prisma.UserUncheckedUpdateWithoutFriendshipsRequestedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsRequestedInput, Prisma.UserUncheckedCreateWithoutFriendshipsRequestedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriendshipsRequestedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriendshipsRequestedInput, Prisma.UserUncheckedUpdateWithoutFriendshipsRequestedInput>
+}
+
+export type UserUpdateWithoutFriendshipsRequestedInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriendshipsRequestedInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUpsertWithoutFriendshipsReceivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFriendshipsReceivedInput, Prisma.UserUncheckedUpdateWithoutFriendshipsReceivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFriendshipsReceivedInput, Prisma.UserUncheckedCreateWithoutFriendshipsReceivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFriendshipsReceivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFriendshipsReceivedInput, Prisma.UserUncheckedUpdateWithoutFriendshipsReceivedInput>
+}
+
+export type UserUpdateWithoutFriendshipsReceivedInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFriendshipsReceivedInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutConversationsCreatedInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutConversationsCreatedInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutConversationsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationsCreatedInput, Prisma.UserUncheckedCreateWithoutConversationsCreatedInput>
+}
+
+export type UserUpsertWithoutConversationsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConversationsCreatedInput, Prisma.UserUncheckedUpdateWithoutConversationsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationsCreatedInput, Prisma.UserUncheckedCreateWithoutConversationsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConversationsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConversationsCreatedInput, Prisma.UserUncheckedUpdateWithoutConversationsCreatedInput>
+}
+
+export type UserUpdateWithoutConversationsCreatedInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConversationsCreatedInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutConversationMembersInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  messages?: Prisma.MessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutConversationMembersInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutConversationMembersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationMembersInput, Prisma.UserUncheckedCreateWithoutConversationMembersInput>
+}
+
+export type UserUpsertWithoutConversationMembersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConversationMembersInput, Prisma.UserUncheckedUpdateWithoutConversationMembersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationMembersInput, Prisma.UserUncheckedCreateWithoutConversationMembersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConversationMembersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConversationMembersInput, Prisma.UserUncheckedUpdateWithoutConversationMembersInput>
+}
+
+export type UserUpdateWithoutConversationMembersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConversationMembersInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutMessagesInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMessagesInput = {
+  id?: bigint | number
+  name: string
+  tag: string
+  email: string
+  passwordHash: string
+  globalXp?: number
+  role?: string
+  HostedRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutHostInput
+  wonRooms?: Prisma.RoomUncheckedCreateNestedManyWithoutWinnerInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedCreateNestedManyWithoutUserInput
+  answers?: Prisma.AnswerUncheckedCreateNestedManyWithoutUserInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedCreateNestedManyWithoutUserInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedCreateNestedManyWithoutRequesterInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedCreateNestedManyWithoutAddresseeInput
+  conversationsCreated?: Prisma.ConversationUncheckedCreateNestedManyWithoutCreatedByInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+}
+
+export type UserUpsertWithoutMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMessagesInput, Prisma.UserUncheckedUpdateWithoutMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMessagesInput, Prisma.UserUncheckedCreateWithoutMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMessagesInput, Prisma.UserUncheckedUpdateWithoutMessagesInput>
+}
+
+export type UserUpdateWithoutMessagesInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMessagesInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  globalXp?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  HostedRooms?: Prisma.RoomUncheckedUpdateManyWithoutHostNestedInput
+  wonRooms?: Prisma.RoomUncheckedUpdateManyWithoutWinnerNestedInput
+  roomPlayers?: Prisma.RoomPlayerUncheckedUpdateManyWithoutUserNestedInput
+  answers?: Prisma.AnswerUncheckedUpdateManyWithoutUserNestedInput
+  weeklyScores?: Prisma.WeeklyScoreUncheckedUpdateManyWithoutUserNestedInput
+  friendshipsRequested?: Prisma.FriendshipUncheckedUpdateManyWithoutRequesterNestedInput
+  friendshipsReceived?: Prisma.FriendshipUncheckedUpdateManyWithoutAddresseeNestedInput
+  conversationsCreated?: Prisma.ConversationUncheckedUpdateManyWithoutCreatedByNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -865,6 +1574,11 @@ export type UserCountOutputType = {
   roomPlayers: number
   answers: number
   weeklyScores: number
+  friendshipsRequested: number
+  friendshipsReceived: number
+  conversationsCreated: number
+  conversationMembers: number
+  messages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -873,6 +1587,11 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   roomPlayers?: boolean | UserCountOutputTypeCountRoomPlayersArgs
   answers?: boolean | UserCountOutputTypeCountAnswersArgs
   weeklyScores?: boolean | UserCountOutputTypeCountWeeklyScoresArgs
+  friendshipsRequested?: boolean | UserCountOutputTypeCountFriendshipsRequestedArgs
+  friendshipsReceived?: boolean | UserCountOutputTypeCountFriendshipsReceivedArgs
+  conversationsCreated?: boolean | UserCountOutputTypeCountConversationsCreatedArgs
+  conversationMembers?: boolean | UserCountOutputTypeCountConversationMembersArgs
+  messages?: boolean | UserCountOutputTypeCountMessagesArgs
 }
 
 /**
@@ -920,6 +1639,41 @@ export type UserCountOutputTypeCountWeeklyScoresArgs<ExtArgs extends runtime.Typ
   where?: Prisma.WeeklyScoreWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriendshipsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FriendshipWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFriendshipsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FriendshipWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConversationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConversationMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationMemberWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MessageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -928,11 +1682,17 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   passwordHash?: boolean
   globalXp?: boolean
+  role?: boolean
   HostedRooms?: boolean | Prisma.User$HostedRoomsArgs<ExtArgs>
   wonRooms?: boolean | Prisma.User$wonRoomsArgs<ExtArgs>
   roomPlayers?: boolean | Prisma.User$roomPlayersArgs<ExtArgs>
   answers?: boolean | Prisma.User$answersArgs<ExtArgs>
   weeklyScores?: boolean | Prisma.User$weeklyScoresArgs<ExtArgs>
+  friendshipsRequested?: boolean | Prisma.User$friendshipsRequestedArgs<ExtArgs>
+  friendshipsReceived?: boolean | Prisma.User$friendshipsReceivedArgs<ExtArgs>
+  conversationsCreated?: boolean | Prisma.User$conversationsCreatedArgs<ExtArgs>
+  conversationMembers?: boolean | Prisma.User$conversationMembersArgs<ExtArgs>
+  messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -943,6 +1703,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   globalXp?: boolean
+  role?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -952,6 +1713,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   globalXp?: boolean
+  role?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -961,15 +1723,21 @@ export type UserSelectScalar = {
   email?: boolean
   passwordHash?: boolean
   globalXp?: boolean
+  role?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tag" | "email" | "passwordHash" | "globalXp", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tag" | "email" | "passwordHash" | "globalXp" | "role", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   HostedRooms?: boolean | Prisma.User$HostedRoomsArgs<ExtArgs>
   wonRooms?: boolean | Prisma.User$wonRoomsArgs<ExtArgs>
   roomPlayers?: boolean | Prisma.User$roomPlayersArgs<ExtArgs>
   answers?: boolean | Prisma.User$answersArgs<ExtArgs>
   weeklyScores?: boolean | Prisma.User$weeklyScoresArgs<ExtArgs>
+  friendshipsRequested?: boolean | Prisma.User$friendshipsRequestedArgs<ExtArgs>
+  friendshipsReceived?: boolean | Prisma.User$friendshipsReceivedArgs<ExtArgs>
+  conversationsCreated?: boolean | Prisma.User$conversationsCreatedArgs<ExtArgs>
+  conversationMembers?: boolean | Prisma.User$conversationMembersArgs<ExtArgs>
+  messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -983,6 +1751,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     roomPlayers: Prisma.$RoomPlayerPayload<ExtArgs>[]
     answers: Prisma.$AnswerPayload<ExtArgs>[]
     weeklyScores: Prisma.$WeeklyScorePayload<ExtArgs>[]
+    friendshipsRequested: Prisma.$FriendshipPayload<ExtArgs>[]
+    friendshipsReceived: Prisma.$FriendshipPayload<ExtArgs>[]
+    conversationsCreated: Prisma.$ConversationPayload<ExtArgs>[]
+    conversationMembers: Prisma.$ConversationMemberPayload<ExtArgs>[]
+    messages: Prisma.$MessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -991,6 +1764,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     passwordHash: string
     globalXp: number
+    role: string
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1390,6 +2164,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   roomPlayers<T extends Prisma.User$roomPlayersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roomPlayersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   answers<T extends Prisma.User$answersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$answersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   weeklyScores<T extends Prisma.User$weeklyScoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$weeklyScoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WeeklyScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  friendshipsRequested<T extends Prisma.User$friendshipsRequestedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendshipsRequestedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  friendshipsReceived<T extends Prisma.User$friendshipsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$friendshipsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversationsCreated<T extends Prisma.User$conversationsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversationMembers<T extends Prisma.User$conversationMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  messages<T extends Prisma.User$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1425,6 +2204,7 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly globalXp: Prisma.FieldRef<"User", 'Int'>
+  readonly role: Prisma.FieldRef<"User", 'String'>
 }
     
 
@@ -1935,6 +2715,126 @@ export type User$weeklyScoresArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.WeeklyScoreScalarFieldEnum | Prisma.WeeklyScoreScalarFieldEnum[]
+}
+
+/**
+ * User.friendshipsRequested
+ */
+export type User$friendshipsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Friendship
+   */
+  select?: Prisma.FriendshipSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Friendship
+   */
+  omit?: Prisma.FriendshipOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FriendshipInclude<ExtArgs> | null
+  where?: Prisma.FriendshipWhereInput
+  orderBy?: Prisma.FriendshipOrderByWithRelationInput | Prisma.FriendshipOrderByWithRelationInput[]
+  cursor?: Prisma.FriendshipWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FriendshipScalarFieldEnum | Prisma.FriendshipScalarFieldEnum[]
+}
+
+/**
+ * User.friendshipsReceived
+ */
+export type User$friendshipsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Friendship
+   */
+  select?: Prisma.FriendshipSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Friendship
+   */
+  omit?: Prisma.FriendshipOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FriendshipInclude<ExtArgs> | null
+  where?: Prisma.FriendshipWhereInput
+  orderBy?: Prisma.FriendshipOrderByWithRelationInput | Prisma.FriendshipOrderByWithRelationInput[]
+  cursor?: Prisma.FriendshipWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FriendshipScalarFieldEnum | Prisma.FriendshipScalarFieldEnum[]
+}
+
+/**
+ * User.conversationsCreated
+ */
+export type User$conversationsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Conversation
+   */
+  select?: Prisma.ConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Conversation
+   */
+  omit?: Prisma.ConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationInclude<ExtArgs> | null
+  where?: Prisma.ConversationWhereInput
+  orderBy?: Prisma.ConversationOrderByWithRelationInput | Prisma.ConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
+}
+
+/**
+ * User.conversationMembers
+ */
+export type User$conversationMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConversationMember
+   */
+  select?: Prisma.ConversationMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ConversationMember
+   */
+  omit?: Prisma.ConversationMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationMemberInclude<ExtArgs> | null
+  where?: Prisma.ConversationMemberWhereInput
+  orderBy?: Prisma.ConversationMemberOrderByWithRelationInput | Prisma.ConversationMemberOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationMemberScalarFieldEnum | Prisma.ConversationMemberScalarFieldEnum[]
+}
+
+/**
+ * User.messages
+ */
+export type User$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Message
+   */
+  select?: Prisma.MessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Message
+   */
+  omit?: Prisma.MessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MessageInclude<ExtArgs> | null
+  where?: Prisma.MessageWhereInput
+  orderBy?: Prisma.MessageOrderByWithRelationInput | Prisma.MessageOrderByWithRelationInput[]
+  cursor?: Prisma.MessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
 }
 
 /**

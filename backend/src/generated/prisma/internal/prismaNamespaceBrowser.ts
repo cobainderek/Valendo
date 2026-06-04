@@ -57,7 +57,11 @@ export const ModelName = {
   Duel: 'Duel',
   Question: 'Question',
   Answer: 'Answer',
-  WeeklyScore: 'WeeklyScore'
+  WeeklyScore: 'WeeklyScore',
+  Friendship: 'Friendship',
+  Conversation: 'Conversation',
+  ConversationMember: 'ConversationMember',
+  Message: 'Message'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -82,7 +86,8 @@ export const UserScalarFieldEnum = {
   tag: 'tag',
   email: 'email',
   passwordHash: 'passwordHash',
-  globalXp: 'globalXp'
+  globalXp: 'globalXp',
+  role: 'role'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -97,6 +102,7 @@ export const RoomScalarFieldEnum = {
   isPrivate: 'isPrivate',
   isSoloMode: 'isSoloMode',
   maxPlayers: 'maxPlayers',
+  questionTime: 'questionTime',
   startedAt: 'startedAt',
   finishedAt: 'finishedAt',
   winnerId: 'winnerId'
@@ -163,6 +169,53 @@ export const WeeklyScoreScalarFieldEnum = {
 } as const
 
 export type WeeklyScoreScalarFieldEnum = (typeof WeeklyScoreScalarFieldEnum)[keyof typeof WeeklyScoreScalarFieldEnum]
+
+
+export const FriendshipScalarFieldEnum = {
+  id: 'id',
+  requesterId: 'requesterId',
+  addresseeId: 'addresseeId',
+  status: 'status',
+  createdAt: 'createdAt',
+  respondedAt: 'respondedAt'
+} as const
+
+export type FriendshipScalarFieldEnum = (typeof FriendshipScalarFieldEnum)[keyof typeof FriendshipScalarFieldEnum]
+
+
+export const ConversationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  name: 'name',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+} as const
+
+export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const ConversationMemberScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  userId: 'userId',
+  joinedAt: 'joinedAt',
+  lastReadAt: 'lastReadAt',
+  role: 'role'
+} as const
+
+export type ConversationMemberScalarFieldEnum = (typeof ConversationMemberScalarFieldEnum)[keyof typeof ConversationMemberScalarFieldEnum]
+
+
+export const MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  authorId: 'authorId',
+  text: 'text',
+  sentAt: 'sentAt',
+  editedAt: 'editedAt'
+} as const
+
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
 export const SortOrder = {

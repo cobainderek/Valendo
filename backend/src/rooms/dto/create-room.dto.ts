@@ -19,4 +19,10 @@ export class CreateRoomDto {
   @IsBoolean({ message: 'O campo solo deve ser um booleano' })
   @IsOptional()
   isSoloMode?: boolean;
+
+  @IsInt({ message: 'O tempo por pergunta deve ser um inteiro (segundos)' })
+  @IsOptional()
+  @Min(10, { message: 'Mínimo de 10 segundos por pergunta' })
+  @Max(60, { message: 'Máximo de 60 segundos por pergunta' })
+  questionTime?: number;
 }

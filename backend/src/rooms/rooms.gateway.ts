@@ -63,7 +63,7 @@ export class RoomsGateway
 
       try {
         const payload: any = this.jwtService.verify(token, {
-          secret: process.env.JWT_SECRET || 'sua-chave-secreta-aqui',
+          secret: process.env.JWT_SECRET, // garantido pelo fail-fast do main.ts
         });
         socket.data.userId = String(payload.sub);
         socket.data.tag = payload.tag;

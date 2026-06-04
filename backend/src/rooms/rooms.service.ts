@@ -77,6 +77,7 @@ export class RoomsService {
         isPrivate: dto.isPrivate ?? false,
         isSoloMode: isSolo,
         maxPlayers: isSolo ? 2 : (dto.maxPlayers ?? 4),
+        questionTime: dto.questionTime ?? 20,
         status: 'waiting',
       },
     });
@@ -208,6 +209,33 @@ export class RoomsService {
     return state;
   }
 
+  /**
+   * Respostas já dadas pelo usuário no duelo desta sala. Usado pelo frontend
+   * pra retomar a partida do ponto certo após um reload (sem isso, o jogador
+   * tentaria responder a pergunta 1 de novo e levaria 409).
+   */
+  async getMyAnswers(userId: bigint, code: string) {
+    const room = await this.prisma.room.findUnique({
+      where: { code },
+      include: { duel: { select: { id: true } } },
+    });
+    if (!room) throw new NotFoundException('Sala não encontrada.');
+    if (!room.duel) return { answers: [] };
+
+    const answers = await this.prisma.answer.findMany({
+      where: { userId, question: { duelId: room.duel.id } },
+      select: { questionId: true, selectedAnswer: true, isCorrect: true },
+    });
+
+    return {
+      answers: answers.map((a) => ({
+        questionId: a.questionId.toString(),
+        selectedAnswer: a.selectedAnswer,
+        isCorrect: a.isCorrect,
+      })),
+    };
+  }
+
   async startGame(userId: bigint, code: string) {
     const room = await this.prisma.room.findUnique({
       where: { code },
@@ -219,11 +247,19 @@ export class RoomsService {
     if (room.status !== 'waiting') throw new BadRequestException('A partida já foi iniciada.');
     if (!room.isSoloMode && room._count.players < 2) throw new BadRequestException('Precisa de pelo menos 2 jogadores.');
 
-    // Gerar perguntas via Gemini
-    const questionResult = await this.questionsService.generateAndStore(
-      userId,
-      { roomCode: code, theme: room.theme || undefined },
-    );
+    // Gerar perguntas via Gemini — exceto se o host já gerou antes (ex.: via
+    // upload de PDF na criação da sala). Regenerar aqui substituiria as
+    // perguntas do material pelo tema genérico.
+    const duelExistente = await this.prisma.duel.findUnique({
+      where: { roomId: room.id },
+      include: { _count: { select: { questions: true } } },
+    });
+    if (!duelExistente || duelExistente._count.questions === 0) {
+      await this.questionsService.generateAndStore(userId, {
+        roomCode: code,
+        theme: room.theme || undefined,
+      });
+    }
 
     // Atualizar status para playing
     await this.prisma.room.update({

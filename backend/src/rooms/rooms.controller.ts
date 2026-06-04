@@ -35,6 +35,14 @@ export class RoomsController {
     return this.roomsService.getRoomByCode(code);
   }
 
+  /** Respostas já dadas pelo usuário neste duelo — permite retomar após reload. */
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':code/my-answers')
+  myAnswers(@Request() req: any, @Param('code') code: string) {
+    const userId = BigInt(req.user.id);
+    return this.roomsService.getMyAnswers(userId, code);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post(':code/join')
   join(@Request() req: any, @Param('code') code: string) {
