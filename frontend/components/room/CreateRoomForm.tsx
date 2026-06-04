@@ -12,6 +12,8 @@ export interface NovaSala {
   temaId: string
   maxJogadores: number
   tempoPergunta: number
+  /** Quantidade de perguntas do duelo (3–20). */
+  numPerguntas: number
   privada: boolean
   soloMode: boolean
   /** Material de estudo opcional — perguntas saem do PDF em vez do tema. */
@@ -42,6 +44,7 @@ export function CreateRoomForm({
   const [temaId, setTemaId] = useState(temaInicial || temas[0]?.id || '')
   const [maxJogadores, setMaxJogadores] = useState(4)
   const [tempoPergunta, setTempoPergunta] = useState(20)
+  const [numPerguntas, setNumPerguntas] = useState(10)
   const [privada, setPrivada] = useState(false)
   const [soloMode, setSoloMode] = useState(false)
   const [arquivoPdf, setArquivoPdf] = useState<File | null>(null)
@@ -76,7 +79,7 @@ export function CreateRoomForm({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ nome: nome.trim(), temaId, maxJogadores: soloMode ? 2 : maxJogadores, tempoPergunta, privada, soloMode, arquivoPdf })
+    onSubmit({ nome: nome.trim(), temaId, maxJogadores: soloMode ? 2 : maxJogadores, tempoPergunta, numPerguntas, privada, soloMode, arquivoPdf })
   }
 
   return (
@@ -274,16 +277,25 @@ export function CreateRoomForm({
         )}
       </div>
 
-      {/* Jogadores + tempo — lado a lado */}
-      {!soloMode && (
+      {/* Jogadores + perguntas + tempo — lado a lado */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        {!soloMode && (
+          <StepperField
+            label="Máx. jogadores"
+            value={maxJogadores}
+            min={2}
+            max={10}
+            step={1}
+            onChange={setMaxJogadores}
+          />
+        )}
         <StepperField
-          label="Máx. jogadores"
-          value={maxJogadores}
-          min={2}
-          max={10}
+          label="Nº de perguntas"
+          value={numPerguntas}
+          min={3}
+          max={20}
           step={1}
-          onChange={setMaxJogadores}
+          onChange={setNumPerguntas}
         />
         <StepperField
           label="Tempo por pergunta (s)"
@@ -294,7 +306,6 @@ export function CreateRoomForm({
           onChange={setTempoPergunta}
         />
       </div>
-      )}
 
       {/* Privacidade */}
       <label

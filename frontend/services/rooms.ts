@@ -23,6 +23,8 @@ export interface CriarSalaDTO {
   isSoloMode?: boolean
   /** Segundos por pergunta (10–60, default 20 no backend). */
   questionTime?: number
+  /** Quantidade de perguntas do duelo (3–20, default 10 no backend). */
+  numQuestions?: number
 }
 
 export interface SalaCriadaAPI {
@@ -60,6 +62,7 @@ export interface SalaDetalhe {
   status: string
   maxPlayers: number
   questionTime?: number
+  numQuestions?: number
   startedAt: string | null
   finishedAt: string | null
   winnerId: string | null

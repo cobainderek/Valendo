@@ -47,6 +47,7 @@ model Room {
   isSoloMode Boolean   @default(false) @map("is_solo_mode")
   maxPlayers Int       @default(4) @map("max_players")
   questionTime Int     @default(20) @map("question_time")
+  numQuestions Int     @default(10) @map("num_questions")
   startedAt  DateTime? @map("started_at")
   finishedAt DateTime? @map("finished_at")
   winnerId   BigInt?   @map("winner_id")

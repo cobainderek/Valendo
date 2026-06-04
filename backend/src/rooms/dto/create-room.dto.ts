@@ -25,4 +25,10 @@ export class CreateRoomDto {
   @Min(10, { message: 'Mínimo de 10 segundos por pergunta' })
   @Max(60, { message: 'Máximo de 60 segundos por pergunta' })
   questionTime?: number;
+
+  @IsInt({ message: 'A quantidade de perguntas deve ser um inteiro' })
+  @IsOptional()
+  @Min(3, { message: 'Mínimo de 3 perguntas por duelo' })
+  @Max(20, { message: 'Máximo de 20 perguntas por duelo' })
+  numQuestions?: number;
 }

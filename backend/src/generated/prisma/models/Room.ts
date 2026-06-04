@@ -31,6 +31,7 @@ export type RoomAvgAggregateOutputType = {
   hostId: number | null
   maxPlayers: number | null
   questionTime: number | null
+  numQuestions: number | null
   winnerId: number | null
 }
 
@@ -39,6 +40,7 @@ export type RoomSumAggregateOutputType = {
   hostId: bigint | null
   maxPlayers: number | null
   questionTime: number | null
+  numQuestions: number | null
   winnerId: bigint | null
 }
 
@@ -52,6 +54,7 @@ export type RoomMinAggregateOutputType = {
   isSoloMode: boolean | null
   maxPlayers: number | null
   questionTime: number | null
+  numQuestions: number | null
   startedAt: Date | null
   finishedAt: Date | null
   winnerId: bigint | null
@@ -67,6 +70,7 @@ export type RoomMaxAggregateOutputType = {
   isSoloMode: boolean | null
   maxPlayers: number | null
   questionTime: number | null
+  numQuestions: number | null
   startedAt: Date | null
   finishedAt: Date | null
   winnerId: bigint | null
@@ -82,6 +86,7 @@ export type RoomCountAggregateOutputType = {
   isSoloMode: number
   maxPlayers: number
   questionTime: number
+  numQuestions: number
   startedAt: number
   finishedAt: number
   winnerId: number
@@ -94,6 +99,7 @@ export type RoomAvgAggregateInputType = {
   hostId?: true
   maxPlayers?: true
   questionTime?: true
+  numQuestions?: true
   winnerId?: true
 }
 
@@ -102,6 +108,7 @@ export type RoomSumAggregateInputType = {
   hostId?: true
   maxPlayers?: true
   questionTime?: true
+  numQuestions?: true
   winnerId?: true
 }
 
@@ -115,6 +122,7 @@ export type RoomMinAggregateInputType = {
   isSoloMode?: true
   maxPlayers?: true
   questionTime?: true
+  numQuestions?: true
   startedAt?: true
   finishedAt?: true
   winnerId?: true
@@ -130,6 +138,7 @@ export type RoomMaxAggregateInputType = {
   isSoloMode?: true
   maxPlayers?: true
   questionTime?: true
+  numQuestions?: true
   startedAt?: true
   finishedAt?: true
   winnerId?: true
@@ -145,6 +154,7 @@ export type RoomCountAggregateInputType = {
   isSoloMode?: true
   maxPlayers?: true
   questionTime?: true
+  numQuestions?: true
   startedAt?: true
   finishedAt?: true
   winnerId?: true
@@ -247,6 +257,7 @@ export type RoomGroupByOutputType = {
   isSoloMode: boolean
   maxPlayers: number
   questionTime: number
+  numQuestions: number
   startedAt: Date | null
   finishedAt: Date | null
   winnerId: bigint | null
@@ -285,6 +296,7 @@ export type RoomWhereInput = {
   isSoloMode?: Prisma.BoolFilter<"Room"> | boolean
   maxPlayers?: Prisma.IntFilter<"Room"> | number
   questionTime?: Prisma.IntFilter<"Room"> | number
+  numQuestions?: Prisma.IntFilter<"Room"> | number
   startedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
   finishedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
   winnerId?: Prisma.BigIntNullableFilter<"Room"> | bigint | number | null
@@ -304,6 +316,7 @@ export type RoomOrderByWithRelationInput = {
   isSoloMode?: Prisma.SortOrder
   maxPlayers?: Prisma.SortOrder
   questionTime?: Prisma.SortOrder
+  numQuestions?: Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   winnerId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -326,6 +339,7 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<{
   isSoloMode?: Prisma.BoolFilter<"Room"> | boolean
   maxPlayers?: Prisma.IntFilter<"Room"> | number
   questionTime?: Prisma.IntFilter<"Room"> | number
+  numQuestions?: Prisma.IntFilter<"Room"> | number
   startedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
   finishedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
   winnerId?: Prisma.BigIntNullableFilter<"Room"> | bigint | number | null
@@ -345,6 +359,7 @@ export type RoomOrderByWithAggregationInput = {
   isSoloMode?: Prisma.SortOrder
   maxPlayers?: Prisma.SortOrder
   questionTime?: Prisma.SortOrder
+  numQuestions?: Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   winnerId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -368,6 +383,7 @@ export type RoomScalarWhereWithAggregatesInput = {
   isSoloMode?: Prisma.BoolWithAggregatesFilter<"Room"> | boolean
   maxPlayers?: Prisma.IntWithAggregatesFilter<"Room"> | number
   questionTime?: Prisma.IntWithAggregatesFilter<"Room"> | number
+  numQuestions?: Prisma.IntWithAggregatesFilter<"Room"> | number
   startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Room"> | Date | string | null
   finishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Room"> | Date | string | null
   winnerId?: Prisma.BigIntNullableWithAggregatesFilter<"Room"> | bigint | number | null
@@ -382,6 +398,7 @@ export type RoomCreateInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
@@ -400,6 +417,7 @@ export type RoomUncheckedCreateInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   winnerId?: bigint | number | null
@@ -416,6 +434,7 @@ export type RoomUpdateInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
@@ -434,6 +453,7 @@ export type RoomUncheckedUpdateInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -451,6 +471,7 @@ export type RoomCreateManyInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   winnerId?: bigint | number | null
@@ -465,6 +486,7 @@ export type RoomUpdateManyMutationInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -479,6 +501,7 @@ export type RoomUncheckedUpdateManyInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -504,6 +527,7 @@ export type RoomCountOrderByAggregateInput = {
   isSoloMode?: Prisma.SortOrder
   maxPlayers?: Prisma.SortOrder
   questionTime?: Prisma.SortOrder
+  numQuestions?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrder
   winnerId?: Prisma.SortOrder
@@ -514,6 +538,7 @@ export type RoomAvgOrderByAggregateInput = {
   hostId?: Prisma.SortOrder
   maxPlayers?: Prisma.SortOrder
   questionTime?: Prisma.SortOrder
+  numQuestions?: Prisma.SortOrder
   winnerId?: Prisma.SortOrder
 }
 
@@ -527,6 +552,7 @@ export type RoomMaxOrderByAggregateInput = {
   isSoloMode?: Prisma.SortOrder
   maxPlayers?: Prisma.SortOrder
   questionTime?: Prisma.SortOrder
+  numQuestions?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrder
   winnerId?: Prisma.SortOrder
@@ -542,6 +568,7 @@ export type RoomMinOrderByAggregateInput = {
   isSoloMode?: Prisma.SortOrder
   maxPlayers?: Prisma.SortOrder
   questionTime?: Prisma.SortOrder
+  numQuestions?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrder
   winnerId?: Prisma.SortOrder
@@ -552,6 +579,7 @@ export type RoomSumOrderByAggregateInput = {
   hostId?: Prisma.SortOrder
   maxPlayers?: Prisma.SortOrder
   questionTime?: Prisma.SortOrder
+  numQuestions?: Prisma.SortOrder
   winnerId?: Prisma.SortOrder
 }
 
@@ -701,6 +729,7 @@ export type RoomCreateWithoutHostInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   winner?: Prisma.UserCreateNestedOneWithoutWonRoomsInput
@@ -717,6 +746,7 @@ export type RoomUncheckedCreateWithoutHostInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   winnerId?: bigint | number | null
@@ -743,6 +773,7 @@ export type RoomCreateWithoutWinnerInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
@@ -760,6 +791,7 @@ export type RoomUncheckedCreateWithoutWinnerInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   duel?: Prisma.DuelUncheckedCreateNestedOneWithoutRoomInput
@@ -805,6 +837,7 @@ export type RoomScalarWhereInput = {
   isSoloMode?: Prisma.BoolFilter<"Room"> | boolean
   maxPlayers?: Prisma.IntFilter<"Room"> | number
   questionTime?: Prisma.IntFilter<"Room"> | number
+  numQuestions?: Prisma.IntFilter<"Room"> | number
   startedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
   finishedAt?: Prisma.DateTimeNullableFilter<"Room"> | Date | string | null
   winnerId?: Prisma.BigIntNullableFilter<"Room"> | bigint | number | null
@@ -835,6 +868,7 @@ export type RoomCreateWithoutPlayersInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
@@ -852,6 +886,7 @@ export type RoomUncheckedCreateWithoutPlayersInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   winnerId?: bigint | number | null
@@ -883,6 +918,7 @@ export type RoomUpdateWithoutPlayersInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
@@ -900,6 +936,7 @@ export type RoomUncheckedUpdateWithoutPlayersInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -915,6 +952,7 @@ export type RoomCreateWithoutDuelInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   host: Prisma.UserCreateNestedOneWithoutHostedRoomsInput
@@ -932,6 +970,7 @@ export type RoomUncheckedCreateWithoutDuelInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   winnerId?: bigint | number | null
@@ -963,6 +1002,7 @@ export type RoomUpdateWithoutDuelInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
@@ -980,6 +1020,7 @@ export type RoomUncheckedUpdateWithoutDuelInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -995,6 +1036,7 @@ export type RoomCreateManyHostInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
   winnerId?: bigint | number | null
@@ -1010,6 +1052,7 @@ export type RoomCreateManyWinnerInput = {
   isSoloMode?: boolean
   maxPlayers?: number
   questionTime?: number
+  numQuestions?: number
   startedAt?: Date | string | null
   finishedAt?: Date | string | null
 }
@@ -1023,6 +1066,7 @@ export type RoomUpdateWithoutHostInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   winner?: Prisma.UserUpdateOneWithoutWonRoomsNestedInput
@@ -1039,6 +1083,7 @@ export type RoomUncheckedUpdateWithoutHostInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -1055,6 +1100,7 @@ export type RoomUncheckedUpdateManyWithoutHostInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   winnerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -1069,6 +1115,7 @@ export type RoomUpdateWithoutWinnerInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   host?: Prisma.UserUpdateOneRequiredWithoutHostedRoomsNestedInput
@@ -1086,6 +1133,7 @@ export type RoomUncheckedUpdateWithoutWinnerInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duel?: Prisma.DuelUncheckedUpdateOneWithoutRoomNestedInput
@@ -1102,6 +1150,7 @@ export type RoomUncheckedUpdateManyWithoutWinnerInput = {
   isSoloMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   maxPlayers?: Prisma.IntFieldUpdateOperationsInput | number
   questionTime?: Prisma.IntFieldUpdateOperationsInput | number
+  numQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -1147,6 +1196,7 @@ export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isSoloMode?: boolean
   maxPlayers?: boolean
   questionTime?: boolean
+  numQuestions?: boolean
   startedAt?: boolean
   finishedAt?: boolean
   winnerId?: boolean
@@ -1167,6 +1217,7 @@ export type RoomSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isSoloMode?: boolean
   maxPlayers?: boolean
   questionTime?: boolean
+  numQuestions?: boolean
   startedAt?: boolean
   finishedAt?: boolean
   winnerId?: boolean
@@ -1184,6 +1235,7 @@ export type RoomSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isSoloMode?: boolean
   maxPlayers?: boolean
   questionTime?: boolean
+  numQuestions?: boolean
   startedAt?: boolean
   finishedAt?: boolean
   winnerId?: boolean
@@ -1201,12 +1253,13 @@ export type RoomSelectScalar = {
   isSoloMode?: boolean
   maxPlayers?: boolean
   questionTime?: boolean
+  numQuestions?: boolean
   startedAt?: boolean
   finishedAt?: boolean
   winnerId?: boolean
 }
 
-export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "hostId" | "theme" | "status" | "isPrivate" | "isSoloMode" | "maxPlayers" | "questionTime" | "startedAt" | "finishedAt" | "winnerId", ExtArgs["result"]["room"]>
+export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "hostId" | "theme" | "status" | "isPrivate" | "isSoloMode" | "maxPlayers" | "questionTime" | "numQuestions" | "startedAt" | "finishedAt" | "winnerId", ExtArgs["result"]["room"]>
 export type RoomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   winner?: boolean | Prisma.Room$winnerArgs<ExtArgs>
@@ -1241,6 +1294,7 @@ export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isSoloMode: boolean
     maxPlayers: number
     questionTime: number
+    numQuestions: number
     startedAt: Date | null
     finishedAt: Date | null
     winnerId: bigint | null
@@ -1680,6 +1734,7 @@ export interface RoomFieldRefs {
   readonly isSoloMode: Prisma.FieldRef<"Room", 'Boolean'>
   readonly maxPlayers: Prisma.FieldRef<"Room", 'Int'>
   readonly questionTime: Prisma.FieldRef<"Room", 'Int'>
+  readonly numQuestions: Prisma.FieldRef<"Room", 'Int'>
   readonly startedAt: Prisma.FieldRef<"Room", 'DateTime'>
   readonly finishedAt: Prisma.FieldRef<"Room", 'DateTime'>
   readonly winnerId: Prisma.FieldRef<"Room", 'BigInt'>

@@ -131,4 +131,57 @@ describe('QuestionsService — generateAndStore', () => {
     expect(mockGenerateContent).not.toHaveBeenCalled();
     expect(resultado.cachedHit).toBe(true);
   });
+
+  it('inclui a quantidade de perguntas na chave do cache (v2)', async () => {
+    prisma.room.findUnique.mockResolvedValue({ ...sala, numQuestions: 3 });
+    prisma.duel.findUnique.mockResolvedValue(null);
+    prisma.duel.create.mockResolvedValue({ id: 6n, roomId: 1n, totalRounds: 3 });
+
+    await service.generateAndStore(10n, dto as any);
+
+    expect(mockRedis.get).toHaveBeenCalledWith(
+      expect.stringMatching(/^valendo:quiz:v2:[0-9a-f]{32}:3$/),
+    );
+  });
+
+  it('tenta de novo quando a IA retorna menos questões que o pedido', async () => {
+    prisma.room.findUnique.mockResolvedValue({ ...sala, numQuestions: 3 });
+    prisma.duel.findUnique.mockResolvedValue(null);
+    prisma.duel.create.mockResolvedValue({ id: 7n, roomId: 1n, totalRounds: 3 });
+    mockRedis.get.mockResolvedValue(null); // sem cache → vai pro Gemini
+
+    // 1ª tentativa: só 1 pergunta (o bug do "Qual é o tema?"); 2ª: as 3 pedidas.
+    mockGenerateContent
+      .mockResolvedValueOnce({
+        text: JSON.stringify({ questions: [PERGUNTAS_FAKE[0]] }),
+      })
+      .mockResolvedValueOnce({
+        text: JSON.stringify({ questions: PERGUNTAS_FAKE }),
+      });
+
+    await service.generateAndStore(10n, dto as any);
+
+    expect(mockGenerateContent).toHaveBeenCalledTimes(2);
+    const inserts = prisma.question.createMany.mock.calls[0][0].data;
+    expect(inserts).toHaveLength(3);
+  });
+
+  it('manda a quantidade e o rótulo TEMA DO DUELO no prompt', async () => {
+    prisma.room.findUnique.mockResolvedValue({ ...sala, numQuestions: 5 });
+    prisma.duel.findUnique.mockResolvedValue(null);
+    prisma.duel.create.mockResolvedValue({ id: 8n, roomId: 1n, totalRounds: 5 });
+    mockRedis.get.mockResolvedValue(null);
+
+    const cincoPerguntas = [...PERGUNTAS_FAKE, ...PERGUNTAS_FAKE].slice(0, 5);
+    mockGenerateContent.mockResolvedValue({
+      text: JSON.stringify({ questions: cincoPerguntas }),
+    });
+
+    await service.generateAndStore(10n, dto as any);
+
+    const chamada = mockGenerateContent.mock.calls[0][0];
+    expect(chamada.contents).toContain('QUANTIDADE DE QUESTÕES: 5');
+    expect(chamada.contents).toContain('TEMA DO DUELO: "matemática"');
+    expect(chamada.contents).not.toContain('EXTRAÇÃO');
+  });
 });

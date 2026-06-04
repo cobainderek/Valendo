@@ -54,10 +54,16 @@ export class QuestionsService {
       throw new UnauthorizedException('Apenas o Host pode gerar questões para esta sala.');
     }
 
+    // Quantidade de perguntas configurada pelo host na criação da sala.
+    const numQuestoes = room.numQuestions ?? 10;
+
     // 2. Extrair Contexto Base
+    // O prompt diferencia TEMA (título curto → IA usa conhecimento geral)
+    // de MATERIAL (texto extraído de PDF → perguntas saem do conteúdo).
     let baseContext = '';
+    let isTema = false;
     let cacheKey: string | null = null;
-    
+
     if (file) {
       try {
         const parsedPdf = await pdfParse(file.buffer);
@@ -67,9 +73,12 @@ export class QuestionsService {
       }
     } else if (dto.theme) {
       baseContext = this.sanitizeText(dto.theme);
-      // Criação de ID algoritimica determinístico MD5 como chave para cacheamento
+      isTema = true;
+      // Criação de ID algoritimica determinístico MD5 como chave para cacheamento.
+      // A quantidade entra na chave (v2): mudar o nº de perguntas não pode
+      // reusar um quiz antigo de tamanho diferente.
       const hash = crypto.createHash('md5').update(baseContext).digest('hex');
-      cacheKey = `valendo:quiz:${hash}`;
+      cacheKey = `valendo:quiz:v2:${hash}:${numQuestoes}`;
     } else {
       throw new BadRequestException('Você deve fornecer um tema em texto ou enviar um arquivo PDF.');
     }
@@ -119,15 +128,22 @@ export class QuestionsService {
     // AI Generation Fallback Se não houver Cache
     if (parsedQuestions.length === 0) {
     let attempts = 0;
-    const maxAttempts = 2; // Auto-retry para lidar com timeouts ou falhas atípicas de JSON
-    let lastError = null;
+    const maxAttempts = 3; // Auto-retry para lidar com timeouts, JSON inválido ou quantidade errada
+    let lastError: unknown = null;
+    let melhorTentativa: any[] = []; // maior leva obtida, caso nenhuma bata a quantidade exata
+
+    // O rótulo do conteúdo importa: um tema curto rotulado como "texto para
+    // extração" fazia a IA gerar meta-perguntas ("Qual é o tema...?").
+    const conteudo = isTema
+      ? `TEMA DO DUELO: "${baseContext.substring(0, 500)}"`
+      : `MATERIAL DE ESTUDO (texto extraído de PDF):\n\n"${baseContext.substring(0, 15000)}"`; // Gemini lida bem com mais texto que a baseline
 
     while (attempts < maxAttempts && parsedQuestions.length === 0) {
       try {
         attempts++;
         const response = await this.ai.models.generateContent({
           model: 'gemini-2.5-flash',
-          contents: `TEXTO FORNECIDO PARA EXTRAÇÃO:\n\n"${baseContext.substring(0, 15000)}"`, // Gemini lida bem com mais texto que a baseline
+          contents: `QUANTIDADE DE QUESTÕES: ${numQuestoes}\n\n${conteudo}`,
           config: {
             systemInstruction: this.cachedSystemInstruction,
             responseMimeType: 'application/json',
@@ -139,16 +155,33 @@ export class QuestionsService {
 
         const jsonText = response.text || '';
         const payload = JSON.parse(jsonText);
-        
-        if (Array.isArray(payload.questions) && payload.questions.length > 0) {
-          parsedQuestions = payload.questions;
-        } else {
+
+        if (!Array.isArray(payload.questions) || payload.questions.length === 0) {
           throw new Error('Payload retornado não contem um array de "questions".');
+        }
+        if (payload.questions.length > melhorTentativa.length) {
+          melhorTentativa = payload.questions;
+        }
+        if (payload.questions.length >= numQuestoes) {
+          parsedQuestions = payload.questions.slice(0, numQuestoes);
+        } else {
+          throw new Error(
+            `IA retornou ${payload.questions.length} questões (pedido: ${numQuestoes}).`,
+          );
         }
       } catch (e) {
         lastError = e;
         console.warn(`Tentativa ${attempts} de gerar questões falhou. Tentando novamente se aplicável...`);
       }
+    }
+
+    // Última linha de defesa: aceitar uma leva incompleta razoável (>= 3)
+    // em vez de derrubar o início da partida.
+    if (parsedQuestions.length === 0 && melhorTentativa.length >= 3) {
+      console.warn(
+        `Usando melhor tentativa com ${melhorTentativa.length}/${numQuestoes} questões.`,
+      );
+      parsedQuestions = melhorTentativa;
     }
 
     if (parsedQuestions.length === 0) {

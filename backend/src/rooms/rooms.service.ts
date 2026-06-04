@@ -78,6 +78,7 @@ export class RoomsService {
         isSoloMode: isSolo,
         maxPlayers: isSolo ? 2 : (dto.maxPlayers ?? 4),
         questionTime: dto.questionTime ?? 20,
+        numQuestions: dto.numQuestions ?? 10,
         status: 'waiting',
       },
     });

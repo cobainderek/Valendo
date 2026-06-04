@@ -36,6 +36,7 @@ function CreateRoomPageInner() {
         isSoloMode: sala.soloMode,
         maxPlayers: sala.soloMode ? 2 : sala.maxJogadores,
         questionTime: sala.tempoPergunta,
+        numQuestions: sala.numPerguntas,
       })
 
       // Com PDF anexado, gera as perguntas do material AGORA (a IA demora

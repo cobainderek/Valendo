@@ -1290,6 +1290,7 @@ export const RoomScalarFieldEnum = {
   isSoloMode: 'isSoloMode',
   maxPlayers: 'maxPlayers',
   questionTime: 'questionTime',
+  numQuestions: 'numQuestions',
   startedAt: 'startedAt',
   finishedAt: 'finishedAt',
   winnerId: 'winnerId'
