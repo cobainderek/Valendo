@@ -12,10 +12,27 @@ interface WaitingRoomProps {
   isHost: boolean
   onStart: () => void
   iniciando: boolean
+  /** Jogador (não-host) sai da sala. */
+  onSair?: () => void
+  /** Host cancela a sala pra todo mundo. */
+  onCancelar?: () => void
+  saindo?: boolean
 }
 
-export function WaitingRoom({ code, theme, players, maxPlayers, isHost, onStart, iniciando }: WaitingRoomProps) {
+export function WaitingRoom({
+  code,
+  theme,
+  players,
+  maxPlayers,
+  isHost,
+  onStart,
+  iniciando,
+  onSair,
+  onCancelar,
+  saindo,
+}: WaitingRoomProps) {
   const [copiado, setCopiado] = useState(false)
+  const [confirmando, setConfirmando] = useState(false)
 
   function copiarCodigo() {
     navigator.clipboard.writeText(code)
@@ -136,6 +153,40 @@ export function WaitingRoom({ code, theme, players, maxPlayers, isHost, onStart,
             Aguardando o host iniciar a partida...
           </p>
         </div>
+      )}
+
+      {/* Sair (jogador) / Cancelar (host) — com confirmação em 2 cliques */}
+      {(isHost ? onCancelar : onSair) && (
+        <button
+          className="btn"
+          style={{
+            width: '100%',
+            padding: '12px 18px',
+            color: 'var(--red)',
+            borderColor: confirmando ? 'var(--red)' : undefined,
+            background: confirmando ? '#FEE2E2' : undefined,
+          }}
+          disabled={saindo || iniciando}
+          onClick={() => {
+            if (!confirmando) {
+              setConfirmando(true)
+              setTimeout(() => setConfirmando(false), 3000)
+              return
+            }
+            if (isHost) onCancelar?.()
+            else onSair?.()
+          }}
+        >
+          {saindo
+            ? 'Saindo...'
+            : confirmando
+              ? isHost
+                ? 'Clica de novo pra confirmar — cancela pra TODOS'
+                : 'Clica de novo pra confirmar'
+              : isHost
+                ? 'Cancelar sala'
+                : 'Sair da sala'}
+        </button>
       )}
     </div>
   )

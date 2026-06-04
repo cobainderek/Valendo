@@ -21,6 +21,8 @@ export interface CriarSalaDTO {
   isPrivate?: boolean
   maxPlayers?: number
   isSoloMode?: boolean
+  /** Segundos por pergunta (10–60, default 20 no backend). */
+  questionTime?: number
 }
 
 export interface SalaCriadaAPI {
@@ -57,6 +59,7 @@ export interface SalaDetalhe {
   theme: string | null
   status: string
   maxPlayers: number
+  questionTime?: number
   startedAt: string | null
   finishedAt: string | null
   winnerId: string | null
@@ -108,4 +111,27 @@ export async function responderPergunta(
     method: 'POST',
     body: JSON.stringify({ questionId, selectedAnswer }),
   })
+}
+
+export interface MinhaResposta {
+  questionId: string
+  selectedAnswer: string
+  isCorrect: boolean
+}
+
+/** Perguntas que o usuário já respondeu — pra retomar a partida após reload. */
+export async function obterMinhasRespostas(
+  code: string,
+): Promise<{ answers: MinhaResposta[] }> {
+  return apiFetch<{ answers: MinhaResposta[] }>(`/rooms/${code}/my-answers`)
+}
+
+/** Sai da sala (jogador que não é host). */
+export async function sairSala(code: string): Promise<unknown> {
+  return apiFetch(`/rooms/${code}/leave`, { method: 'POST' })
+}
+
+/** Cancela a sala (apenas host). */
+export async function cancelarSala(code: string): Promise<unknown> {
+  return apiFetch(`/rooms/${code}`, { method: 'DELETE' })
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DoodleIcon } from '@/components/ui/DoodleIcon'
 import type { QuestionInfo, AnswerResponse } from '@/services/rooms'
 
@@ -8,17 +8,61 @@ interface QuestionCardProps {
   question: QuestionInfo
   questionNumber: number
   totalQuestions: number
+  /** Segundos pra responder. Sem o valor, não há countdown. Use key={question.id} pra resetar entre perguntas. */
+  tempoPorPergunta?: number
   onAnswer: (questionId: string, answer: string) => Promise<AnswerResponse>
   onNext: () => void
 }
 
-export function QuestionCard({ question, questionNumber, totalQuestions, onAnswer, onNext }: QuestionCardProps) {
+export function QuestionCard({
+  question,
+  questionNumber,
+  totalQuestions,
+  tempoPorPergunta,
+  onAnswer,
+  onNext,
+}: QuestionCardProps) {
   const [selecionada, setSelecionada] = useState<string | null>(null)
   const [resultado, setResultado] = useState<AnswerResponse | null>(null)
   const [enviando, setEnviando] = useState(false)
+  const [restante, setRestante] = useState(tempoPorPergunta ?? 0)
+  const [expirado, setExpirado] = useState(false)
+  const expirouRef = useRef(false)
+
+  // Countdown: 1 tick/segundo enquanto não respondeu. Ao zerar, envia uma
+  // resposta vazia (conta como errada) pra partida não travar.
+  useEffect(() => {
+    if (!tempoPorPergunta || resultado) return
+    const t = setTimeout(() => {
+      if (restante <= 1) {
+        setRestante(0)
+        aoExpirar()
+      } else {
+        setRestante(restante - 1)
+      }
+    }, 1000)
+    return () => clearTimeout(t)
+    // aoExpirar é estável o bastante aqui — depende só de refs e props.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restante, tempoPorPergunta, resultado])
+
+  async function aoExpirar() {
+    if (resultado || enviando || expirouRef.current) return
+    expirouRef.current = true
+    setExpirado(true)
+    setEnviando(true)
+    try {
+      const res = await onAnswer(question.id, '')
+      setResultado(res)
+    } catch {
+      // Mesmo falhando o envio, mostra como expirada — o jogador não responde mais.
+    } finally {
+      setEnviando(false)
+    }
+  }
 
   async function handleSelect(option: string) {
-    if (resultado || enviando) return
+    if (resultado || enviando || expirouRef.current) return
     setSelecionada(option)
     setEnviando(true)
     try {
@@ -67,10 +111,23 @@ export function QuestionCard({ question, questionNumber, totalQuestions, onAnswe
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {/* Progress */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
         <span className="chip" style={{ borderColor: 'var(--primary)', color: 'var(--primary)' }}>
           Pergunta {questionNumber} de {totalQuestions}
         </span>
+        {!!tempoPorPergunta && !resultado && (
+          <span
+            className="chip"
+            style={{
+              borderColor: restante <= 5 ? 'var(--red)' : 'var(--ink)',
+              color: restante <= 5 ? 'var(--red)' : 'var(--ink)',
+              background: restante <= 5 ? '#fde8e8' : 'var(--bg-card)',
+              fontVariantNumeric: 'tabular-nums',
+            }}
+          >
+            ⏱ {restante}s
+          </span>
+        )}
         {resultado && (
           <span
             className="chip"
@@ -118,6 +175,24 @@ export function QuestionCard({ question, questionNumber, totalQuestions, onAnswe
           </button>
         ))}
       </div>
+
+      {/* Tempo esgotado */}
+      {expirado && (
+        <div
+          style={{
+            padding: '10px 14px',
+            background: '#fde8e8',
+            border: '2px solid var(--red)',
+            borderRadius: 10,
+            color: 'var(--red)',
+            fontWeight: 800,
+            fontSize: 13,
+            textAlign: 'center',
+          }}
+        >
+          ⏰ Tempo esgotado!
+        </div>
+      )}
 
       {/* Explanation */}
       {resultado && resultado.explanationAi && (
