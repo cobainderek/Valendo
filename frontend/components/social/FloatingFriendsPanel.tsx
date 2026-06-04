@@ -1,22 +1,39 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { DoodleIcon } from '@/components/ui/DoodleIcon'
 import { FriendsChatPanel } from './FriendsChatPanel'
+import { useChatStore } from '@/lib/store/useChatStore'
+import { useAuthStore } from '@/lib/store/useAuthStore'
 
 const STORAGE_KEY = 'valendo:chatPanel:aberto'
 
 export function FloatingFriendsPanel() {
-  const [aberto, setAberto] = useState(false)
+  const token = useAuthStore((s) => s.token)
+  const iniciar = useChatStore((s) => s.iniciar)
+  const conversas = useChatStore((s) => s.conversas)
+  const pedidos = useChatStore((s) => s.pedidos)
+  // Estado do painel mora no store — o Sidebar ("Meus amigos") também abre.
+  const aberto = useChatStore((s) => s.painelAberto)
+  const setAberto = useChatStore((s) => s.setPainelAberto)
 
+  // Total real de notificações: mensagens não lidas + pedidos pendentes.
+  const naoLidas = conversas.reduce((soma, c) => soma + c.unread, 0) + pedidos.length
+
+  // Restaura o estado salvo só depois da hidratação — inicializar direto do
+  // localStorage causaria mismatch entre servidor e cliente.
   useEffect(() => {
     const salvo = localStorage.getItem(STORAGE_KEY)
     if (salvo === '1') setAberto(true)
-  }, [])
+  }, [setAberto])
 
+  // Conecta o socket do chat assim que houver sessão — mesmo com o painel
+  // fechado, pra badge de não lidas atualizar em tempo real.
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, aberto ? '1' : '0')
-  }, [aberto])
+    if (token) iniciar()
+  }, [token, iniciar])
+
+  if (!token) return null
 
   if (aberto) {
     return <FriendsChatPanel onFechar={() => setAberto(false)} />
@@ -59,20 +76,22 @@ export function FloatingFriendsPanel() {
     >
       <DoodleIcon name="people" size={20} strokeColor="#fff" />
       amigos
-      <span
-        style={{
-          background: 'var(--green)',
-          color: '#fff',
-          border: '2px solid var(--ink)',
-          borderRadius: 999,
-          fontWeight: 900,
-          fontSize: 11,
-          padding: '1px 8px',
-          marginLeft: 2,
-        }}
-      >
-        4
-      </span>
+      {naoLidas > 0 && (
+        <span
+          style={{
+            background: 'var(--green)',
+            color: '#fff',
+            border: '2px solid var(--ink)',
+            borderRadius: 999,
+            fontWeight: 900,
+            fontSize: 11,
+            padding: '1px 8px',
+            marginLeft: 2,
+          }}
+        >
+          {naoLidas > 99 ? '99+' : naoLidas}
+        </span>
+      )}
     </button>
   )
 }
