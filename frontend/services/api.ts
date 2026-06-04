@@ -12,10 +12,14 @@ export async function apiFetch<T = unknown>(
 
   const storedToken = token || (typeof window !== 'undefined' ? localStorage.getItem('token') : null)
 
+  // FormData (upload de arquivo): o browser define o Content-Type sozinho
+  // com o boundary do multipart — forçar application/json quebraria o upload.
+  const ehFormData = typeof FormData !== 'undefined' && rest.body instanceof FormData
+
   const res = await fetch(`${API_URL}${endpoint}`, {
     ...rest,
     headers: {
-      'Content-Type': 'application/json',
+      ...(ehFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(storedToken ? { Authorization: `Bearer ${storedToken}` } : {}),
       ...headers,
     },

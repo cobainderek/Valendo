@@ -7,6 +7,7 @@ import { CreateRoomForm, type NovaSala } from '@/components/room/CreateRoomForm'
 import { TEMAS } from '@/lib/temas'
 import { useAuthGuard } from '@/lib/hooks/useAuthGuard'
 import { criarSala } from '@/services/rooms'
+import { gerarPerguntas } from '@/services/questions'
 
 function CreateRoomPageInner() {
   const { carregando: authCarregando } = useAuthGuard()
@@ -14,6 +15,7 @@ function CreateRoomPageInner() {
   const searchParams = useSearchParams()
   const temaInicial = searchParams.get('tema') || undefined
   const [carregando, setCarregando] = useState(false)
+  const [textoCarregando, setTextoCarregando] = useState('')
   const [erro, setErro] = useState('')
 
   if (authCarregando) return null
@@ -24,6 +26,7 @@ function CreateRoomPageInner() {
       return
     }
     setCarregando(true)
+    setTextoCarregando('Criando...')
     setErro('')
     try {
       const tema = TEMAS.find((t) => t.id === sala.temaId)
@@ -32,11 +35,26 @@ function CreateRoomPageInner() {
         isPrivate: sala.soloMode ? true : sala.privada,
         isSoloMode: sala.soloMode,
         maxPlayers: sala.soloMode ? 2 : sala.maxJogadores,
+        questionTime: sala.tempoPergunta,
       })
+
+      // Com PDF anexado, gera as perguntas do material AGORA (a IA demora
+      // alguns segundos). O start da sala detecta que já existem perguntas
+      // e não regenera pelo tema.
+      if (sala.arquivoPdf) {
+        setTextoCarregando('Gerando perguntas do seu PDF... 🤖')
+        try {
+          await gerarPerguntas(salaCriada.code, sala.arquivoPdf)
+        } catch (err) {
+          // A sala já existe — segue pra ela, mas avisa que caiu no tema.
+          console.error('Falha na geração via PDF:', err)
+          setErro('Sala criada, mas a geração pelo PDF falhou — o duelo usará o tema escolhido.')
+        }
+      }
+
       router.push(`/room/${salaCriada.code}`)
     } catch {
       setErro('Não rolou criar a sala. Tenta de novo.')
-    } finally {
       setCarregando(false)
     }
   }
@@ -108,6 +126,7 @@ function CreateRoomPageInner() {
             temas={TEMAS}
             temaInicial={temaInicial}
             carregando={carregando}
+            textoCarregando={textoCarregando}
             erro={erro}
             onSubmit={handleCreate}
             onCancelar={handleCancel}

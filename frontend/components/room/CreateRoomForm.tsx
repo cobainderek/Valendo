@@ -1,8 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { DoodleIcon } from '@/components/ui/DoodleIcon'
 import type { Tema } from '@/lib/temas'
+
+// PDFs maiores que isso costumam estourar o limite do upload/extração.
+const TAMANHO_MAX_PDF_MB = 10
 
 export interface NovaSala {
   nome: string
@@ -11,12 +14,16 @@ export interface NovaSala {
   tempoPergunta: number
   privada: boolean
   soloMode: boolean
+  /** Material de estudo opcional — perguntas saem do PDF em vez do tema. */
+  arquivoPdf: File | null
 }
 
 interface CreateRoomFormProps {
   temas: Tema[]
   temaInicial?: string
   carregando?: boolean
+  /** Texto do botão enquanto carrega (ex.: "Gerando perguntas do PDF…"). */
+  textoCarregando?: string
   erro?: string
   onSubmit: (sala: NovaSala) => void
   onCancelar: () => void
@@ -26,6 +33,7 @@ export function CreateRoomForm({
   temas,
   temaInicial,
   carregando,
+  textoCarregando,
   erro,
   onSubmit,
   onCancelar,
@@ -36,10 +44,39 @@ export function CreateRoomForm({
   const [tempoPergunta, setTempoPergunta] = useState(20)
   const [privada, setPrivada] = useState(false)
   const [soloMode, setSoloMode] = useState(false)
+  const [arquivoPdf, setArquivoPdf] = useState<File | null>(null)
+  const [erroPdf, setErroPdf] = useState('')
+  const inputPdfRef = useRef<HTMLInputElement>(null)
+
+  function aoEscolherPdf(e: React.ChangeEvent<HTMLInputElement>) {
+    const arquivo = e.target.files?.[0] ?? null
+    setErroPdf('')
+    if (!arquivo) {
+      setArquivoPdf(null)
+      return
+    }
+    if (arquivo.type !== 'application/pdf' && !arquivo.name.toLowerCase().endsWith('.pdf')) {
+      setErroPdf('Só aceitamos PDF por enquanto.')
+      setArquivoPdf(null)
+      return
+    }
+    if (arquivo.size > TAMANHO_MAX_PDF_MB * 1024 * 1024) {
+      setErroPdf(`PDF muito grande — máximo de ${TAMANHO_MAX_PDF_MB} MB.`)
+      setArquivoPdf(null)
+      return
+    }
+    setArquivoPdf(arquivo)
+  }
+
+  function removerPdf() {
+    setArquivoPdf(null)
+    setErroPdf('')
+    if (inputPdfRef.current) inputPdfRef.current.value = ''
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit({ nome: nome.trim(), temaId, maxJogadores: soloMode ? 2 : maxJogadores, tempoPergunta, privada, soloMode })
+    onSubmit({ nome: nome.trim(), temaId, maxJogadores: soloMode ? 2 : maxJogadores, tempoPergunta, privada, soloMode, arquivoPdf })
   }
 
   return (
@@ -146,6 +183,97 @@ export function CreateRoomForm({
         </div>
       </div>
 
+      {/* Material de estudo — PDF opcional pra gerar as perguntas via IA */}
+      <div>
+        <span style={{ display: 'block', fontWeight: 800, fontSize: 13, marginBottom: 8 }}>
+          Material de estudo <span style={{ color: 'var(--muted)', fontWeight: 700 }}>(opcional)</span>
+        </span>
+        <input
+          ref={inputPdfRef}
+          type="file"
+          accept="application/pdf,.pdf"
+          onChange={aoEscolherPdf}
+          style={{ display: 'none' }}
+        />
+        {arquivoPdf ? (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              padding: '12px 14px',
+              border: '2.5px solid var(--ink)',
+              borderRadius: 12,
+              background: 'var(--bg-cream)',
+              boxShadow: 'var(--shadow-doodle-sm)',
+            }}
+          >
+            <span style={{ fontSize: 20 }}>📄</span>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div
+                style={{
+                  fontWeight: 800,
+                  fontSize: 13,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {arquivoPdf.name}
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>
+                {(arquivoPdf.size / 1024 / 1024).toFixed(1)} MB — as perguntas vão sair desse material
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={removerPdf}
+              title="Remover PDF"
+              style={{
+                width: 30,
+                height: 30,
+                border: '2px solid var(--ink)',
+                borderRadius: 8,
+                background: 'var(--bg-page)',
+                cursor: 'pointer',
+                fontWeight: 900,
+                fontSize: 16,
+                color: 'var(--red)',
+                display: 'grid',
+                placeItems: 'center',
+                flexShrink: 0,
+              }}
+            >
+              ×
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => inputPdfRef.current?.click()}
+            style={{
+              width: '100%',
+              padding: '14px 12px',
+              border: '2.5px dashed var(--muted)',
+              borderRadius: 12,
+              background: 'var(--bg-card)',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-ui)',
+              fontWeight: 800,
+              fontSize: 13,
+              color: 'var(--muted)',
+            }}
+          >
+            📎 Anexar apostila em PDF — a IA gera as perguntas do seu material
+          </button>
+        )}
+        {erroPdf && (
+          <div style={{ marginTop: 6, fontSize: 12, fontWeight: 800, color: 'var(--red)' }}>
+            {erroPdf}
+          </div>
+        )}
+      </div>
+
       {/* Jogadores + tempo — lado a lado */}
       {!soloMode && (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
@@ -229,7 +357,7 @@ export function CreateRoomForm({
           style={{ flex: 1, padding: '12px 18px', fontSize: 15 }}
           disabled={carregando || !nome.trim()}
         >
-          {carregando ? 'Criando...' : 'Criar sala'}
+          {carregando ? (textoCarregando || 'Criando...') : 'Criar sala'}
           <DoodleIcon name="play" size={14} strokeColor="var(--accent-ink)" color="var(--accent-ink)" />
         </button>
       </div>
