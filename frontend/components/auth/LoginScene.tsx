@@ -2,7 +2,6 @@
 
 import { Valdo } from '@/components/ui/Valdo'
 import { Doodle } from '@/components/ui/Doodle'
-import { DoodleIcon } from '@/components/ui/DoodleIcon'
 
 export function LoginScene() {
   return (

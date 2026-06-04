@@ -69,6 +69,7 @@ export default function LobbyPage() {
 
   return (
     <div
+      className="layout-com-sidebar"
       style={{
         minHeight: '100vh',
         background: 'var(--bg-page)',
@@ -78,7 +79,7 @@ export default function LobbyPage() {
     >
       <Sidebar onLogout={handleLogout} usuario={useAuthStore.getState().user} activeRoute="/lobby" />
 
-      <main style={{ padding: '32px 40px 60px', maxWidth: 1280 }}>
+      <main className="main-mobile" style={{ padding: '32px 40px 60px', maxWidth: 1280 }}>
         {/* Saudação enxuta */}
         <header style={{ marginBottom: 24 }}>
           <p
@@ -111,7 +112,7 @@ export default function LobbyPage() {
         </header>
 
         {/* Grid: principal (salas + temas) | ranking */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 24, alignItems: 'start' }}>
+        <div className="grid-lobby" style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 24, alignItems: 'start' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 28, minWidth: 0 }}>
             <SalasList
               salas={salas}

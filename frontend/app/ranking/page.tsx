@@ -32,6 +32,7 @@ export default function RankingRoute() {
 
   return (
     <div
+      className="layout-com-sidebar"
       style={{
         minHeight: '100vh',
         background: 'var(--bg-page)',
@@ -41,7 +42,7 @@ export default function RankingRoute() {
     >
       <Sidebar onLogout={handleLogout} usuario={user} activeRoute="/ranking" />
 
-      <main style={{ padding: '32px 40px 60px', maxWidth: 1280 }}>
+      <main className="main-mobile" style={{ padding: '32px 40px 60px', maxWidth: 1280 }}>
         <header style={{ marginBottom: 24 }}>
           <h1
             style={{

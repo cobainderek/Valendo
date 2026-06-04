@@ -1,6 +1,5 @@
 'use client'
 
-import { DoodleIcon } from '@/components/ui/DoodleIcon'
 import { Doodle } from '@/components/ui/Doodle'
 import type { PlayerInfo } from '@/services/rooms'
 
