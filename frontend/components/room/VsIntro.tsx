@@ -89,6 +89,7 @@ export function VsIntro({ jogador1, jogador2, onFim }: VsIntroProps) {
 
       {/* Centro — VS ou FIGHT */}
       <div
+        className="vs-center"
         style={{
           position: 'absolute',
           left: '50%',
@@ -103,7 +104,7 @@ export function VsIntro({ jogador1, jogador2, onFim }: VsIntroProps) {
         {vsVisivel && (
           <div
             key="vs"
-            className="vs-soft"
+            className="vs-soft vs-bigtext"
             style={{
               fontFamily: 'var(--font-ui)',
               fontWeight: 900,
@@ -122,7 +123,7 @@ export function VsIntro({ jogador1, jogador2, onFim }: VsIntroProps) {
         {fase === 'fight' && (
           <div
             key="fight"
-            className="fight-soft"
+            className="fight-soft vs-bigtext"
             style={{
               fontFamily: 'var(--font-hand)',
               fontWeight: 700,
@@ -152,7 +153,7 @@ export function VsIntro({ jogador1, jogador2, onFim }: VsIntroProps) {
               transform: 'rotate(-12deg)',
               opacity: 0.8,
             }}
-            className="fade-slide-up"
+            className="fade-slide-up vs-doodle"
           >
             ★
           </div>
@@ -167,7 +168,7 @@ export function VsIntro({ jogador1, jogador2, onFim }: VsIntroProps) {
               transform: 'rotate(14deg)',
               opacity: 0.8,
             }}
-            className="fade-slide-up"
+            className="fade-slide-up vs-doodle"
           >
             ✦
           </div>

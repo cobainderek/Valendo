@@ -6,6 +6,7 @@ import { Doodle } from '@/components/ui/Doodle'
 export function LoginScene() {
   return (
     <div
+      className="auth-scene"
       style={{
         background: 'var(--primary)',
         position: 'relative',

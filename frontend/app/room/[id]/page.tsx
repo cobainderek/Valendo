@@ -225,6 +225,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-page)' }}>
       <header
+        className="roomid-header"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -240,7 +241,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
             Valendo
           </span>
         </a>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="roomid-chips" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <span className="chip" style={{ background: 'var(--primary-soft)' }}>
             sala #{sala.code}
           </span>
@@ -256,7 +257,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
       </header>
 
-      <main style={{ maxWidth: 680, margin: '0 auto', padding: '32px 24px 60px' }}>
+      <main className="roomid-main" style={{ maxWidth: 680, margin: '0 auto', padding: '32px 24px 60px' }}>
         {sala.status === 'waiting' && (
           <WaitingRoom
             code={sala.code}

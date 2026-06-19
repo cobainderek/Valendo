@@ -80,6 +80,7 @@ export function QuestionCard({
       width: '100%',
       textAlign: 'left' as const,
       padding: '14px 16px',
+      minHeight: 48,
       border: '2.5px solid var(--ink)',
       borderRadius: 12,
       background: 'var(--bg-card)',
@@ -88,6 +89,8 @@ export function QuestionCard({
       cursor: resultado ? 'default' : 'pointer',
       transition: 'all 0.15s ease',
       font: 'inherit',
+      wordBreak: 'break-word',
+      overflowWrap: 'anywhere',
     }
 
     if (!resultado) {
@@ -109,7 +112,7 @@ export function QuestionCard({
   const isLast = questionNumber >= totalQuestions
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+    <div className="qcard-root" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {/* Progress */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
         <span className="chip" style={{ borderColor: 'var(--primary)', color: 'var(--primary)' }}>
@@ -148,8 +151,8 @@ export function QuestionCard({
       </div>
 
       {/* Question text */}
-      <div className="doodle-card" style={{ padding: 20 }}>
-        <p style={{ fontFamily: 'var(--font-ui)', fontWeight: 900, fontSize: 18, margin: 0, lineHeight: 1.4 }}>
+      <div className="doodle-card qcard-question" style={{ padding: 20 }}>
+        <p className="qcard-qtext" style={{ fontFamily: 'var(--font-ui)', fontWeight: 900, fontSize: 18, margin: 0, lineHeight: 1.4, wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
           {question.text}
         </p>
       </div>
@@ -160,6 +163,7 @@ export function QuestionCard({
           <button
             key={i}
             type="button"
+            className="qcard-option"
             style={getOptionStyle(option)}
             onClick={() => handleSelect(option)}
             disabled={!!resultado || enviando}

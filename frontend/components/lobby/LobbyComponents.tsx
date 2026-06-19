@@ -11,7 +11,7 @@ interface TemaGridProps {
 
 export function TemaGrid({ temas, onSelect }: TemaGridProps) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
+    <div className="tema-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
       {temas.map((t) => (
         <button
           key={t.id}
@@ -88,7 +88,7 @@ interface RankingCardProps {
 
 export function RankingCard({ ranking = [] }: RankingCardProps) {
   return (
-    <aside className="doodle-card" style={{ padding: 18, background: 'var(--bg-cream)' }}>
+    <aside className="doodle-card rankcard-root" style={{ padding: 18, background: 'var(--bg-cream)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
         <Doodle kind="trophy" size={22} />
         <h3

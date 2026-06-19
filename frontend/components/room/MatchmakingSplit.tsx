@@ -18,6 +18,7 @@ function formatarTempo(seg: number) {
 export function MatchmakingSplit({ jogador, oponente, tempoDecorrido }: MatchmakingSplitProps) {
   return (
     <div
+      className="mm-grid"
       style={{
         position: 'relative',
         flex: 1,
@@ -56,6 +57,7 @@ export function MatchmakingSplit({ jogador, oponente, tempoDecorrido }: Matchmak
 
       {/* Linha divisória doodle vertical */}
       <svg
+        className="mm-divider"
         style={{
           position: 'absolute',
           left: '50%',
@@ -81,6 +83,7 @@ export function MatchmakingSplit({ jogador, oponente, tempoDecorrido }: Matchmak
 
       {/* Valdo árbitro no meio */}
       <div
+        className="mm-valdo"
         style={{
           position: 'absolute',
           left: '50%',

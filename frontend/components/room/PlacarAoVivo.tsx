@@ -16,6 +16,7 @@ export function PlacarAoVivo({ players, meuId }: PlacarAoVivoProps) {
 
   return (
     <div
+      className="placar-wrap"
       style={{
         display: 'flex',
         gap: 8,
@@ -28,6 +29,7 @@ export function PlacarAoVivo({ players, meuId }: PlacarAoVivoProps) {
         return (
           <div
             key={p.id}
+            className="placar-chip"
             style={{
               display: 'flex',
               alignItems: 'center',

@@ -25,6 +25,7 @@ export function PlayerSideCard({ jogador, lado, procurando = false }: PlayerSide
   if (procurando || !jogador) {
     return (
       <div
+        className="pside-wrap"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -35,6 +36,7 @@ export function PlayerSideCard({ jogador, lado, procurando = false }: PlayerSide
         }}
       >
         <div
+          className="pside-avatar animate-float"
           style={{
             width: 220,
             height: 220,
@@ -45,7 +47,6 @@ export function PlayerSideCard({ jogador, lado, procurando = false }: PlayerSide
             placeItems: 'center',
             color: 'var(--muted)',
           }}
-          className="animate-float"
         >
           <DoodleIcon name="search" size={72} strokeColor="var(--muted)" />
         </div>
@@ -82,6 +83,7 @@ export function PlayerSideCard({ jogador, lado, procurando = false }: PlayerSide
 
   return (
     <div
+      className="pside-wrap"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -92,7 +94,7 @@ export function PlayerSideCard({ jogador, lado, procurando = false }: PlayerSide
       }}
     >
       <div
-        className="doodle-card"
+        className="doodle-card pside-avatar"
         style={{
           width: 240,
           height: 240,
@@ -104,6 +106,7 @@ export function PlayerSideCard({ jogador, lado, procurando = false }: PlayerSide
         }}
       >
         <div
+          className="pside-initial"
           style={{
             fontFamily: 'var(--font-ui)',
             fontWeight: 900,

@@ -39,11 +39,11 @@ export function RankingPage({ ranking, carregando, meuTag }: RankingPageProps) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Top 3 destaque */}
       {ranking.length >= 3 && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
+        <div className="ranking-top3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
           {ranking.slice(0, 3).map((r) => (
             <div
               key={r.pos}
-              className="doodle-card"
+              className="doodle-card ranking-top3-card"
               style={{
                 padding: 20,
                 textAlign: 'center',
@@ -52,6 +52,7 @@ export function RankingPage({ ranking, carregando, meuTag }: RankingPageProps) {
               }}
             >
               <div
+                className="ranking-top3-medal"
                 style={{
                   width: 52,
                   height: 52,
@@ -89,6 +90,7 @@ export function RankingPage({ ranking, carregando, meuTag }: RankingPageProps) {
             return (
               <li
                 key={r.pos}
+                className="ranking-row"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -102,6 +104,7 @@ export function RankingPage({ ranking, carregando, meuTag }: RankingPageProps) {
                 }}
               >
                 <span
+                  className="ranking-row-pos"
                   style={{
                     fontFamily: 'var(--font-ui)',
                     fontWeight: 900,
@@ -113,6 +116,7 @@ export function RankingPage({ ranking, carregando, meuTag }: RankingPageProps) {
                   {r.pos}
                 </span>
                 <div
+                  className="ranking-row-avatar"
                   style={{
                     width: 32,
                     height: 32,
@@ -129,11 +133,12 @@ export function RankingPage({ ranking, carregando, meuTag }: RankingPageProps) {
                 >
                   {r.tag[0].toUpperCase()}
                 </div>
-                <span style={{ flex: 1, fontWeight: 800, fontSize: 14 }}>
+                <span className="ranking-row-tag" style={{ flex: 1, fontWeight: 800, fontSize: 14, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {r.tag}
                   {isMe && <span style={{ fontSize: 11, opacity: 0.8 }}> (você)</span>}
                 </span>
                 <span
+                  className="ranking-row-xp"
                   style={{
                     fontFamily: 'var(--font-ui)',
                     fontWeight: 900,

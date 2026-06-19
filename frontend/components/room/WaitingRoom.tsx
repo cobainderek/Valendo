@@ -45,7 +45,7 @@ export function WaitingRoom({
       {/* Código */}
       <div className="doodle-card" style={{ padding: '24px 20px', textAlign: 'center', background: 'var(--bg-cream)' }}>
         <p style={{ fontWeight: 700, fontSize: 13, color: 'var(--muted)', margin: '0 0 6px' }}>Código da sala</p>
-        <div style={{ fontFamily: 'var(--font-ui)', fontWeight: 900, fontSize: 44, letterSpacing: '0.15em', color: 'var(--primary)' }}>
+        <div className="waiting-code" style={{ fontFamily: 'var(--font-ui)', fontWeight: 900, fontSize: 44, letterSpacing: '0.15em', color: 'var(--primary)' }}>
           {code}
         </div>
         <button className="btn" style={{ fontSize: 13, padding: '8px 16px', marginTop: 8 }} onClick={copiarCodigo}>
@@ -81,6 +81,7 @@ export function WaitingRoom({
           {players.map((p, i) => (
             <div
               key={p.id}
+              className="waiting-player"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -99,7 +100,7 @@ export function WaitingRoom({
               }}>
                 {p.name[0].toUpperCase()}
               </div>
-              <span style={{ fontWeight: 800, fontSize: 14, flex: 1 }}>{p.tag}</span>
+              <span className="waiting-player-tag" style={{ fontWeight: 800, fontSize: 14, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.tag}</span>
               {p.isBot && <span className="chip" style={{ fontSize: 11, borderColor: 'var(--purple)', color: 'var(--purple)' }}>Bot</span>}
               {i === 0 && !p.isBot && <span className="chip" style={{ fontSize: 11, borderColor: 'var(--accent)', color: 'var(--accent-ink)', background: 'var(--accent)' }}>host</span>}
             </div>

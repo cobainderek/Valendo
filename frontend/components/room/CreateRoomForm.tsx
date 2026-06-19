@@ -89,7 +89,7 @@ export function CreateRoomForm({
         <span style={{ display: 'block', fontWeight: 800, fontSize: 13, marginBottom: 8 }}>
           Modo de jogo
         </span>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div className="createform-modegrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           <button
             type="button"
             onClick={() => setSoloMode(false)}
@@ -278,7 +278,7 @@ export function CreateRoomForm({
       </div>
 
       {/* Jogadores + perguntas + tempo — lado a lado */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="createform-steppers" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         {!soloMode && (
           <StepperField
             label="Máx. jogadores"
@@ -352,7 +352,7 @@ export function CreateRoomForm({
       )}
 
       {/* Ações */}
-      <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+      <div className="createform-actions" style={{ display: 'flex', gap: 10, marginTop: 4 }}>
         <button
           type="button"
           className="btn"

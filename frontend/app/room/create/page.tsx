@@ -67,6 +67,7 @@ function CreateRoomPageInner() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-page)' }}>
       <header
+        className="roomcreate-header"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -103,9 +104,10 @@ function CreateRoomPageInner() {
         </a>
       </header>
 
-      <main style={{ maxWidth: 640, margin: '0 auto', padding: '40px 24px 60px' }}>
+      <main className="roomcreate-main" style={{ maxWidth: 640, margin: '0 auto', padding: '40px 24px 60px' }}>
         <div style={{ marginBottom: 22 }}>
           <h1
+            className="roomcreate-title"
             style={{
               fontFamily: 'var(--font-ui)',
               fontWeight: 900,
@@ -122,7 +124,7 @@ function CreateRoomPageInner() {
           </p>
         </div>
 
-        <div className="doodle-card" style={{ padding: 24 }}>
+        <div className="doodle-card roomcreate-card" style={{ padding: 24 }}>
           <CreateRoomForm
             temas={TEMAS}
             temaInicial={temaInicial}

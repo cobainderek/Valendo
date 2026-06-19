@@ -58,6 +58,7 @@ export function LoginForm({
     <>
       <div style={{ marginBottom: 28 }}>
         <h1
+          className="auth-title"
           style={{
             fontFamily: 'var(--font-ui)',
             fontWeight: 900,
@@ -134,7 +135,7 @@ export function LoginForm({
             <label>Apelido</label>
             <span className="input-icon"><DoodleIcon name="user" size={20} /></span>
             <input
-              className="input"
+              className="input auth-input"
               placeholder="derek_o_insuperável"
               value={apelido}
               onChange={(e) => setApelido(e.target.value)}
@@ -147,7 +148,7 @@ export function LoginForm({
           <label>Email</label>
           <span className="input-icon"><DoodleIcon name="mail" size={20} /></span>
           <input
-            className="input"
+            className="input auth-input"
             type="email"
             placeholder="voce@faesa.br"
             value={email}
@@ -160,7 +161,7 @@ export function LoginForm({
           <label>Senha</label>
           <span className="input-icon"><DoodleIcon name="lock" size={20} /></span>
           <input
-            className="input"
+            className="input auth-input"
             type="password"
             placeholder="••••••••"
             value={senha}
@@ -230,6 +231,7 @@ function RecoverForm({ onBack, onRecover }: { onBack: () => void; onRecover?: (e
   return (
     <div>
       <h1
+        className="auth-title"
         style={{
           fontFamily: 'var(--font-ui)',
           fontWeight: 900,
@@ -267,7 +269,7 @@ function RecoverForm({ onBack, onRecover }: { onBack: () => void; onRecover?: (e
             <label>Email</label>
             <span className="input-icon"><DoodleIcon name="mail" size={20} /></span>
             <input
-              className="input"
+              className="input auth-input"
               type="email"
               placeholder="voce@faesa.br"
               value={email}

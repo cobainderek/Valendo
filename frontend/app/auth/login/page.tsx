@@ -94,6 +94,7 @@ export default function LoginPage() {
 
   return (
     <div
+      className="auth-grid"
       style={{
         minHeight: '100vh',
         display: 'grid',
@@ -103,6 +104,7 @@ export default function LoginPage() {
     >
       {/* LEFT — form */}
       <div
+        className="auth-form-col"
         style={{
           padding: '48px 64px',
           display: 'flex',

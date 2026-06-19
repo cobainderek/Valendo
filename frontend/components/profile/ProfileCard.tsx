@@ -48,11 +48,12 @@ export function ProfileCard({
       : 0
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 640 }}>
+    <div className="profcard-root" style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 640 }}>
       {/* Cabeçalho */}
-      <div className="doodle-card" style={{ padding: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+      <div className="doodle-card profcard-header-card" style={{ padding: 24 }}>
+        <div className="profcard-header" style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
           <div
+            className="profcard-avatar"
             style={{
               width: 72,
               height: 72,
@@ -73,6 +74,7 @@ export function ProfileCard({
           </div>
           <div style={{ minWidth: 0 }}>
             <h2
+              className="profcard-name"
               style={{
                 fontFamily: 'var(--font-ui)',
                 fontWeight: 900,
@@ -83,12 +85,12 @@ export function ProfileCard({
             >
               {perfil.name}
             </h2>
-            <p style={{ color: 'var(--muted)', fontWeight: 700, fontSize: 14, margin: '2px 0 0' }}>
+            <p className="profcard-sub" style={{ color: 'var(--muted)', fontWeight: 700, fontSize: 14, margin: '2px 0 0' }}>
               @{perfil.tag} · {perfil.email}
             </p>
           </div>
           <span
-            className="chip"
+            className="chip profcard-xp-chip"
             style={{ marginLeft: 'auto', background: 'var(--primary-soft)', fontWeight: 900 }}
           >
             ⭐ {perfil.globalXp.toLocaleString('pt-BR')} XP
@@ -102,6 +104,7 @@ export function ProfileCard({
           Estatísticas
         </h3>
         <div
+          className="profcard-stats-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
@@ -171,6 +174,7 @@ export function ProfileCard({
 function StatBox({ valor, rotulo, cor }: { valor: number | string; rotulo: string; cor: string }) {
   return (
     <div
+      className="profcard-statbox"
       style={{
         border: '2.5px solid var(--ink)',
         borderRadius: 12,
@@ -181,6 +185,7 @@ function StatBox({ valor, rotulo, cor }: { valor: number | string; rotulo: strin
       }}
     >
       <div
+        className="profcard-statval"
         style={{
           fontFamily: 'var(--font-ui)',
           fontWeight: 900,
@@ -294,7 +299,7 @@ function FormEdicao({
               style={{ paddingLeft: 16 }}
             />
           </label>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
+          <div className="profcard-pass-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
             <label>
               <span style={{ display: 'block', fontWeight: 800, fontSize: 13, marginBottom: 6 }}>Senha atual</span>
               <input

@@ -61,7 +61,7 @@ export function DicasCarousel() {
 
   return (
     <div
-      className="doodle-card"
+      className="doodle-card dicas-root"
       style={{
         padding: '18px 22px',
         display: 'flex',
@@ -122,7 +122,7 @@ export function DicasCarousel() {
           {d.texto}
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+      <div className="dicas-dots" style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
         {DICAS.map((_, i) => (
           <span
             key={i}

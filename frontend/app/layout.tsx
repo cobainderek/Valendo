@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Nunito, Caveat } from "next/font/google"
 import "./globals.css"
 import { GlobalFloatingUI } from "@/components/social/GlobalFloatingUI"
@@ -20,6 +20,13 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   title: "Valendo — Bora duelar, gênio?",
   description: "Plataforma de gamificação para estudos. Crie salas, dispute perguntas e respostas em tempo real.",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Permite zoom (acessibilidade) mas evita o auto-zoom do iOS em inputs <16px
+  maximumScale: 5,
 }
 
 export default function RootLayout({

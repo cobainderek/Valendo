@@ -34,6 +34,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
     >
       {/* Header */}
       <header
+        className="salas-header"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -79,7 +80,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
         </div>
 
         <button
-          className="btn btn-accent"
+          className="btn btn-accent salas-criar-btn"
           style={{ padding: '10px 16px', fontSize: 14 }}
           onClick={onCriar}
         >
@@ -90,6 +91,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
 
       {/* Tabs + busca */}
       <div
+        className="salas-tabs"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -107,7 +109,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
           </TabBtn>
         </div>
 
-        <div style={{ position: 'relative', flex: 1, maxWidth: 320, marginLeft: 'auto' }}>
+        <div className="salas-busca" style={{ position: 'relative', flex: 1, maxWidth: 320, marginLeft: 'auto' }}>
           <span
             className="input-icon"
             style={{ left: 14, top: '50%', transform: 'translateY(-50%)' }}
@@ -152,6 +154,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
           return (
             <li
               key={s.id}
+              className="salas-row"
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 160px 110px 120px',
@@ -161,7 +164,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
                 borderTop: i === 0 ? 'none' : '1.5px dashed var(--border)',
               }}
             >
-              <div style={{ minWidth: 0 }}>
+              <div className="salas-row-info" style={{ minWidth: 0 }}>
                 <div
                   style={{
                     fontFamily: 'var(--font-ui)',
@@ -181,6 +184,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
               </div>
 
               <span
+                className="salas-row-tema"
                 style={{
                   justifySelf: 'start',
                   fontSize: 12,
@@ -196,6 +200,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
               </span>
 
               <span
+                className="salas-row-jog"
                 style={{
                   fontFamily: 'var(--font-ui)',
                   fontWeight: 900,
@@ -209,7 +214,7 @@ export function SalasList({ salas, onEntrar, onCriar }: SalasListProps) {
               </span>
 
               <button
-                className={cheia ? 'btn' : 'btn btn-accent'}
+                className={`salas-row-btn ${cheia ? 'btn' : 'btn btn-accent'}`}
                 style={{
                   padding: '8px 14px',
                   fontSize: 13,

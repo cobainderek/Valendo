@@ -60,7 +60,7 @@ export function FriendsChatPanel({ onFechar }: FriendsChatPanelProps) {
 
   return (
     <aside
-      className="painel-amigos"
+      className="painel-amigos friends-panel"
       style={{
         width: 320,
         height: '100vh',
@@ -209,6 +209,7 @@ function BotaoFechar({ onFechar }: { onFechar: () => void }) {
       type="button"
       onClick={onFechar}
       title="Minimizar"
+      className="friends-close-btn"
       style={{
         width: 32,
         height: 32,
@@ -389,6 +390,7 @@ function NovoGrupoForm({ onCriado }: { onCriado: () => void }) {
       }}
     >
       <input
+        className="chat-msg-input"
         value={nome}
         onChange={(e) => setNome(e.target.value)}
         placeholder="nome do grupo…"
@@ -526,6 +528,7 @@ function AdicionarAmigo() {
     <div style={{ padding: '4px 4px 8px' }}>
       <form onSubmit={enviar} style={{ display: 'flex', gap: 6 }}>
         <input
+          className="chat-msg-input"
           value={tag}
           onChange={(e) => setTag(e.target.value)}
           placeholder="buscar por tag…"
@@ -1166,6 +1169,7 @@ function ChatView({ conversa }: { conversa: Conversa }) {
         }}
       >
         <input
+          className="chat-msg-input"
           value={rascunho}
           onChange={(e) => aoDigitar(e.target.value)}
           placeholder="manda a real…"

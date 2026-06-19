@@ -18,11 +18,11 @@ export function GameResults({ players, winnerId, meuId, totalQuestions, onVoltar
   })
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div className="results-root" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Winner banner */}
       <div className="doodle-card" style={{ padding: 24, textAlign: 'center', background: 'var(--bg-cream)' }}>
         <Doodle kind="trophy" size={48} />
-        <h2 style={{ fontFamily: 'var(--font-ui)', fontWeight: 900, fontSize: 28, margin: '10px 0 4px', letterSpacing: '-0.02em' }}>
+        <h2 className="results-title" style={{ fontFamily: 'var(--font-ui)', fontWeight: 900, fontSize: 28, margin: '10px 0 4px', letterSpacing: '-0.02em', overflowWrap: 'anywhere' }}>
           {winnerId === meuId ? 'Você venceu!' : `${sorted[0]?.tag} venceu!`}
         </h2>
         <p style={{ color: 'var(--muted)', fontWeight: 700, fontSize: 14, margin: 0 }}>
@@ -42,6 +42,7 @@ export function GameResults({ players, winnerId, meuId, totalQuestions, onVoltar
             return (
               <div
                 key={p.id}
+                className="results-row"
                 style={{
                   display: 'flex',
                   alignItems: 'center',

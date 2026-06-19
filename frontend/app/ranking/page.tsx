@@ -45,6 +45,7 @@ export default function RankingRoute() {
       <main className="main-mobile" style={{ padding: '32px 40px 60px', maxWidth: 1280 }}>
         <header style={{ marginBottom: 24 }}>
           <h1
+            className="ranking-title"
             style={{
               fontFamily: 'var(--font-ui)',
               fontWeight: 900,

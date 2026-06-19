@@ -44,6 +44,7 @@ export function FloatingFriendsPanel() {
       type="button"
       onClick={() => setAberto(true)}
       title="Abrir amigos"
+      className="floatui-amigos-btn"
       style={{
         position: 'fixed',
         right: 20,

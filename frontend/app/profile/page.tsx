@@ -120,6 +120,7 @@ export default function ProfileRoute() {
       <main style={{ padding: '32px 40px 60px', maxWidth: 1280 }} className="main-mobile">
         <header style={{ marginBottom: 24 }}>
           <h1
+            className="profile-title"
             style={{
               fontFamily: 'var(--font-ui)',
               fontWeight: 900,

@@ -13,7 +13,7 @@ services:
     image: postgres:16-alpine
     container_name: valendo-db
     ports:
-      - "127.0.0.1:5442:5432"
+      - "127.0.0.1:5432:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
@@ -45,7 +45,7 @@ services:
       dockerfile: Dockerfile
     container_name: valendo-backend
     ports:
-      - "127.0.0.1:3901:3001"
+      - "127.0.0.1:3001:3001"
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-valendo}?schema=public
       PORT: 3001
