@@ -25,3 +25,9 @@ services:
       PORT: 3000
       HOSTNAME: 0.0.0.0
     restart: unless-stopped
+    networks:
+      - backend_default
+
+networks:
+  backend_default:
+    external: true
