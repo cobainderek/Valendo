@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center">Valendo — Frontend 🎨</h1>
 
-## Getting Started
+<p align="center">
+  Interface web do <strong>Valendo</strong>: lobby, criação de salas, duelos em tempo real,
+  perfil, ranking, amigos e chat. Consome a API NestJS (REST <code>/api</code> + WebSocket).
+</p>
 
-First, run the development server:
+> Visão geral do projeto e como subir o stack completo: veja o **[README da raiz](../README.md)**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🧩 Stack
+
+- **[Next.js 16](https://nextjs.org)** (App Router, Turbopack, output `standalone`)
+- **React 19** + **TypeScript**
+- **Tailwind CSS 4** + Doodle Design System (`styles/doodle-system.css`)
+- **Zustand** (estado global) · **socket.io-client** (realtime)
+
+## 📁 Estrutura
+
+```
+frontend/
+├── app/                  # Rotas (App Router)
+│   ├── auth/login        # login / cadastro / recuperar (botão Google se houver client id)
+│   ├── lobby             # salas + ranking + temas
+│   ├── room/create       # criar sala (+ upload de PDF opcional)
+│   ├── room/[id]         # tela de jogo (REST + socket room:*)
+│   ├── ranking, profile  # ranking semanal e perfil/histórico
+│   └── dashboard, duel/[id]  # redirects
+├── components/           # View (auth, lobby, room, social, profile, ui)
+├── services/             # api.ts (fetch + Bearer) · socket.ts · auth.ts · ...
+├── lib/store/            # useAuthStore (Zustand)
+└── styles/               # doodle-system.css
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔐 Variáveis de ambiente (`.env.local`)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# IMPORTANTE: NEXT_PUBLIC_API_URL DEVE terminar em /api
+# (api.ts monta `${NEXT_PUBLIC_API_URL}${endpoint}`; socket.ts deriva o WS removendo o /api).
+NEXT_PUBLIC_API_URL=http://localhost:3002/api
+NEXT_PUBLIC_WS_URL=ws://localhost:3002
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=   # client_id público do OAuth; vazio = botão Google oculto
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> ⚠️ As variáveis `NEXT_PUBLIC_*` são **embutidas no build** (não em runtime). Mudou alguma?
+> É preciso **rebuildar**. No Docker elas vêm dos *build args* do `docker-compose.yml`.
 
-## Learn More
+## 🚀 Rodando
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Dev (Turbopack) → http://localhost:3000  (precisa do backend rodando)
+npm install
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Build de produção (standalone)
+npm run build && npm run start
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Lint
+npm run lint
+```
 
-## Deploy on Vercel
+Com Docker (a partir desta pasta, backend já de pé):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+docker compose up -d --build      # → http://localhost:3000
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔗 Como fala com o backend
+
+- **REST:** `services/api.ts` → `fetch` com header `Authorization: Bearer <token>` (token no `localStorage`).
+- **WebSocket:** `services/socket.ts` → Socket.IO em `/api/socket.io` (namespaces `/` para sala e `/chat`).
+
+Mais detalhes de arquitetura/convenções do frontend em **[CLAUDE.md](./CLAUDE.md)**.

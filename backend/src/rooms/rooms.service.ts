@@ -119,7 +119,7 @@ export class RoomsService {
     }));
   }
 
-  async getRoomByCode(code: string) {
+  async getRoomByCode(code: string, requesterId?: bigint) {
     const room = await this.prisma.room.findUnique({
       where: { code },
       include: {
@@ -147,6 +147,18 @@ export class RoomsService {
     });
 
     if (!room) throw new NotFoundException('Sala não encontrada.');
+
+    // Salas privadas em andamento/finalizadas só são visíveis a participantes.
+    // Salas 'waiting' seguem acessíveis por código (necessário para entrar via
+    // convite). requesterId só é passado pela rota HTTP — chamadas internas
+    // (já autorizadas) o omitem e pulam a checagem.
+    if (requesterId !== undefined && room.isPrivate && room.status !== 'waiting') {
+      const isHost = room.hostId === requesterId;
+      const isPlayer = room.players.some((p) => !p.isBot && p.user?.id === requesterId);
+      if (!isHost && !isPlayer) {
+        throw new ForbiddenException('Você não participa desta sala.');
+      }
+    }
 
     const serialized: any = {
       ...this.serializeRoom(room),
@@ -331,35 +343,46 @@ export class RoomsService {
     });
     const isLastQuestion = answeredCount + 1 >= totalQuestions;
 
-    // Transação: criar answer + atualizar scores
-    await this.prisma.$transaction(async (tx) => {
-      await tx.answer.create({
-        data: { userId, questionId: qId, selectedAnswer, isCorrect },
-      });
+    // Transação atômica: cria a answer e incrementa os placares com { increment }
+    // (em vez de gravar valor lido fora do tx, que perde incrementos sob corrida).
+    // A checagem de duplicata acima é o caminho rápido; numa corrida real, o unique
+    // [userId, questionId] dispara P2002 — convertido em 409 em vez de vazar 500.
+    let updatedScore = player.score + xpEarned;
+    try {
+      const updatedPlayer = await this.prisma.$transaction(async (tx) => {
+        await tx.answer.create({
+          data: { userId, questionId: qId, selectedAnswer, isCorrect },
+        });
 
-      const newScore = player.score + xpEarned;
-      const newCorrect = player.correct + (isCorrect ? 1 : 0);
+        const up = await tx.roomPlayer.update({
+          where: { id: player.id },
+          data: {
+            score: { increment: xpEarned },
+            correct: { increment: isCorrect ? 1 : 0 },
+            finished: isLastQuestion,
+          },
+        });
 
-      await tx.roomPlayer.update({
-        where: { id: player.id },
-        data: {
-          score: newScore,
-          correct: newCorrect,
-          finished: isLastQuestion,
-        },
-      });
+        await tx.weeklyScore.upsert({
+          where: { userId_year_week: { userId, year, week } },
+          update: { xp: { increment: xpEarned } },
+          create: { userId, year, week, xp: xpEarned },
+        });
 
-      await tx.weeklyScore.upsert({
-        where: { userId_year_week: { userId, year, week } },
-        update: { xp: { increment: xpEarned } },
-        create: { userId, year, week, xp: xpEarned },
-      });
+        await tx.user.update({
+          where: { id: userId },
+          data: { globalXp: { increment: xpEarned } },
+        });
 
-      await tx.user.update({
-        where: { id: userId },
-        data: { globalXp: { increment: xpEarned } },
+        return up;
       });
-    });
+      updatedScore = updatedPlayer.score;
+    } catch (e: any) {
+      if (e?.code === 'P2002') {
+        throw new ConflictException('Você já respondeu esta pergunta.');
+      }
+      throw e;
+    }
 
     // Simular resposta do bot se for solo
     if (room.isSoloMode) {
@@ -371,13 +394,16 @@ export class RoomsService {
       await this.checkAndFinishGame(room.id, room.code);
     }
 
-    // Emitir resultado da pergunta + scoreboard atualizado pra todo mundo na sala
+    // Emitir resultado da pergunta + scoreboard atualizado pra todo mundo na sala.
+    // NÃO inclui correctAnswer: vazá-la no broadcast permitiria que os demais
+    // jogadores vissem a resposta certa assim que o primeiro respondesse. Cada
+    // jogador recebe a sua correctAnswer só no retorno HTTP da própria resposta
+    // (abaixo); o reveal a todos acontece quando a sala fica 'finished'.
     const fresh = await this.getRoomByCode(code);
     this.gateway.emitQuestionResult(code, {
       questionId: questionId,
       answeredBy: userId.toString(),
       isCorrect,
-      correctAnswer: question.correctAnswer,
       scoreboard: fresh.players,
     });
     if (fresh.status !== 'finished') {
@@ -389,7 +415,7 @@ export class RoomsService {
       correctAnswer: question.correctAnswer,
       explanationAi: question.explanationAi,
       xpEarned,
-      totalScore: player.score + xpEarned,
+      totalScore: updatedScore,
     };
   }
 

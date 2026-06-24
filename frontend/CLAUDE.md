@@ -3,7 +3,7 @@
 Plataforma web de gamificação para estudos. Usuários criam salas e disputam perguntas e respostas em tempo real. Temas gerados via upload de PDF + Google Gemini.
 
 **Equipe:** Derek (frontend) · Dyone (backend)
-**Disciplina:** Desenvolvimento Web 2 — FAESA 2025
+**Disciplina:** Desenvolvimento Web 2 — FAESA 2026
 **Assistente:** Claude (pair programming com Derek no frontend)
 
 ## Stack
@@ -38,14 +38,14 @@ Padrão MVC. Frontend = View. Backend = Model + Controller.
 ```
 frontend/
 ├── app/                          # CONTROLLER (rotas + orquestração)
-│   ├── auth/login/page.tsx       # ✅ Implementado
-│   ├── auth/register/page.tsx    # 🔲 Falta implementar
+│   ├── auth/login/page.tsx       # ✅ Implementado (login/signup/recover + Google)
+│   ├── auth/register/page.tsx    # ✅ Implementado (redirect → /auth/login)
 │   ├── lobby/page.tsx            # ✅ Implementado
-│   ├── dashboard/page.tsx        # 🔲 Vazio
-│   ├── duel/                     # 🔲 Vazio
-│   ├── room/                     # 🔲 Vazio
-│   ├── ranking/                  # 🔲 Vazio
-│   ├── profile/                  # 🔲 Vazio
+│   ├── dashboard/page.tsx        # ✅ Implementado (redirect → /lobby)
+│   ├── duel/[id]/page.tsx        # ✅ Implementado (redirect → /room/[id])
+│   ├── room/[id], room/create    # ✅ Implementado (jogo real via REST + socket)
+│   ├── ranking/page.tsx          # ✅ Implementado (ranking semanal)
+│   ├── profile/page.tsx          # ✅ Implementado (perfil + histórico + edição)
 │   ├── layout.tsx                # ✅ Fonts Nunito + Caveat
 │   ├── globals.css               # ✅ Tailwind + Doodle System
 │   └── page.tsx                  # ✅ Redirect → /auth/login
@@ -146,15 +146,18 @@ Servidor → Cliente:  duel:start | question:new | player:answered | question:re
 ## Environment Variables
 
 ```bash
-# backend/.env
-DATABASE_URL=postgresql://user:pass@localhost:5432/valendo
+# backend/.env  (portas do HOST via docker-compose: Postgres 5433, Redis 6380)
+DATABASE_URL=postgresql://user:password@localhost:5433/valendo?schema=public
+REDIS_URL=redis://localhost:6380
 GEMINI_API_KEY=<key>
-JWT_SECRET=<secret>
-JWT_EXPIRES_IN=7d
+JWT_SECRET=<secret>   # obrigatória (fail-fast)
 
 # frontend/.env.local
-NEXT_PUBLIC_API_URL=http://localhost:3001
-NEXT_PUBLIC_WS_URL=ws://localhost:3001
+# IMPORTANTE: NEXT_PUBLIC_API_URL DEVE terminar em /api (api.ts faz `${API_URL}${endpoint}`).
+# Backend exposto no host em 3002 (via docker) ou 3001 (npm run start:dev direto).
+NEXT_PUBLIC_API_URL=http://localhost:3002/api
+NEXT_PUBLIC_WS_URL=ws://localhost:3002
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=<client_id público — vazio = botão Google oculto>
 ```
 
 ## Important Notes

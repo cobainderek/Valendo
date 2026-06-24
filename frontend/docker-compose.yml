@@ -7,7 +7,9 @@
 #
 # Importante: o backend deve estar rodando ANTES (a partir de /backend
 # com `docker compose up -d --build`). O browser fala direto com
-# http://localhost:3001 - as URLs NEXT_PUBLIC_* sao embarcadas no build.
+# http://localhost:3002/api - as URLs NEXT_PUBLIC_* sao embarcadas no build.
+# A API_URL DEVE terminar em /api. Para testar de outros dispositivos na LAN,
+# exporte NEXT_PUBLIC_API_URL=http://<ip-da-lan>:3002/api antes do build.
 
 services:
   frontend:
@@ -15,8 +17,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
-        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-ws://localhost:3001}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3002/api}
+        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-ws://localhost:3002}
     container_name: valendo-frontend
     ports:
       - "3000:3000"

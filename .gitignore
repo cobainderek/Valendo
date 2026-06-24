@@ -1,2 +1,5 @@
 Valendo/
 .env
+*.bak
+.mimocode/
+RELATORIO-VARREDURA.md

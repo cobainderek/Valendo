@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, InternalServerErrorException, ServiceUnavailableException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { GenerateQuestionsDto } from './dto/create-question.dto';
 import { GoogleGenAI, Type, Schema } from '@google/genai';
@@ -10,11 +10,20 @@ const pdfParse = require('pdf-parse');
 
 @Injectable()
 export class QuestionsService {
+  private readonly logger = new Logger(QuestionsService.name);
   private ai: GoogleGenAI;
   private redis: Redis;
   private cachedSystemInstruction: string = '';
 
   constructor(private prisma: PrismaService) {
+    // Diferente do JWT_SECRET (fail-fast), aqui só avisamos: o app sobe e a
+    // ausência da chave só impacta a geração de perguntas. Sem isso a falha
+    // só apareceria, opaca, na 1ª chamada dentro de startGame.
+    if (!process.env.GEMINI_API_KEY) {
+      this.logger.warn(
+        'GEMINI_API_KEY ausente — a geração de perguntas via Gemini vai falhar até configurá-la.',
+      );
+    }
     this.ai = new GoogleGenAI({
       apiKey: process.env.GEMINI_API_KEY || 'MISSING_KEY',
     });
@@ -172,6 +181,10 @@ export class QuestionsService {
       } catch (e) {
         lastError = e;
         console.warn(`Tentativa ${attempts} de gerar questões falhou. Tentando novamente se aplicável...`);
+        // Backoff exponencial leve entre tentativas (alivia sobrecarga/429 do upstream).
+        if (attempts < maxAttempts && parsedQuestions.length === 0) {
+          await new Promise((r) => setTimeout(r, 300 * attempts));
+        }
       }
     }
 
@@ -186,6 +199,19 @@ export class QuestionsService {
 
     if (parsedQuestions.length === 0) {
       console.error(lastError);
+      // Erros transitórios do upstream (sobrecarga/quota) viram 503 com semântica
+      // de "tente de novo", reservando 500 para bugs reais nossos.
+      const msg = String((lastError as any)?.message ?? lastError ?? '');
+      const status = (lastError as any)?.status ?? (lastError as any)?.code;
+      const transient =
+        status === 503 ||
+        status === 429 ||
+        /\b(429|503)\b|unavailable|overloaded|resource_exhausted|quota|rate.?limit/i.test(msg);
+      if (transient) {
+        throw new ServiceUnavailableException(
+          'O serviço de IA está temporariamente indisponível ou sobrecarregado. Tente novamente em instantes.',
+        );
+      }
       throw new InternalServerErrorException('A IA falhou em processar e formular as questões após múltiplas tentativas.');
     }
 

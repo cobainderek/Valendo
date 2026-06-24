@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 
 // To prevent TypeError: Do not know how to serialize a BigInt
 (BigInt.prototype as any).toJSON = function () {
@@ -17,6 +19,18 @@ async function bootstrap() {
   }
 
   const app = await NestFactory.create(AppModule);
+
+  // Security headers. CSP off: a API só serve JSON (e o Swagger UI em dev) — CSP
+  // aqui quebraria o swagger sem ganho real; o site/HTML fica a cargo do Nginx.
+  // CORP cross-origin: a API é consumida de outra origem (o frontend).
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
+
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.setGlobalPrefix('api');
 
@@ -34,6 +48,19 @@ async function bootstrap() {
 
   // Behind Nginx: trust X-Forwarded-* so req.ip / secure are accurate
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
+  // Swagger/OpenAPI só fora de produção — expor o mapa completo da API em prod
+  // seria entregar a superfície de ataque. Disponível em /api/docs.
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('Valendo API')
+      .setDescription('API da plataforma Valendo — auth, salas/duelos, perguntas (IA), amigos, chat e ranking.')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document);
+  }
 
   const port = process.env.PORT ?? 3001;
   const host = process.env.API_HOST ?? '127.0.0.1';

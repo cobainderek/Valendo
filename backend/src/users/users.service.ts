@@ -30,7 +30,7 @@ export class UsersService {
     // adicionando um discriminador (ex.: "derek#1234").
     const uniqueTag = await this.generateUniqueTag(tag);
 
-    const salt = await bcrypt.genSalt();
+    const salt = await bcrypt.genSalt(12);
     const passwordHash = await bcrypt.hash(password, salt);
 
     const user = await this.prisma.user.create({
@@ -142,7 +142,7 @@ export class UsersService {
       if (!ok) {
         throw new UnauthorizedException('Senha atual incorreta.');
       }
-      const salt = await bcrypt.genSalt();
+      const salt = await bcrypt.genSalt(12);
       data.passwordHash = await bcrypt.hash(dto.newPassword, salt);
     }
 

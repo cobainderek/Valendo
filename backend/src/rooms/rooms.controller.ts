@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
+import { SubmitAnswerDto } from './dto/submit-answer.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('rooms')
@@ -30,9 +31,11 @@ export class RoomsController {
     return this.roomsService.getLobbyRooms();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':code')
-  getRoom(@Param('code') code: string) {
-    return this.roomsService.getRoomByCode(code);
+  getRoom(@Request() req: any, @Param('code') code: string) {
+    const requesterId = BigInt(req.user.id);
+    return this.roomsService.getRoomByCode(code, requesterId);
   }
 
   /** Respostas já dadas pelo usuário neste duelo — permite retomar após reload. */
@@ -62,7 +65,7 @@ export class RoomsController {
   answer(
     @Request() req: any,
     @Param('code') code: string,
-    @Body() body: { questionId: string; selectedAnswer: string },
+    @Body() body: SubmitAnswerDto,
   ) {
     const userId = BigInt(req.user.id);
     return this.roomsService.submitAnswer(userId, code, body.questionId, body.selectedAnswer);

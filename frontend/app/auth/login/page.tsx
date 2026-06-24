@@ -153,7 +153,7 @@ export default function LoginPage() {
         </div>
 
         <p style={{ color: 'var(--muted)', fontSize: 13, fontWeight: 600, textAlign: 'center' }}>
-          FAESA · Desenvolvimento Web 2 · 2025
+          FAESA · Desenvolvimento Web 2 · 2026
         </p>
       </div>
 
